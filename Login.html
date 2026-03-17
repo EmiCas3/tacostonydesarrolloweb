@@ -99,7 +99,7 @@ Contraseña: admin-->
                 alert("Contraseña no ingresada")
                 return 0;
             }
-            if (form.user.value != "admin" && form.contra.value != "admin") {
+            if (form.user.value != "admin" || form.contra.value != "admin") {
                 alert("Usuario o contraseña incorrectos")
                 return 0;
             } else {
