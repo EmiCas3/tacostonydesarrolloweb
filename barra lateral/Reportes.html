@@ -29,7 +29,6 @@
 
         .menu-item.activo {
             background-color: #F6821F;
-            color: #000000;
         }
 
         .menu-item:hover:not(.activo) {
@@ -37,16 +36,15 @@
         }
 
         .main-content {
-
+            flex-grow: 1;
             display: flex;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
         .tarjeta-reportes {
             background-color: #FFFFFF;
             border-radius: 10px;
             padding: 60px 40px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
             width: 100%;
         }
 
@@ -72,7 +70,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, .5);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
         button:hover {
@@ -109,7 +107,7 @@
                 <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
             </a>
     </div>
-    <div class="main-content" style="flex-grow: 1">
+    <div class="main-content">
         <div class="tarjeta-reportes">
             <div class="botones-grid">
                 <button>INGRESO POR PRODUCTO</button>

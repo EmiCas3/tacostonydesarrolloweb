@@ -15,18 +15,6 @@
             box-sizing: border-box;
         }
 
-        .sidebar {
-            background-color: #FFFFFF;
-            width: 250px;
-            border-radius: 10px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            margin-right: 30px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .1);
-            position: sticky;
-            top: 20px;
-        }
-
         .menu-item {
             padding: 15px 20px;
             color: #000000;
@@ -37,17 +25,14 @@
             gap: 15px;
         }
 
-        /* Clase activo ahora en Movimientos */
         .menu-item.activo {
             background-color: #f6821f;
-            color: #000000;
         }
 
         .menu-item:hover:not(.activo) {
             background-color: #F9D864;
         }
 
-        /* --- Estilos de la Sección Principal (Movimientos) --- */
         .main-content {
             flex-grow: 1;
             display: flex;
@@ -61,10 +46,9 @@
             padding: 60px 50px;
             width: 100%;
             max-width: 700px;
-            box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        /* Titulo Superior ("¿Qué desea registrar?") */
         .titulo-caja {
             background: #f6821f;
             color: #000000;
@@ -74,10 +58,9 @@
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 60px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        /* Contenedor de Botones (Entradas y Ventas) */
         .botones-contenedor {
             display: flex;
             justify-content: center;
@@ -94,20 +77,16 @@
             padding: 30px 20px;
             border-radius: 12px;
             flex: 1;
-            /* Para que ambos botones midan lo mismo */
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s, opacity 0.2s;
         }
 
         .btn-opcion:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+            background-color: #DC7B3C;
         }
     </style>
 </head>
 
 <body>
-
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
         <div align="center">
