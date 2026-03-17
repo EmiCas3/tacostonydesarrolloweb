@@ -171,8 +171,12 @@
             if (form.value == "") {
                 alert("No hay cambios que guardar");
             } else {//Agregar validación de requerimientod de la contraseña
-                alert("Nueva Contraseña guardada");
-                form.value = "";
+                if (form.value.length < 8) {
+                    alert("La contraseña debe tener al menos 8 caracteres");
+                } else {
+                    alert("Nueva Contraseña guardada");
+                    form.value = "";
+                }
             }
         }
     </script>
