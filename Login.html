@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Tacos Tony</title>
+    <style>
+        body {
+            background-color: #e5e5e5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+        }
+
+        .login-card {
+            background-color: white;
+            padding: 50px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            background-color: #e5e5e5;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input::placeholder {
+            color: #7a7676;
+        }
+
+        .input-group input:focus {
+            border-color: #F6821F;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #F6821F;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c9793c;
+        }
+    </style>
+</head>
+
+<body style="height: 100vh; justify-content: center; align-items: center">
+
+    <div class="login-card">
+        <img src="/Imagenes/Tacos_tony_logo.png" name="Logo" width="220" margin-bottom="25px">
+        <h2 style="font-size: large;">Sistema de control de inventario</h2>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Usuario" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Contraseña" required>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="font-weight: bold;">Intente de nuevo</div>
+
+            <button type="submit">INGRESAR</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var user = document.getElementById('username').value.trim();
+            var pass = document.getElementById('password').value.trim();
+            var errorMessage = document.getElementById('errorMessage');
+
+            if (user === 'admin' && pass === 'admin' || user === 'Alex19@correo.com' && pass === '12345') {
+                errorMessage.style.display = 'none';
+                // Redirigir al dashboard
+                window.location.href = '/Sitio/Dashboard.html';
+            } else {
+                // Fallo (muestra el error)
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>
