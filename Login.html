@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- wola-->
+<!--Usuario: admin 
+Contraseña: admin-->
 
 <head>
     <meta charset="UTF-8">
@@ -15,7 +16,7 @@
         }
 
         .login-card {
-            background-color: white;
+            background-color: #FFFFFF;
             padding: 50px 40px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -54,18 +55,18 @@
             display: none;
         }
 
-        button {
+        .button {
             width: 100%;
             padding: 15px;
             background-color: #F6821F;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        button:hover {
+        .button:hover {
             background-color: #c9793c;
         }
     </style>
@@ -77,38 +78,38 @@
         <img src="/Imagenes/Tacos_tony_logo.png" name="Logo" width="220" margin-bottom="25px">
         <h2 style="font-size: large;">Sistema de control de inventario</h2>
 
-        <form id="loginForm">
+        <form id="loginForm" method="post" action="#">
             <div class="input-group">
-                <input type="text" id="username" placeholder="Usuario" required>
+                <input type="text" name="user" placeholder="Usuario" required>
             </div>
             <div class="input-group">
-                <input type="password" id="password" placeholder="Contraseña" required>
+                <input type="password" name="contra" placeholder="Contraseña" required>
             </div>
 
-            <div id="errorMessage" class="error-message" style="font-weight: bold;">Intente de nuevo</div>
-
-            <button type="submit">INGRESAR</button>
+            <input class="button" type="button" name="Ingresar" value="INGRESAR" onclick="valida_enviar()">
         </form>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            var user = document.getElementById('username').value.trim();
-            var pass = document.getElementById('password').value.trim();
-            var errorMessage = document.getElementById('errorMessage');
-
-            if (user === 'admin' && pass === 'admin' || user === 'Alex19@correo.com' && pass === '12345') {
-                errorMessage.style.display = 'none';
-                // Redirigir al dashboard
-                window.location.href = '/Sitio/Dashboard.html';
-            } else {
-                // Fallo (muestra el error)
-                errorMessage.style.display = 'block';
+        function valida_enviar() {
+            var form = document.getElementById("loginForm");
+            if (form.user.value == "") {
+                alert("Usuario no ingresado")
+                return 0;
             }
-        });
+            if (form.contra.value == "") {
+                alert("Contraseña no ingresada")
+                return 0;
+            }
+            if (form.user.value != "admin" && form.contra.value != "admin") {
+                alert("Usuario o contraseña incorrectos")
+                return 0;
+            } else {
+                window.location.href = "/v2/Dashboard.html";
+            }
+        }
     </script>
+
 </body>
 
 </html>
