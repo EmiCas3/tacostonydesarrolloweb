@@ -140,15 +140,46 @@
         .btn-secundario:hover {
             background-color: #DC7B3C;
         }
+
+        .menu-dropdown {
+            position: relative;
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            border-left: 4px solid #F6821F;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: -5px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .menu-dropdown:hover .submenu {
+            display: flex;
+        }
+
+        .submenu-item {
+            padding: 12px 20px;
+            color: #333333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #F6821F;
+            background-color: #E5E5E5;
+        }
     </style>
 </head>
 
 <body>
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <a href="../../Login.html" class="logout" style="font-weight: bold;color: #073A79; margin-left: 20px">
-            Cerrar Sesión
-        </a>
         <div align="center" style="margin-bottom: 20px;">
             <a href="../../Dashboard.html">
                 <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
@@ -170,9 +201,15 @@
         <a href="../../Administracion.html" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
-        <a href="../../Configuracion.html" class="menu-item">
-            <img src="../../../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
-        </a>
+        <div class="menu-dropdown">
+            <a class="menu-item">
+                <img src="../../../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
+            </a>
+            <div class="submenu">
+                <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
+                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+            </div>
+        </div>
     </div>
 
     <div class="main-content">
@@ -196,7 +233,20 @@
 
                 <div class="input-grupo">
                     <label>Fecha</label>
-                    <input type="date">
+                    <input type="date" id="fechaDia">
+                    <script>
+                        let fecha = new Date();
+                        let dia = fecha.getDate();
+                        let mes = fecha.getMonth() + 1;
+                        let anio = fecha.getFullYear();
+                        if (dia < 10) {
+                            dia = "0" + dia;
+                        }
+                        if (mes < 10) {
+                            mes = "0" + mes;
+                        }
+                        document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
+                    </script>
                 </div>
 
                 <div class="input-grupo">
@@ -225,7 +275,6 @@
 
         </div>
     </div>
-    <!--Debería ser PHP para poder recibir del pos del login y poder poner el nombre del empleado y el ID automaticamente-->
 </body>
 
 </html>
