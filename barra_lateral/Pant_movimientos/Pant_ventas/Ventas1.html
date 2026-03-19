@@ -218,63 +218,84 @@
             <div class="titulo-caja">
                 INFORMACIÓN GENERAL
             </div>
+            <form id="venta1form" method="post" action="Ventas2.html">
+                <div class="form-grid">
 
-            <div class="form-grid">
+                    <div class="input-grupo">
+                        <label>Nombre Cliente</label>
+                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
+                    </div>
 
-                <div class="input-grupo">
-                    <label>Nombre Cliente</label>
-                    <input type="text" placeholder="Ingrese el nombre">
+                    <div class="input-grupo">
+                        <label>ID Cliente</label>
+                        <input type="text" id="idCliente" placeholder="Ingrese el ID">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Fecha</label>
+                        <input type="date" id="fechaDia">
+                        <script>
+                            let fecha = new Date();
+                            let dia = fecha.getDate();
+                            let mes = fecha.getMonth() + 1;
+                            let anio = fecha.getFullYear();
+                            if (dia < 10) {
+                                dia = "0" + dia;
+                            }
+                            if (mes < 10) {
+                                mes = "0" + mes;
+                            }
+                            document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
+                        </script>
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Servicio a Domicilio</label>
+                        <select>
+                            <option value="no">No</option>
+                            <option value="si">Sí</option>
+                        </select>
+                    </div>
+                    <div class="input-grupo">
+                        <label>Nombre Empleado</label>
+                        <input type="text" id="nombreEmpleado" placeholder="Ingrese el nombre">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>ID Empleado</label>
+                        <input type="text" id="idEmpleado" placeholder="Ingrese el ID">
+                    </div>
                 </div>
-
-                <div class="input-grupo">
-                    <label>ID Cliente</label>
-                    <input type="text" placeholder="Ingrese el ID">
-                </div>
-
-                <div class="input-grupo">
-                    <label>Fecha</label>
-                    <input type="date" id="fechaDia">
-                    <script>
-                        let fecha = new Date();
-                        let dia = fecha.getDate();
-                        let mes = fecha.getMonth() + 1;
-                        let anio = fecha.getFullYear();
-                        if (dia < 10) {
-                            dia = "0" + dia;
-                        }
-                        if (mes < 10) {
-                            mes = "0" + mes;
-                        }
-                        document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
-                    </script>
-                </div>
-
-                <div class="input-grupo">
-                    <label>Servicio a Domicilio</label>
-                    <select>
-                        <option value="no">No</option>
-                        <option value="si">Sí</option>
-                    </select>
-                </div>
-                <div class="input-grupo">
-                    <label>Nombre Empleado</label>
-                    <input type="text" placeholder="Ingrese el nombre">
-                </div>
-
-                <div class="input-grupo">
-                    <label>ID Empleado</label>
-                    <input type="text" placeholder="Ingrese el ID">
-                </div>
-            </div>
-
+            </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
                 <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
 
-                <a href="#" class="btn-accion">CONTINUAR</a>
+                <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
             </div>
 
         </div>
     </div>
+
+    <script>
+        function valida_enviar() {
+            var form = document.getElementById("venta1form");
+            if (form.nombreCliente.value == "") {
+                alert("Nombre del cliente no ingresado");
+                return 0;
+            } if (form.idCliente.value == "") {
+                alert("ID del cliente no ingresado");
+                return 0;
+            } if (form.nombreEmpleado.value == "") {
+                alert("Nombre del empleado no ingresado");
+                return 0;
+            } if (form.idEmpleado.value == "") {
+                alert("ID del empleado no ingresado");
+                return 0;
+            } else {
+                window.location.href = "Ventas2.html";
+            }
+        }
+    </script>
 </body>
 
 </html>
