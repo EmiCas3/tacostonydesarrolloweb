@@ -82,7 +82,8 @@
         }
 
         .input-grupo input,
-        .input-grupo select {
+        .input-grupo select,
+        .input-grupo datalist {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -94,7 +95,8 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus {
+        .input-grupo select:focus,
+        .input-grupo datalist:focus {
             border-color: #f6821f;
         }
 
@@ -222,13 +224,25 @@
             <form id="entrada2form" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>ID Material</label>
-                        <input type="number" id="idMaterial" placeholder="Ingrese el ID">
+                        <label>Nombre Material</label>
+                        <input type="text" list="listaMateriales" id="nombreMaterial" placeholder="Ingrese el nombre">
+                        <datalist id="listaMateriales">
+                            <option value="Carne"></option>
+                            <option value="Cebolla"></option>
+                            <option value="Tortilla de Maíz"></option>
+                            <option value="Tortilla de Harina"></option>
+                            <option value="Refresco"></option>
+                            <option value="Agua"></option>
+                            <option value="Servilletas"></option>
+                            <option value="Vasos"></option>
+                            <option value="Platos"></option>
+                            <option value="Cubiertos"></option>
+                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
                     </div>
 
                     <div class="input-grupo">
-                        <label>Nombre Material</label>
-                        <input type="text" id="nombreMaterial" placeholder="Ingrese el nombre">
+                        <label>ID Material</label>
+                        <input type="number" id="idMaterial" placeholder="Ingrese el ID">
                     </div>
 
                     <div class="input-grupo">

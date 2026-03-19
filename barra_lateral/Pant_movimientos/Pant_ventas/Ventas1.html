@@ -82,7 +82,8 @@
         }
 
         .input-grupo input,
-        .input-grupo select {
+        .input-grupo select,
+        .input-grupo datalist {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -94,7 +95,8 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus {
+        .input-grupo select:focus,
+        .input-grupo datalist:focus {
             border-color: #f6821f;
         }
 
@@ -223,7 +225,19 @@
 
                     <div class="input-grupo">
                         <label>Nombre Cliente</label>
-                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
+                        <input type="text" list="listaClientes" id="nombreCliente" placeholder="Ingrese el nombre">
+                        <datalist id="listaClientes">
+                            <option value="Raul"></option>
+                            <option value="Cesar"></option>
+                            <option value="Juan"></option>
+                            <option value="Maria"></option>
+                            <option value="Ana"></option>
+                            <option value="Pedro"></option>
+                            <option value="Luis"></option>
+                            <option value="Jorge"></option>
+                            <option value="Fernando"></option>
+                            <option value="Miguel"></option>
+                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
                     </div>
 
                     <div class="input-grupo">
@@ -258,7 +272,12 @@
                     </div>
                     <div class="input-grupo">
                         <label>Nombre Empleado</label>
-                        <input type="text" id="nombreEmpleado" placeholder="Ingrese el nombre">
+                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
+                        <datalist id="listaEmpleados">
+                            <option value="Raul"></option>
+                            <option value="Cesar"></option>
+                            <option value="Juan"></option>
+                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
                     </div>
 
                     <div class="input-grupo">

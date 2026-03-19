@@ -82,7 +82,8 @@
         }
 
         .input-grupo input,
-        .input-grupo select {
+        .input-grupo select,
+        .input-grupo datalist {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -94,7 +95,8 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus {
+        .input-grupo select:focus,
+        .input-grupo datalist:focus {
             border-color: #f6821f;
         }
 
@@ -222,8 +224,13 @@
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre de Producto</label>
-                        <input type="text" id="nombreProducto" placeholder="Ingrese el nombre">
+                        <label>Nombre Producto</label>
+                        <input type="text" list="listaProductos" id="nombreProducto" placeholder="Ingrese el nombre">
+                        <datalist id="listaProductos">
+                            <option value="Taco Árabe"></option>
+                            <option value="Cebollitas"></option>
+                            <option value="Refresco"></option>
+                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
                     </div>
 
                     <div class="input-grupo">
