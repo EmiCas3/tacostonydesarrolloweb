@@ -65,7 +65,7 @@
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
+            gap: 20px;
             margin-bottom: 40px;
         }
 
@@ -219,6 +219,10 @@
                 INFORMACIÓN GENERAL
             </div>
             <form id="venta1form" method="post" action="#">
+                <div class="input-grupo">
+                    <label>ID Venta</label>
+                    <input type="number" id="idVenta" placeholder="Ingrese el ID" style="margin-bottom: 20px;">
+                </div>
                 <div class="form-grid">
 
                     <div class="input-grupo">
@@ -228,7 +232,7 @@
 
                     <div class="input-grupo">
                         <label>ID Cliente</label>
-                        <input type="text" id="idCliente" placeholder="Ingrese el ID">
+                        <input type="number" id="idCliente" placeholder="Ingrese el ID">
                     </div>
 
                     <div class="input-grupo">
@@ -278,20 +282,27 @@
     <script>
         function valida_enviar() {
             var form = document.getElementById("venta1form");
+            if (form.idVenta.value == "") {
+                alert("ID de la venta no ingresado");
+                return 0;
+            }
             if (form.nombreCliente.value == "") {
                 alert("Nombre del cliente no ingresado");
                 return 0;
-            } if (form.idCliente.value == "") {
+            }
+            if (form.idCliente.value == "") {
                 alert("ID del cliente no ingresado");
                 return 0;
-            } if (form.nombreEmpleado.value == "") {
+            }
+            if (form.nombreEmpleado.value == "") {
                 alert("Nombre del empleado no ingresado");
                 return 0;
-            } if (form.idEmpleado.value == "") {
+            }
+            if (form.idEmpleado.value == "") {
                 alert("ID del empleado no ingresado");
                 return 0;
             } else {
-                window.location.href = "Ventas2.html";
+                window.location.href = "ModificarV2.html";
             }
         }
     </script>

@@ -180,9 +180,9 @@
 <body>
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center" ">
-            <a href=" ../../Dashboard.html">
-            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center">
+            <a href="../../Dashboard.html">
+                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -216,60 +216,36 @@
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN GENERAL
+                INFORMACIÓN PARTICULAR
             </div>
-            <form id="venta1form" method="post" action="#">
+            <form id="venta2form" onsubmit="event.preventDefault(); valida_enviar();">
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
-                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
+                        <label>Nombre de Producto</label>
+                        <input type="text" id="nombreProducto" placeholder="Ingrese el nombre">
                     </div>
 
                     <div class="input-grupo">
-                        <label>ID Cliente</label>
-                        <input type="text" id="idCliente" placeholder="Ingrese el ID">
+                        <label>ID Producto</label>
+                        <input type="number" id="idProducto" placeholder="Ingrese el ID">
                     </div>
 
                     <div class="input-grupo">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaDia">
-                        <script>
-                            let fecha = new Date();
-                            let dia = fecha.getDate();
-                            let mes = fecha.getMonth() + 1;
-                            let anio = fecha.getFullYear();
-                            if (dia < 10) {
-                                dia = "0" + dia;
-                            }
-                            if (mes < 10) {
-                                mes = "0" + mes;
-                            }
-                            document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
-                        </script>
+                        <label>Cantidad</label>
+                        <input type="number" id="cantidad" placeholder="Ingrese la cantidad">
                     </div>
 
                     <div class="input-grupo">
-                        <label>Servicio a Domicilio</label>
-                        <select>
-                            <option value="no">No</option>
-                            <option value="si">Sí</option>
-                        </select>
-                    </div>
-                    <div class="input-grupo">
-                        <label>Nombre Empleado</label>
-                        <input type="text" id="nombreEmpleado" placeholder="Ingrese el nombre">
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Empleado</label>
-                        <input type="number" id="idEmpleado" placeholder="Ingrese el ID">
+                        <label>Subtotal</label>
+                        <input type="number" id="subtotal" placeholder="Ingrese el subtotal" step="0.01">
                     </div>
                 </div>
             </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                <a class="btn-accion" href="../../Movimientos.html">CANCELAR</a>
-                <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
+                <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
+
+                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
             </div>
 
         </div>
@@ -277,21 +253,22 @@
 
     <script>
         function valida_enviar() {
-            var form = document.getElementById("venta1form");
-            if (form.nombreCliente.value == "") {
-                alert("Nombre del cliente no ingresado");
+            var form = document.getElementById("venta2form");
+            if (form.nombreProducto.value == "") {
+                alert("Nombre de producto no ingresado");
                 return 0;
-            } if (form.idCliente.value == "") {
-                alert("ID del cliente no ingresado");
+            } if (form.idProducto.value == "") {
+                alert("ID de producto no ingresado");
                 return 0;
-            } if (form.nombreEmpleado.value == "") {
-                alert("Nombre del empleado no ingresado");
+            } if (form.cantidad.value == "") {
+                alert("Cantidad no ingresada");
                 return 0;
-            } if (form.idEmpleado.value == "") {
-                alert("ID del empleado no ingresado");
+            } if (form.subtotal.value == "") {
+                alert("Subtotal no ingresado");
                 return 0;
             } else {
-                window.location.href = "Ventas2.html";
+                alert("Modificado con éxito.");
+                window.location.href = "ModificarV2.html";
             }
         }
     </script>
