@@ -209,14 +209,14 @@
     <script>
         function guardar_cambios() {
             var form = document.getElementById("password");
-            if (form.value == "") {
+            if (form.password.value == "" && form.nombre.value == "Don Tacos Tony" && form.correo.value == "admin@tony.com") {
                 alert("No hay cambios que guardar");
             } else {//Agregar validación de requerimientos de la contraseña
-                if (form.value.length < 8) {
+                if (form.password.value.length < 8) {
                     alert("La contraseña debe tener al menos 8 caracteres");
                 } else {
-                    alert("Nueva Contraseña guardada");
-                    form.value = "";
+                    alert("Cambios guardados exitosamente");
+                    form.password.value = "";
                 }
             }
         }
