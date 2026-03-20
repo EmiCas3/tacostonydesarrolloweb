@@ -222,10 +222,6 @@
             <form id="proveedorForm" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>ID Proveedor</label>
-                        <input type="number" id="idProveedor" placeholder="Ingrese el ID">
-                    </div>
-                    <div class="input-grupo">
                         <label>Nombre</label>
                         <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
                     </div>
@@ -250,9 +246,6 @@
 
     <script>
         function valida_enviar() {
-            if (document.getElementById("idProveedor").value == "") {
-                alert("ID del proveedor no ingresado"); return;
-            }
             if (document.getElementById("nombreProveedor").value == "") {
                 alert("Nombre del proveedor no ingresado"); return;
             }
