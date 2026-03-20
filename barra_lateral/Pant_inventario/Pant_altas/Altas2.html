@@ -69,28 +69,28 @@
             margin-bottom: 40px;
         }
 
-        .tabla-header {
+        .tabla-contenedor table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla-contenedor thead th {
             background: #f6821f;
             color: #000;
             font-weight: bold;
-            display: flex;
             padding: 15px 30px;
+            text-align: left;
         }
 
-        .tabla-body {
-            background-color: #E6E6E6;
-            padding: 10px 0;
-        }
-
-        .fila {
-            display: flex;
+        .tabla-contenedor tbody td {
             padding: 12px 30px;
+            background-color: #E6E6E6;
             font-weight: bold;
             color: #333;
             border-bottom: 1px solid #D0D0D0;
         }
 
-        .fila:last-child {
+        .tabla-contenedor tbody tr:last-child td {
             border-bottom: none;
         }
 
@@ -226,28 +226,24 @@
             </div>
 
             <div class="tabla-contenedor">
-                <div class="tabla-header">
-                    <div class="col-campo">Campo</div>
-                    <div class="col-valor">Valor</div>
-                </div>
-                <div class="tabla-body">
-                    <div class="fila">
-                        <div class="col-campo">Nombre del Material</div>
-                        <div class="col-valor" id="show-nombre">—</div>
-                    </div>
-                    <div class="fila">
-                        <div class="col-campo">Unidad de Medida</div>
-                        <div class="col-valor" id="show-unidad">—</div>
-                    </div>
-                    <div class="fila">
-                        <div class="col-campo">Cantidad Inicial</div>
-                        <div class="col-valor" id="show-cantidad">—</div>
-                    </div>
-                    <div class="fila">
-                        <div class="col-campo">Precio Unitario</div>
-                        <div class="col-valor" id="show-precio">—</div>
-                    </div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-campo">Campo</th>
+                            <th class="col-valor">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-campo">Nombre del Material</td>
+                            <td class="col-valor" id="show-nombre">—</td>
+                        </tr>
+                        <tr>
+                            <td class="col-campo">Cantidad Inicial</td>
+                            <td class="col-valor" id="show-cantidad">—</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="botones-bottom">
@@ -259,37 +255,26 @@
     </div>
 
     <script>
-        // Load data from sessionStorage and display in table
         window.onload = function () {
             var nombre = sessionStorage.getItem("alta_nombre");
-            var unidad = sessionStorage.getItem("alta_unidad");
             var cantidad = sessionStorage.getItem("alta_cantidad");
-            var precio = sessionStorage.getItem("alta_precio");
-
-            if (!nombre) {
-                // If no data, redirect back to step 1
+            
+            if (!nombre || !cantidad) {
+                alert("Error: No se encontraron los datos del material");
                 window.location.href = "Altas1.html";
                 return;
             }
-
+            
             document.getElementById("show-nombre").textContent = nombre;
-            document.getElementById("show-unidad").textContent = unidad;
-            document.getElementById("show-cantidad").textContent = cantidad + " " + unidad;
-            document.getElementById("show-precio").textContent = "$" + parseFloat(precio).toFixed(2);
+            document.getElementById("show-cantidad").textContent = cantidad;
         };
 
         function confirmarAlta() {
-            // Clear sessionStorage after confirmed
             sessionStorage.removeItem("alta_nombre");
-            sessionStorage.removeItem("alta_unidad");
             sessionStorage.removeItem("alta_cantidad");
-            sessionStorage.removeItem("alta_precio");
-            //going to remove this
-            alert(" MATERIAL REGISTRADO CON ÉXITO");
+            alert("Material registrado con éxito.");
             window.location.href = "../../Inventario.html";
         }
-
-        //Olav2
     </script>
 </body>
 

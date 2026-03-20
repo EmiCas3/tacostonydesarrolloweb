@@ -226,22 +226,8 @@
                         <input type="text" id="nombreMaterial" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
-                        <label>Unidad de Medida</label>
-                        <select id="unidadMedida">
-                            <option value="">Seleccione...</option>
-                            <option value="Kg">Kg</option>
-                            <option value="Lt">Lt</option>
-                            <option value="Pza">Pza</option>
-                            <option value="Paquete">Paquete</option>
-                        </select>
-                    </div>
-                    <div class="input-grupo">
                         <label>Cantidad Inicial</label>
                         <input type="number" id="cantidadInicial" placeholder="Ingrese la cantidad" min="0" step="0.1">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Precio Unitario</label>
-                        <input type="number" id="precioUnitario" placeholder="Ingrese el precio" min="0" step="0.01">
                     </div>
                 </div>
 
@@ -256,37 +242,30 @@
 
     <script>
         function validarAlta() {
-            var nombre = document.getElementById("nombreMaterial").value;
-            var unidad = document.getElementById("unidadMedida").value;
-            var cantidad = document.getElementById("cantidadInicial").value;
-            var precio = document.getElementById("precioUnitario").value;
+            var form = document.getElementById("altasForm1");
+            var nombreInput = document.getElementById("nombreMaterial");
+            var cantidadInput = document.getElementById("cantidadInicial");
 
-            if (nombre == "") {
+            if (nombreInput.value.trim() === "") {
                 alert("Nombre del material no ingresado");
-                return;
+                nombreInput.focus();
+                return false;
             }
-            if (unidad == "") {
-                alert("Seleccione una unidad de medida");
-                return;
-            }
-            if (cantidad == "") {
+            if (cantidadInput.value.trim() === "") {
                 alert("Cantidad inicial no ingresada");
-                return;
+                cantidadInput.focus();
+                return false;
             }
-            if (precio == "") {
-                alert("Precio unitario no ingresado");
-                return;
+            if (isNaN(cantidadInput.value) || parseFloat(cantidadInput.value) < 0) {
+                alert("Ingrese una cantidad válida");
+                cantidadInput.focus();
+                return false;
             }
-
-            // Save data to sessionStorage to pass to next page
-            sessionStorage.setItem("alta_nombre", nombre);
-            sessionStorage.setItem("alta_unidad", unidad);
-            sessionStorage.setItem("alta_cantidad", cantidad);
-            sessionStorage.setItem("alta_precio", precio);
-
+            
+            sessionStorage.setItem("alta_nombre", nombreInput.value.trim());
+            sessionStorage.setItem("alta_cantidad", cantidadInput.value.trim());
             window.location.href = "Altas2.html";
         }
-        //Ola
     </script>
 </body>
 
