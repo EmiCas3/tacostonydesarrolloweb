@@ -236,11 +236,6 @@
                     </div>
 
                     <div class="input-grupo">
-                        <label>ID</label>
-                        <input type="text" id="idProducto" placeholder="Ingrese el ID del producto">
-                    </div>
-
-                    <div class="input-grupo">
                         <label>Precio</label>
                         <input type="number" id="precioProducto" placeholder="Ingrese el precio" step="0.01">
                     </div>
@@ -259,9 +254,6 @@
             var form = document.getElementById("productos1form");
             if (form.nombreProducto.value == "") {
                 alert("Nombre del producto no ingresado");
-                return 0;
-            } if (form.idProducto.value == "") {
-                alert("ID del producto no ingresado");
                 return 0;
             } if (form.precioProducto.value == "") {
                 alert("Precio del producto no ingresado");
