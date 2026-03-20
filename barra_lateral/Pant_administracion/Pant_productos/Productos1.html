@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administracion - Colaboradores</title>
+    <title>Tacos Tony - Administracion - Productos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,7 +41,7 @@
             justify-content: center;
         }
 
-        .colaboradores-card {
+        .productos-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
@@ -216,38 +216,33 @@
     </div>
 
     <div class="main-content">
-        <div class="colaboradores-card">
+        <div class="productos-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN DEL COLABORADOR
+                INFORMACIÓN DEL PRODUCTO
             </div>
 
-            <form id="colaboradores1form" method="post" action="#">
+            <form id="productos1form" method="post" action="#">
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Empleado</label>
-                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
-                        <datalist id="listaEmpleados">
-                            <option value="Raul"></option>
-                            <option value="Cesar"></option>
-                            <option value="Fernando"></option>
+                        <label>Nombre Producto</label>
+                        <input type="text" list="listaProductos" id="nombreProducto" placeholder="Ingrese el nombre">
+                        <datalist id="listaProductos">
+                            <option value="Taco de Arabe"></option>
+                            <option value="Falafel"></option>
+                            <option value="Pizza Arabe"></option>
                         </datalist>
                     </div>
 
                     <div class="input-grupo">
-                        <label>Correo Electrónico</label>
-                        <input type="email" id="correoEmpleado" placeholder="Ingrese el correo">
+                        <label>ID</label>
+                        <input type="text" id="idProducto" placeholder="Ingrese el ID del producto">
                     </div>
 
                     <div class="input-grupo">
-                        <label>Salario</label>
-                        <input type="number" id="salarioEmpleado" placeholder="Ingrese el salario" step="0.01">
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>Contraseña</label>
-                        <input type="password" id="contrasenaEmpleado" placeholder="Ingrese la contraseña">
+                        <label>Precio</label>
+                        <input type="number" id="precioProducto" placeholder="Ingrese el precio" step="0.01">
                     </div>
                 </div>
             </form>
@@ -261,18 +256,15 @@
 
     <script>
         function valida_enviar() {
-            var form = document.getElementById("colaboradores1form");
-            if (form.nombreEmpleado.value == "") {
-                alert("Nombre del empleado no ingresado");
+            var form = document.getElementById("productos1form");
+            if (form.nombreProducto.value == "") {
+                alert("Nombre del producto no ingresado");
                 return 0;
-            } if (form.correoEmpleado.value == "") {
-                alert("Correo del empleado no ingresado");
+            } if (form.idProducto.value == "") {
+                alert("ID del producto no ingresado");
                 return 0;
-            } if (form.salarioEmpleado.value == "") {
-                alert("Salario del empleado no ingresado");
-                return 0;
-            } if (form.contrasenaEmpleado.value == "") {
-                alert("Contraseña del empleado no ingresada");
+            } if (form.precioProducto.value == "") {
+                alert("Precio del producto no ingresado");
                 return 0;
             } else {
                 window.location.href = "../../Administracion.html";
