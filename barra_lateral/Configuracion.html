@@ -208,17 +208,19 @@
 
     <script>
         function guardar_cambios() {
-            var form = document.getElementById("password");
-            if (form.password.value == "" && form.nombre.value == "Don Tacos Tony" && form.correo.value == "admin@tony.com") {
+            var nombre = document.getElementById("nombre").value;
+            var correo = document.getElementById("correo").value;
+            var password = document.getElementById("password").value;
+            if (nombre === "Don Tacos Tony" && correo === "admin@tony.com" && password === "") {
                 alert("No hay cambios que guardar");
-            } else {//Agregar validación de requerimientos de la contraseña
-                if (form.password.value.length < 8) {
-                    alert("La contraseña debe tener al menos 8 caracteres");
-                } else {
-                    alert("Cambios guardados exitosamente");
-                    form.password.value = "";
-                }
+                return;
             }
+            if (password !== "" && password.length < 8) {
+                alert("La contraseña debe tener al menos 8 caracteres");
+                return;
+            }
+            alert("Cambios guardados exitosamente");
+            document.getElementById("password").value = "";
         }
     </script>
 </body>
