@@ -201,6 +201,9 @@
         <a href="../../Administracion.html" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
+        <a href="../../Catalogo.html" class="menu-item">
+            <img src="../../../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
+        </a>
         <div class="menu-dropdown">
             <a class="menu-item">
                 <img src="../../../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
@@ -261,7 +264,7 @@
                 cantidadInput.focus();
                 return false;
             }
-            
+
             sessionStorage.setItem("alta_nombre", nombreInput.value.trim());
             sessionStorage.setItem("alta_cantidad", cantidadInput.value.trim());
             window.location.href = "Altas2.html";

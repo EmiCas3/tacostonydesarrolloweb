@@ -207,6 +207,9 @@
         <a href="../../Administracion.html" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
+        <a href="../../Catalogo.html" class="menu-item">
+            <img src="../../../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
+        </a>
         <div class="menu-dropdown">
             <a class="menu-item">
                 <img src="../../../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
@@ -258,13 +261,13 @@
         window.onload = function () {
             var nombre = sessionStorage.getItem("alta_nombre");
             var cantidad = sessionStorage.getItem("alta_cantidad");
-            
+
             if (!nombre || !cantidad) {
                 alert("Error: No se encontraron los datos del material");
                 window.location.href = "Altas1.html";
                 return;
             }
-            
+
             document.getElementById("show-nombre").textContent = nombre;
             document.getElementById("show-cantidad").textContent = cantidad;
         };
