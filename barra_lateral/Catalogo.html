@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administracion - Colaboradores</title>
+    <title>Tacos Tony - Catálogo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,57 +32,6 @@
 
         .menu-item:hover:not(.activo) {
             background-color: #F9D864;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .catalogo-card {
-            background-color: #FFFFFF;
-            border-radius: 15px;
-            padding: 60px 50px;
-            width: 100%;
-            max-width: 700px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-        }
-
-        .titulo-caja {
-            background: #f6821f;
-            color: #000000;
-            font-weight: bold;
-            font-size: 22px;
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 60px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-        }
-
-        .botones-contenedor {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
-
-        .btn-opcion {
-            background: #f6821f;
-            color: #000000;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 20px;
-            text-align: center;
-            padding: 30px 20px;
-            border-radius: 12px;
-            flex: 1;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-        }
-
-        .btn-opcion:hover {
-            background-color: #DC7B3C;
         }
 
         .menu-dropdown {
@@ -118,12 +67,106 @@
             color: #F6821F;
             background-color: #E5E5E5;
         }
+
+        /* ===== CATÁLOGO ===== */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main-content h1 {
+            margin: 0 0 15px 0;
+            color: #000000;
+            font-size: 26px;
+        }
+
+        .catalogo-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .catalogo-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .catalogo-container::-webkit-scrollbar-track {
+            background: #E5E5E5;
+            border-radius: 4px;
+        }
+
+        .catalogo-container::-webkit-scrollbar-thumb {
+            background: #F6821F;
+            border-radius: 4px;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            padding-bottom: 20px;
+        }
+
+        .producto-card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .producto-img-container {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .producto-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .producto-info {
+            padding: 12px 15px;
+            border-top: 3px solid #F6821F;
+        }
+
+        .producto-nombre {
+            font-weight: bold;
+            font-size: 14px;
+            color: #000000;
+            margin-bottom: 6px;
+        }
+
+        .producto-precio {
+            font-weight: bold;
+            font-size: 16px;
+            color: #F6821F;
+        }
+
+        .producto-id {
+            font-size: 11px;
+            color: #999999;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 
 <body>
     <div
-        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px; align-self: flex-start;">
         <div align="center">
             <a href="Dashboard.html">
                 <img src="../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
@@ -157,6 +200,438 @@
                     <a href="../Login.html" class="submenu-item">Cerrar Sesión</a>
                 </div>
             </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Catálogo de Productos</h1>
+        <div class="catalogo-container">
+            <div class="productos-grid">
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TacoArabe.png" alt="Taco Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#1</div>
+                        <div class="producto-nombre">Taco Árabe</div>
+                        <div class="producto-precio">$39</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TortaArabe.png" alt="Torta Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#2</div>
+                        <div class="producto-nombre">Torta Árabe</div>
+                        <div class="producto-precio">$39</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TacoArabe.png" alt="Tony Especial Árabe"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#3</div>
+                        <div class="producto-nombre">Tony Especial Árabe</div>
+                        <div class="producto-precio">$41</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TortaArabe.png" alt="Tony Especial Torta"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#4</div>
+                        <div class="producto-nombre">Tony Especial Torta</div>
+                        <div class="producto-precio">$41</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/CemitaArabe.png" alt="Cemita con Carne Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#5</div>
+                        <div class="producto-nombre">Cemita con Carne Árabe</div>
+                        <div class="producto-precio">$40</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TacoOriental.png" alt="Taco Oriental">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#6</div>
+                        <div class="producto-nombre">Taco Oriental</div>
+                        <div class="producto-precio">$24</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Cremita.png" alt="Cremita">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#7</div>
+                        <div class="producto-nombre">Cremita</div>
+                        <div class="producto-precio">$37</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TacoOriental.png" alt="Tony Especial Oriental">
+                        <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#8</div>
+                        <div class="producto-nombre">Tony Especial Oriental</div>
+                        <div class="producto-precio">$26</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Falafel.png" alt="Falafel">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#9</div>
+                        <div class="producto-nombre">Falafel</div>
+                        <div class="producto-precio">$39</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Carne.png" alt="Kilo de Carne Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#10</div>
+                        <div class="producto-nombre">Kilo de Carne Árabe</div>
+                        <div class="producto-precio">$400</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Carne.png" alt="1/2 de Kilo de Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#11</div>
+                        <div class="producto-nombre">1/2 de Kilo de Árabe</div>
+                        <div class="producto-precio">$200</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Salsa / Gine 100 ml"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#12</div>
+                        <div class="producto-nombre">Salsa / Gine 100 ml</div>
+                        <div class="producto-precio">$30</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Salsa / Gine 250 ml"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#13</div>
+                        <div class="producto-nombre">Salsa / Gine 250 ml</div>
+                        <div class="producto-precio">$40</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesoFundido.png" alt="Queso Fundido">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#14</div>
+                        <div class="producto-nombre">Queso Fundido</div>
+                        <div class="producto-precio">$115</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesoFundido.png" alt="Queso Fundido Preparado">
+                        <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#15</div>
+                        <div class="producto-nombre">Queso Fundido Preparado</div>
+                        <div class="producto-precio">$120</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Quesadilla.png" alt="Quesadilla">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#16</div>
+                        <div class="producto-nombre">Quesadilla</div>
+                        <div class="producto-precio">$45</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesaArabe.png" alt="Quesadilla Árabe con Gine">
+                        <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#17</div>
+                        <div class="producto-nombre">Quesadilla Árabe con Gine</div>
+                        <div class="producto-precio">$67</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/TortaAQueso.png" alt="Torta Árabe con Queso">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#18</div>
+                        <div class="producto-nombre">Torta Árabe con Queso</div>
+                        <div class="producto-precio">$65</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/CemitaArabe.png" alt="Cemita Árabe con Queso">
+                        <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#19</div>
+                        <div class="producto-nombre">Cemita Árabe con Queso</div>
+                        <div class="producto-precio">$65</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesaArabe.png" alt="Quesadilla Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#20</div>
+                        <div class="producto-nombre">Quesadilla Árabe</div>
+                        <div class="producto-precio">$65</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesoFCarne.png" alt="Queso fundido con Carne">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#21</div>
+                        <div class="producto-nombre">Queso fundido con Carne</div>
+                        <div class="producto-precio">$120</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesoFCarne.png" alt="Queso Tony Especial">
+                        <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#22</div>
+                        <div class="producto-nombre">Queso Tony Especial</div>
+                        <div class="producto-precio">$140</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesaArabe.png" alt="Quesadilla Árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#23</div>
+                        <div class="producto-nombre">Quesadilla Árabe</div>
+                        <div class="producto-precio">$65</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/QuesaOriental.png" alt="Quesadilla Oriental">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#24</div>
+                        <div class="producto-nombre">Quesadilla Oriental</div>
+                        <div class="producto-precio">$40</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Cebollitas.png" alt="Cebollitas">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#25</div>
+                        <div class="producto-nombre">Cebollitas</div>
+                        <div class="producto-precio">$28</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/CaldoCam.png" alt="Caldo de Camarón">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#26</div>
+                        <div class="producto-nombre">Caldo de Camarón</div>
+                        <div class="producto-precio">$38</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/JocoSeco.png" alt="Jocoque Seco">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#27</div>
+                        <div class="producto-nombre">Jocoque Seco</div>
+                        <div class="producto-precio">$55</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Papas a la Francesa"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#28</div>
+                        <div class="producto-nombre">Papas a la Francesa</div>
+                        <div class="producto-precio">$45</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/JocoCrem.png" alt="Jocoque Cremoso">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#29</div>
+                        <div class="producto-nombre">Jocoque Cremoso</div>
+                        <div class="producto-precio">$48</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/FlanHorn.png" alt="Flan Horneado">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#30</div>
+                        <div class="producto-nombre">Flan Horneado</div>
+                        <div class="producto-precio">$34</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/FlanHorn.png" alt="Paleta Helada"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#31</div>
+                        <div class="producto-nombre">Paleta Helada</div>
+                        <div class="producto-precio">$27</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Agua Embotellada"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#32</div>
+                        <div class="producto-nombre">Agua Embotellada</div>
+                        <div class="producto-precio">$29</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Cerveza.png" alt="Michelada"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#33</div>
+                        <div class="producto-nombre">Michelada</div>
+                        <div class="producto-precio">$48</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/DedoNovia.png" alt="Dedo de Novia">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#34</div>
+                        <div class="producto-nombre">Dedo de Novia</div>
+                        <div class="producto-precio">$40</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Refresco Lata">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#35</div>
+                        <div class="producto-nombre">Refresco Lata</div>
+                        <div class="producto-precio">$29</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Cerveza.png" alt="Cerveza">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#36</div>
+                        <div class="producto-nombre">Cerveza</div>
+                        <div class="producto-precio">$45</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/Refersco.png" alt="Café Soluble"> <!--Cambiar imagen-->
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#37</div>
+                        <div class="producto-nombre">Café Soluble</div>
+                        <div class="producto-precio">$25</div>
+                    </div>
+                </div>
+
+                <div class="producto-card">
+                    <div class="producto-img-container">
+                        <img src="../Imagenes/Productos/PizzaArabe.png" alt="Pizza árabe">
+                    </div>
+                    <div class="producto-info">
+                        <div class="producto-id">#38</div>
+                        <div class="producto-nombre">Pizza árabe</div>
+                        <div class="producto-precio">$65</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
 </body>
