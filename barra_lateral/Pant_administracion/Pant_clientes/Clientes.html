@@ -289,6 +289,9 @@
             if (document.getElementById("numeroTelefono").value == "") {
                 alert("Número de Teléfono no ingresado"); return;
             }
+            if (document.getElementById("numeroTelefono").length != 10) {
+                alert("Número de Teléfono no es válido"); return;
+            }
             if (document.getElementById("correo").value == "") {
                 alert("Correo Electrónico no ingresado"); return;
             }
