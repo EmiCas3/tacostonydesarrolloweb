@@ -231,7 +231,7 @@
 
                 <div class="producto-card">
                     <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/" alt="Tony Especial Árabe"> <!--Cambiar imagen-->
+                        <img src="../Imagenes/Productos/TonyEArabe.png" alt="Tony Especial Árabe">
                     </div>
                     <div class="producto-info">
                         <div class="producto-id">#3</div>
@@ -242,7 +242,7 @@
 
                 <div class="producto-card">
                     <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/" alt="Tony Especial Torta"> <!--Cambiar imagen-->
+                        <img src="../Imagenes/Productos/TortaEArabe.png" alt="Tony Especial Torta">
                     </div>
                     <div class="producto-info">
                         <div class="producto-id">#4</div>
@@ -286,8 +286,7 @@
 
                 <div class="producto-card">
                     <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/" alt="Tony Especial Oriental">
-                        <!--Cambiar imagen-->
+                        <img src="../Imagenes/Productos/TonyEOrien.png" alt="Tony Especial Oriental">
                     </div>
                     <div class="producto-info">
                         <div class="producto-id">#8</div>
@@ -386,8 +385,7 @@
 
                 <div class="producto-card">
                     <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/" alt="Quesadilla Árabe con Gine">
-                        <!--Cambiar imagen-->
+                        <img src="../Imagenes/Productos/QuesaAGine.png" alt="Quesadilla Árabe con Gine">
                     </div>
                     <div class="producto-info">
                         <div class="producto-id">#17</div>
@@ -442,24 +440,12 @@
 
                 <div class="producto-card">
                     <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/" alt="Queso Tony Especial">
-                        <!--Cambiar imagen-->
+                        <img src="../Imagenes/Productos/QuesoTonyE.png" alt="Queso Tony Especial">
                     </div>
                     <div class="producto-info">
                         <div class="producto-id">#22</div>
                         <div class="producto-nombre">Queso Tony Especial</div>
                         <div class="producto-precio">$140</div>
-                    </div>
-                </div>
-
-                <div class="producto-card">
-                    <div class="producto-img-container">
-                        <img src="../Imagenes/Productos/QuesaArabe.png" alt="Quesadilla Árabe">
-                    </div>
-                    <div class="producto-info">
-                        <div class="producto-id">#23</div>
-                        <div class="producto-nombre">Quesadilla Árabe</div>
-                        <div class="producto-precio">$65</div>
                     </div>
                 </div>
 
@@ -631,7 +617,42 @@
             </div>
         </div>
     </div>
+    <script>
+        // Aplicar cambios del catálogo guardados desde Ajustes del Sitio
+        (function () {
+            var guardados = localStorage.getItem('catalogoProductos');
+            if (!guardados) return;
 
+            var productos = JSON.parse(guardados);
+            var cards = document.querySelectorAll('.producto-card');
+
+            for (var i = 0; i < cards.length && i < productos.length; i++) {
+                var p = productos[i];
+                var card = cards[i];
+
+                // Actualizar nombre
+                var nombreEl = card.querySelector('.producto-nombre');
+                if (nombreEl) nombreEl.textContent = p.nombre;
+
+                // Actualizar precio
+                var precioEl = card.querySelector('.producto-precio');
+                if (precioEl) precioEl.textContent = '$' + p.precio;
+
+                // Actualizar imagen (si fue cambiada)
+                var imgEl = card.querySelector('.producto-img-container img');
+                if (imgEl) {
+                    // Convertir ruta relativa o usar data URL directamente
+                    var nuevaSrc = p.imagen;
+                    if (nuevaSrc && nuevaSrc.indexOf('data:') !== 0) {
+                        // Las rutas en localStorage usan ../Imagenes/ (relativo a barra_lateral)
+                        nuevaSrc = p.imagen;
+                    }
+                    imgEl.src = nuevaSrc;
+                    imgEl.alt = p.nombre;
+                }
+            }
+        })();
+    </script>
 </body>
 
 </html>
