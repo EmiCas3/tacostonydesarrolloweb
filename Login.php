@@ -72,7 +72,9 @@ Contraseña: admin-->
 </head>
 
 <body style="height: 100vh; justify-content: center; align-items: center">
-
+    <?php include("Conex.php");
+        $link = Conectarse();
+    ?>
     <div class="login-card">
         <img src="./Imagenes/Tacos_tony_logo.png" name="Logo" width="220" margin-bottom="25px">
         <h2 style="font-size: large;">Sistema de control de inventario</h2>
@@ -88,7 +90,7 @@ Contraseña: admin-->
             <input class="button" type="button" name="Ingresar" value="INGRESAR" onclick="valida_enviar()">
         </form>
     </div>
-
+    
     <script>
         function valida_enviar() {
             var form = document.getElementById("loginForm");
@@ -106,6 +108,7 @@ Contraseña: admin-->
             } else {
                 window.location.href = "./barra_lateral/Dashboard.html";
             }
+            
         }
     </script>
 
