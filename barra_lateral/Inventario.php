@@ -322,11 +322,6 @@ $link = Conectarse();
             var tbody = tabla.tBodies[0] || tabla;
             var filas = Array.from(tbody.querySelectorAll('tr.fila'));
 
-            // Ignorar el ordenamiento si sólo está el mensaje de "Vacío"
-            if (filas.length === 1 && filas[0].querySelector('td').colSpan == 3) {
-                return;
-            }
-
             filas.sort(function(a, b) {
                 var valA = "";
                 var valB = "";
@@ -359,11 +354,6 @@ $link = Conectarse();
             var filas = document.querySelectorAll('#tablaInventario tr.fila');
 
             filas.forEach(function(fila) {
-                // Si la fila es el mensaje "No hay materiales registrados", saltarla
-                if (fila.querySelector('td').colSpan == 3) {
-                    return;
-                }
-
                 var tdTexto = "";
                 if (criterio === "id") {
                     tdTexto = fila.querySelector('.col-id').textContent.toLowerCase();
