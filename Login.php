@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<!--Usuario: admin 
-Contraseña: admin-->
+
 
 <head>
     <meta charset="UTF-8">
