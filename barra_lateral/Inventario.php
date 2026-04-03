@@ -244,23 +244,35 @@ $link = Conectarse();
     <div class="main-content">
         <div class="inventario-card">
 
-            <div class="controles-top">
+            <div class="controles-top" style="justify-content: space-between;">
                 <div class="control-grupo">
                     <label>Ordenar por:</label>
                     <div class="input-caja">
-                        <select>
+                        <select id="criterioOrdenar">
                             <option value="id">ID</option>
                             <option value="nombre">Nombre</option>
                             <option value="stock">Stock</option>
                         </select>
                     </div>
                 </div>
-                <div class="control-grupo">
-                    <div class="input-caja">
-                        <input type="text" placeholder="Buscar">
-                        <span style="cursor: pointer; display: flex; align-items: center;">
-                            <img src="../Imagenes/Search.png" alt="search" width="20" style="vertical-align: middle;">
-                        </span>
+
+                <div style="display: flex; gap: 20px;">
+                    <div class="control-grupo">
+                        <label>Buscar por:</label>
+                        <div class="input-caja">
+                            <select id="criterioBusqueda">
+                                <option value="id">ID</option>
+                                <option value="nombre">Nombre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-grupo">
+                        <div class="input-caja">
+                            <input type="text" id="textoBusqueda" placeholder="Buscar">
+                            <span style="cursor: pointer; display: flex; align-items: center;">
+                                <img src="../Imagenes/Search.png" alt="search" width="20" style="vertical-align: middle;">
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -272,7 +284,7 @@ $link = Conectarse();
                     <div class="col-stock">Stock actual</div>
                 </div>
                 <div class="tabla-body">
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table id="tablaInventario" style="width: 100%; border-collapse: collapse;">
                         <?php
                         $query = "SELECT id, nombre, existencias FROM t_materiales ORDER BY id";
                         $result = mysqli_query($link, $query) or die(mysqli_error($link));
@@ -299,6 +311,76 @@ $link = Conectarse();
         </div>
     </div>
 
+    <script>
+        document.getElementById('textoBusqueda').addEventListener('input', filtrarTabla);
+        document.getElementById('criterioBusqueda').addEventListener('change', filtrarTabla);
+        document.getElementById('criterioOrdenar').addEventListener('change', ordenarTabla);
+
+        function ordenarTabla() {
+            var criterio = document.getElementById('criterioOrdenar').value;
+            var tabla = document.getElementById('tablaInventario');
+            var tbody = tabla.tBodies[0] || tabla;
+            var filas = Array.from(tbody.querySelectorAll('tr.fila'));
+
+            // Ignorar el ordenamiento si sólo está el mensaje de "Vacío"
+            if (filas.length === 1 && filas[0].querySelector('td').colSpan == 3) {
+                return;
+            }
+
+            filas.sort(function(a, b) {
+                var valA = "";
+                var valB = "";
+
+                if (criterio === "id") {
+                    valA = parseInt(a.querySelector('.col-id').textContent.trim()) || 0;
+                    valB = parseInt(b.querySelector('.col-id').textContent.trim()) || 0;
+                    return valA - valB;
+                } else if (criterio === "nombre") {
+                    valA = a.querySelector('.col-mat').textContent.trim().toLowerCase();
+                    valB = b.querySelector('.col-mat').textContent.trim().toLowerCase();
+                    if (valA < valB) return -1;
+                    if (valA > valB) return 1;
+                    return 0;
+                } else if (criterio === "stock") {
+                    valA = parseFloat(a.querySelector('.col-stock').textContent.trim()) || 0;
+                    valB = parseFloat(b.querySelector('.col-stock').textContent.trim()) || 0;
+                    return valA - valB;
+                }
+            });
+
+            filas.forEach(function(fila) {
+                tbody.appendChild(fila);
+            });
+        }
+
+        function filtrarTabla() {
+            var filtro = document.getElementById('textoBusqueda').value.toLowerCase();
+            var criterio = document.getElementById('criterioBusqueda').value;
+            var filas = document.querySelectorAll('#tablaInventario tr.fila');
+
+            filas.forEach(function(fila) {
+                // Si la fila es el mensaje "No hay materiales registrados", saltarla
+                if (fila.querySelector('td').colSpan == 3) {
+                    return;
+                }
+
+                var tdTexto = "";
+                if (criterio === "id") {
+                    tdTexto = fila.querySelector('.col-id').textContent.toLowerCase();
+                } else if (criterio === "nombre") {
+                    tdTexto = fila.querySelector('.col-mat').textContent.toLowerCase();
+                } else if (criterio === "stock") {
+                    tdTexto = fila.querySelector('.col-stock').textContent.toLowerCase();
+                }
+
+                if (tdTexto.includes(filtro)) {
+                    fila.style.display = ""; // Mostrar
+                } else {
+                    fila.style.display = "none"; // Ocultar
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
