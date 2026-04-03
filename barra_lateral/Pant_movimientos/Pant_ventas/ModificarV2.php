@@ -1,3 +1,23 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+
+// Obtener el ID de la venta desde GET
+$id_venta = isset($_GET['id_venta']) ? intval($_GET['id_venta']) : 0;
+
+// Obtener los productos de esa venta
+$productos = [];
+if ($id_venta > 0) {
+    $query = "SELECT vp.id_producto, p.nombre, vp.cantidad, vp.subtotal
+              FROM t_vender_particular vp
+              INNER JOIN t_productos p ON vp.id_producto = p.id
+              WHERE vp.id_vg = $id_venta
+              ORDER BY p.nombre";
+    $result = mysqli_query($link, $query) or die(mysqli_error($link));
+    while($row = mysqli_fetch_assoc($result)){
+        $productos[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +25,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Movimientos - Ventas</title>
+    <title>Tacos Tony - Movimientos - Modificar Venta</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,6 +34,7 @@
             padding: 20px;
             display: flex;
             box-sizing: border-box;
+            min-height: 100vh;
         }
 
         .menu-item {
@@ -41,12 +62,12 @@
             justify-content: center;
         }
 
-        .formulario-card {
+        .inventario-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
             width: 100%;
-            max-width: 700px;
+            max-width: 800px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
@@ -62,57 +83,89 @@
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+        .tabla-contenedor {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             margin-bottom: 40px;
         }
 
-        .input-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .input-grupo label {
+        .tabla-header {
+            background: #f6821f;
+            color: #000;
             font-weight: bold;
-            color: #333333;
-            font-size: 14px;
+            display: flex;
+            padding: 15px 30px;
         }
 
-        .input-grupo input,
-        .input-grupo select,
-        .input-grupo datalist {
-            background-color: #F0F0F0;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 15px;
-            outline: none;
+        .tabla-body {
+            background-color: #E6E6E6;
+            height: auto;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .tabla-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tabla-body::-webkit-scrollbar-track {
+            background: transparent;
+            margin: 10px 0;
+        }
+
+        .tabla-body::-webkit-scrollbar-thumb {
+            background-color: #A0A0A0;
+            border-radius: 10px;
+        }
+
+        .fila {
+            display: flex;
+            padding: 10px 30px;
+            font-weight: bold;
             color: #333;
-            font-family: Arial, sans-serif;
+            align-items: center;
         }
 
-        .input-grupo input:focus,
-        .input-grupo select:focus,
-        .input-grupo datalist:focus {
-            border-color: #f6821f;
+        .col-id {
+            width: 10%;
+        }
+
+        .col-mat {
+            width: 40%;
+        }
+
+        .col-stock {
+            width: 20%;
+            text-align: center;
+        }
+
+        .col-subtotal {
+            width: 20%;
+            text-align: center;
+        }
+
+        .col-accion {
+            width: 10%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
         }
 
         .btn-accion {
             background: #f6821f;
             color: #000000;
             border: none;
-            padding: 15px 50px;
+            padding: 15px 40px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             text-decoration: none;
@@ -128,10 +181,10 @@
             background: #f6821f;
             color: #000000;
             border: none;
-            padding: 15px 50px;
+            padding: 15px 40px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             text-decoration: none;
@@ -213,85 +266,63 @@
             <div class="submenu">
                 <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
 
     <div class="main-content">
-        <div class="formulario-card">
+        <div class="inventario-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN PARTICULAR
+                PRODUCTOS DE LA VENTA
             </div>
-            <form id="venta2form" onsubmit="event.preventDefault(); valida_enviar();">
-                <div class="form-grid">
 
-                    <div class="input-grupo">
-                        <label>Nombre Producto</label>
-                        <input type="text" list="listaProductos" id="nombreProducto" placeholder="Ingrese el nombre">
-                        <datalist id="listaProductos">
-                            <option value="Taco Árabe"></option>
-                            <option value="Cebollitas"></option>
-                            <option value="Refresco"></option>
-                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Producto</label>
-                        <input type="number" id="idProducto" placeholder="Ingrese el ID">
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>Cantidad</label>
-                        <input type="number" id="cantidad" placeholder="Ingrese la cantidad">
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>Subtotal</label>
-                        <input type="number" id="subtotal" placeholder="Ingrese el subtotal" step="0.01">
-                    </div>
+            <div class="tabla-contenedor">
+                <div class="tabla-header">
+                    <div class="col-id">ID</div>
+                    <div class="col-mat">Nombre</div>
+                    <div class="col-stock">Cantidad</div>
+                    <div class="col-subtotal">Subtotal</div>
+                    <div class="col-accion">Acción</div>
                 </div>
-            </form>
-
+                <div class="tabla-body">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <?php foreach ($productos as $producto): ?>
+                        <tr class="fila">
+                            <td class="col-id"><?php echo $producto['id_producto']; ?></td>
+                            <td class="col-mat"><?php echo htmlspecialchars($producto['nombre']); ?></td>
+                            <td class="col-stock"><?php echo $producto['cantidad']; ?></td>
+                            <td class="col-subtotal">$<?php echo number_format($producto['subtotal'], 2); ?></td>
+                            <td class="col-accion">
+                                <a href="ModificarV3.php?id_venta=<?php echo $id_venta; ?>&id_producto=<?php echo $producto['id_producto']; ?>" style="text-decoration: none;">
+                                    <img src="../../../Imagenes/icon-edit.png" width="22" alt="Editar">
+                                </a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($productos)): ?>
+                        <tr class="fila">
+                            <td colspan="5" style="text-align:center; width: 100%; padding: 20px;">No hay productos registrados en esta venta.</td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                </div>
+            </div>
             <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-                <button type="button" onclick="document.getElementById('venta2form').reset()"
-                    style="background: none; border: none; cursor: pointer; ">
+                <a href="ModificarV3.php?id_venta=<?php echo $id_venta; ?>" style="background: none; border: none; cursor: pointer; ">
                     <img src="../../../Imagenes/masP.png" alt="Agregar" style="width: 45px; height: auto;">
-                </button>
+                </a>
                 <div style="color: #888; font-size: 16px;">¿Agregar otro producto?</div>
             </div>
-
-            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
+            <div class="botones-bottom">
                 <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
-
-                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+                <a href="../../Movimientos.html" class="btn-accion">CONFIRMAR</a>
             </div>
 
         </div>
     </div>
 
-    <script>
-        function valida_enviar() {
-            var form = document.getElementById("venta2form");
-            if (form.nombreProducto.value == "") {
-                alert("Nombre de producto no ingresado");
-                return 0;
-            } if (form.idProducto.value == "") {
-                alert("ID de producto no ingresado");
-                return 0;
-            } if (form.cantidad.value == "") {
-                alert("Cantidad no ingresada");
-                return 0;
-            } if (form.subtotal.value == "") {
-                alert("Subtotal no ingresado");
-                return 0;
-            } else {
-                alert("Finalizado con éxito.");
-                window.location.href = "../../Movimientos.html";
-            }
-        }
-    </script>
 </body>
 
 </html>

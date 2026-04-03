@@ -1,3 +1,20 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+
+$id_venta = isset($_GET['id_venta']) ? intval($_GET['id_venta']) : 0;
+$id_producto_modificar = isset($_GET['id_producto']) ? intval($_GET['id_producto']) : 0;
+
+$cantidad_inicial = '';
+$subtotal_inicial = '';
+if ($id_venta > 0 && $id_producto_modificar > 0) {
+    $q_det = "SELECT cantidad, subtotal FROM t_vender_particular WHERE id_vg = $id_venta AND id_producto = $id_producto_modificar";
+    $r_det = mysqli_query($link, $q_det);
+    if ($row_det = mysqli_fetch_assoc($r_det)) {
+        $cantidad_inicial = $row_det['cantidad'];
+        $subtotal_inicial = $row_det['subtotal'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -82,8 +99,7 @@
         }
 
         .input-grupo input,
-        .input-grupo select,
-        .input-grupo datalist {
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -95,8 +111,7 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus,
-        .input-grupo datalist:focus {
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
@@ -182,9 +197,9 @@
 <body>
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center" ">
-            <a href=" ../../Dashboard.html">
-            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center">
+            <a href="../../Dashboard.html">
+                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -213,7 +228,7 @@
             <div class="submenu">
                 <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
@@ -222,99 +237,93 @@
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN GENERAL
+                INFORMACIÓN PARTICULAR
             </div>
-            <form id="venta1form" method="post" action="#">
+            <form id="venta2form" onsubmit="event.preventDefault(); valida_enviar();">
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
-                        <input type="text" list="listaClientes" id="nombreCliente" placeholder="Ingrese el nombre">
-                        <datalist id="listaClientes">
-                            <option value="Raul"></option>
-                            <option value="Cesar"></option>
-                            <option value="Juan"></option>
-                            <option value="Maria"></option>
-                            <option value="Ana"></option>
-                            <option value="Pedro"></option>
-                            <option value="Luis"></option>
-                            <option value="Jorge"></option>
-                            <option value="Fernando"></option>
-                            <option value="Miguel"></option>
-                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Cliente</label>
-                        <input type="text" id="idCliente" placeholder="Ingrese el ID">
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaDia">
-                        <script>
-                            let fecha = new Date();
-                            let dia = fecha.getDate();
-                            let mes = fecha.getMonth() + 1;
-                            let anio = fecha.getFullYear();
-                            if (dia < 10) {
-                                dia = "0" + dia;
+                        <label>Nombre Producto</label>
+                        <select id="nombreProducto">
+                            <option value="">-- Seleccione --</option>
+                            <?php
+                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY nombre") or die(mysqli_error($link));
+                            while($row = mysqli_fetch_array($result)){
+                                $selected = ($id_producto_modificar == $row['id']) ? 'selected' : '';
+                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'" '.$selected.'>'.$row['nombre'].'</option>';
                             }
-                            if (mes < 10) {
-                                mes = "0" + mes;
-                            }
-                            document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
-                        </script>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>Servicio a Domicilio</label>
-                        <select>
-                            <option value="no">No</option>
-                            <option value="si">Sí</option>
+                            ?>
                         </select>
                     </div>
+
                     <div class="input-grupo">
-                        <label>Nombre Empleado</label>
-                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
-                        <datalist id="listaEmpleados">
-                            <option value="Raul"></option>
-                            <option value="Cesar"></option>
-                            <option value="Juan"></option>
-                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
+                        <label>ID Producto</label>
+                        <input type="number" id="idProducto" value="<?php echo $id_producto_modificar > 0 ? $id_producto_modificar : ''; ?>" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
-                        <label>ID Empleado</label>
-                        <input type="number" id="idEmpleado" placeholder="Ingrese el ID">
+                        <label>Cantidad</label>
+                        <input type="number" id="cantidad" value="<?php echo htmlspecialchars($cantidad_inicial); ?>" placeholder="Ingrese la cantidad">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Subtotal</label>
+                        <input type="number" id="subtotal" value="<?php echo htmlspecialchars($subtotal_inicial); ?>" placeholder="Se calcula automáticamente" step="0.01" readonly>
                     </div>
                 </div>
             </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                <a class="btn-accion" href="../../Movimientos.html">CANCELAR</a>
-                <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
+                <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
+
+                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
             </div>
 
         </div>
     </div>
 
     <script>
+        // Auto-llenar ID al seleccionar un producto y recalcular
+        document.getElementById('nombreProducto').addEventListener('change', function() {
+            document.getElementById('idProducto').value = this.value;
+            calcularSubtotal();
+        });
+
+        document.getElementById('cantidad').addEventListener('input', function() {
+            calcularSubtotal();
+        });
+
+        function calcularSubtotal() {
+            var select = document.getElementById('nombreProducto');
+            var selectedOption = select.options[select.selectedIndex];
+            var precio = selectedOption && selectedOption.value !== "" ? parseFloat(selectedOption.getAttribute('data-precio')) : 0;
+            var cantidadString = document.getElementById('cantidad').value;
+            var cantidad = cantidadString !== "" ? parseFloat(cantidadString) : NaN;
+            
+            if (precio > 0 && !isNaN(cantidad)) {
+                // Cálculo simple de la BDD.
+                document.getElementById('subtotal').value = (precio * cantidad).toFixed(2);
+            } else {
+                document.getElementById('subtotal').value = '';
+            }
+        }
+
         function valida_enviar() {
-            var form = document.getElementById("venta1form");
-            if (form.nombreCliente.value == "") {
-                alert("Nombre del cliente no ingresado");
+            var form = document.getElementById("venta2form");
+            if (form.nombreProducto.value == "") {
+                alert("Nombre de producto no ingresado");
                 return 0;
-            } if (form.idCliente.value == "") {
-                alert("ID del cliente no ingresado");
+            } if (form.idProducto.value == "") {
+                alert("ID de producto no ingresado");
                 return 0;
-            } if (form.nombreEmpleado.value == "") {
-                alert("Nombre del empleado no ingresado");
+            } if (form.cantidad.value == "") {
+                alert("Cantidad no ingresada");
                 return 0;
-            } if (form.idEmpleado.value == "") {
-                alert("ID del empleado no ingresado");
+            } if (form.subtotal.value == "") {
+                alert("Subtotal no ingresado");
                 return 0;
             } else {
-                window.location.href = "Ventas2.html";
+                alert("Guardado correctamente.");
+                window.location.href = "ModificarV2.php?id_venta=<?php echo $id_venta; ?>";
             }
         }
     </script>

@@ -71,16 +71,14 @@
 </head>
 
 <body style="height: 100vh; justify-content: center; align-items: center">
-    <?php include("Conex.php");
-        $link = Conectarse();
-    ?>
+
     <div class="login-card">
         <img src="./Imagenes/Tacos_tony_logo.png" name="Logo" width="220" margin-bottom="25px">
         <h2 style="font-size: large;">Sistema de control de inventario</h2>
 
-        <form id="loginForm" method="post" action="Ventas1.html">
+        <form id="loginForm" method="post" action="validar_login.php">
             <div class="input-group">
-                <input type="text" name="user" placeholder="Usuario" required>
+                <input type="text" name="user" placeholder="Correo electrónico" required>
             </div>
             <div class="input-group">
                 <input type="password" name="contra" placeholder="Contraseña" required>
@@ -95,19 +93,14 @@
             var form = document.getElementById("loginForm");
             if (form.user.value == "") {
                 alert("Usuario no ingresado")
-                return 0;
+                return;
             }
             if (form.contra.value == "") {
                 alert("Contraseña no ingresada")
-                return 0;
+                return;
             }
-            if (form.user.value != "admin" || form.contra.value != "admin") {
-                alert("Usuario o contraseña incorrectos")
-                return 0;
-            } else {
-                window.location.href = "./barra_lateral/Dashboard.html";
-            }
-            
+            // Enviamos al servidor PHP para que valide contra la BDD
+            form.submit();
         }
     </script>
 

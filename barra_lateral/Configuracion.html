@@ -174,7 +174,7 @@
             <div class="submenu">
                 <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
@@ -190,14 +190,12 @@
             <form style="width: 100%;" action="#" method="POST">
                 <div class="form-group">
                     <h2 for="nombre">Nombre Completo</h2>
-                    <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="Don Tacos Tony"
-                        required>
+                    <input type="text" id="nombre" name="nombre" placeholder="Cargando..." required>
                 </div>
 
                 <div class="form-group">
                     <h2 for="correo">Correo Electrónico</h2>
-                    <input type="email" id="correo" name="correo" placeholder="ejemplo@tacostony.com"
-                        value="admin@tony.com" required>
+                    <input type="email" id="correo" name="correo" placeholder="Cargando..." required>
                 </div>
 
                 <div class="form-group">
@@ -211,11 +209,34 @@
     </div>
 
     <script>
+        let datosOriginales = {};
+
+        // Al cargar la página, consultamos quién está logueado
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('../obtener_sesion.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logeado === true) {
+                        datosOriginales = data;
+                        document.getElementById("nombre").value = data.nombre;
+                        document.getElementById("correo").value = data.correo;
+                    } else {
+                        // No hay sesión activa, redirigir al login
+                        window.location.href = "../Login.php";
+                    }
+                })
+                .catch(err => {
+                    console.error("Error obteniendo sesión:", err);
+                });
+        });
+
         function guardar_cambios() {
             var nombre = document.getElementById("nombre").value;
             var correo = document.getElementById("correo").value;
             var password = document.getElementById("password").value;
-            if (nombre === "Don Tacos Tony" && correo === "admin@tony.com" && password === "") {
+
+            // Comparamos con los datos originales de la sesión
+            if (nombre === datosOriginales.nombre && correo === datosOriginales.correo && password === "") {
                 alert("No hay cambios que guardar");
                 return;
             }

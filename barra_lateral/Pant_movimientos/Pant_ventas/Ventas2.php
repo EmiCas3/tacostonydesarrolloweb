@@ -1,3 +1,6 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Movimientos - Modificar Venta</title>
+    <title>Tacos Tony - Movimientos - Ventas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +17,6 @@
             padding: 20px;
             display: flex;
             box-sizing: border-box;
-            min-height: 100vh;
         }
 
         .menu-item {
@@ -42,12 +44,12 @@
             justify-content: center;
         }
 
-        .inventario-card {
+        .formulario-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
             width: 100%;
-            max-width: 800px;
+            max-width: 700px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
@@ -63,84 +65,55 @@
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        .tabla-contenedor {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
             margin-bottom: 40px;
         }
 
-        .tabla-header {
-            background: #f6821f;
-            color: #000;
-            font-weight: bold;
+        .input-grupo {
             display: flex;
-            padding: 15px 30px;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .tabla-body {
-            background-color: #E6E6E6;
-            height: auto;
-            max-height: 250px;
-            overflow-y: auto;
-            padding: 10px 0;
-        }
-
-        .tabla-body::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .tabla-body::-webkit-scrollbar-track {
-            background: transparent;
-            margin: 10px 0;
-        }
-
-        .tabla-body::-webkit-scrollbar-thumb {
-            background-color: #A0A0A0;
-            border-radius: 10px;
-        }
-
-        .fila {
-            display: flex;
-            padding: 10px 30px;
+        .input-grupo label {
             font-weight: bold;
+            color: #333333;
+            font-size: 14px;
+        }
+
+        .input-grupo input,
+        .input-grupo select {
+            background-color: #F0F0F0;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 15px;
+            outline: none;
             color: #333;
-            align-items: center;
+            font-family: Arial, sans-serif;
         }
 
-        .col-id {
-            width: 15%;
-        }
-
-        .col-mat {
-            width: 45%;
-        }
-
-        .col-stock {
-            width: 25%;
-            text-align: center;
-        }
-
-        .col-accion {
-            width: 15%;
-            text-align: center;
-            display: flex;
-            justify-content: center;
+        .input-grupo input:focus,
+        .input-grupo select:focus {
+            border-color: #f6821f;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
         }
 
         .btn-accion {
             background: #f6821f;
             color: #000000;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 50px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             text-decoration: none;
@@ -156,10 +129,10 @@
             background: #f6821f;
             color: #000000;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 50px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             text-decoration: none;
@@ -241,74 +214,112 @@
             <div class="submenu">
                 <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
 
     <div class="main-content">
-        <div class="inventario-card">
+        <div class="formulario-card">
 
             <div class="titulo-caja">
-                PRODUCTOS DE LA VENTA
+                INFORMACIÓN PARTICULAR
             </div>
+            <form id="venta2form" onsubmit="event.preventDefault(); valida_enviar();">
+                <div class="form-grid">
 
-            <div class="tabla-contenedor">
-                <div class="tabla-header">
-                    <div class="col-id">ID</div>
-                    <div class="col-mat">Nombre</div>
-                    <div class="col-stock">Cantidad</div>
-                    <div class="col-accion">Acción</div>
+                    <div class="input-grupo">
+                        <label>Nombre Producto</label>
+                        <select id="nombreProducto">
+                            <option value="">-- Seleccione --</option>
+                            <?php
+                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY nombre") or die(mysqli_error($link));
+                            while($row = mysqli_fetch_array($result)){
+                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'">'.$row['nombre'].'</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>ID Producto</label>
+                        <input type="number" id="idProducto" placeholder="Se llena automáticamente" readonly>
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Cantidad</label>
+                        <input type="number" id="cantidad" placeholder="Ingrese la cantidad">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Subtotal</label>
+                        <input type="number" id="subtotal" placeholder="Se calcula automáticamente" step="0.01" readonly>
+                    </div>
                 </div>
-                <div class="tabla-body">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr class="fila">
-                            <td class="col-id">1</td>
-                            <td class="col-mat">Taco Árabe</td>
-                            <td class="col-stock">4</td>
-                            <td class="col-accion">
-                                <a href="ModificarV3.html" style="text-decoration: none;">
-                                    <img src="../../../Imagenes/icon-edit.png" width="22" alt="Editar">
-                                </a>
-                            </td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">38</td>
-                            <td class="col-mat">Refresco</td>
-                            <td class="col-stock">2</td>
-                            <td class="col-accion">
-                                <a href="ModificarV3.html" style="text-decoration: none;">
-                                    <img src="../../../Imagenes/icon-edit.png" width="22" alt="Editar">
-                                </a>
-                            </td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">25</td>
-                            <td class="col-mat">Cebollitas</td>
-                            <td class="col-stock">1</td>
-                            <td class="col-accion">
-                                <a href="ModificarV3.html" style="text-decoration: none;">
-                                    <img src="../../../Imagenes/icon-edit.png" width="22" alt="Editar">
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            </form>
+
             <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-                <a href="ModificarV3.html" style="background: none; border: none; cursor: pointer; ">
+                <button type="button" onclick="document.getElementById('venta2form').reset(); document.getElementById('idProducto').value='';"
+                    style="background: none; border: none; cursor: pointer; ">
                     <img src="../../../Imagenes/masP.png" alt="Agregar" style="width: 45px; height: auto;">
-                </a>
+                </button>
                 <div style="color: #888; font-size: 16px;">¿Agregar otro producto?</div>
             </div>
-            <div class="botones-bottom">
+
+            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
                 <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
-                <a href="../../Movimientos.html" class="btn-accion">CONFIRMAR</a>
+
+                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
             </div>
 
         </div>
     </div>
 
+    <script>
+        // Auto-llenar ID al seleccionar un producto y recalcular
+        document.getElementById('nombreProducto').addEventListener('change', function() {
+            document.getElementById('idProducto').value = this.value;
+            calcularSubtotal();
+        });
+
+        document.getElementById('cantidad').addEventListener('input', function() {
+            calcularSubtotal();
+        });
+
+        function calcularSubtotal() {
+            var select = document.getElementById('nombreProducto');
+            var selectedOption = select.options[select.selectedIndex];
+            var precio = selectedOption && selectedOption.value !== "" ? parseFloat(selectedOption.getAttribute('data-precio')) : 0;
+            var cantidadString = document.getElementById('cantidad').value;
+            var cantidad = cantidadString !== "" ? parseFloat(cantidadString) : NaN;
+            
+            if (precio > 0 && !isNaN(cantidad)) {
+                // Cálculo automático
+                document.getElementById('subtotal').value = (precio * cantidad).toFixed(2);
+            } else {
+                document.getElementById('subtotal').value = '';
+            }
+        }
+
+        function valida_enviar() {
+            if (document.getElementById('nombreProducto').value == "") {
+                alert("Nombre de producto no ingresado");
+                return 0;
+            } if (document.getElementById('idProducto').value == "") {
+                alert("ID de producto no ingresado");
+                return 0;
+            } if (document.getElementById('cantidad').value == "") {
+                alert("Cantidad no ingresada");
+                return 0;
+            } if (document.getElementById('subtotal').value == "") {
+                alert("Subtotal no ingresado");
+                return 0;
+            } else {
+                alert("Finalizado con éxito.");
+                window.location.href = "../../Movimientos.html";
+            }
+        }
+    </script>
 </body>
 
 </html>

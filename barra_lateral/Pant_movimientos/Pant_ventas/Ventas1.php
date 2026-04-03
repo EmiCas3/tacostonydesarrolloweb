@@ -1,3 +1,6 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Movimientos - Entradas</title>
+    <title>Tacos Tony - Movimientos - Ventas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,8 +85,7 @@
         }
 
         .input-grupo input,
-        .input-grupo select,
-        .input-grupo datalist {
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -95,14 +97,13 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus,
-        .input-grupo datalist:focus {
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
         }
 
         .btn-accion {
@@ -182,9 +183,9 @@
 <body>
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center">
-            <a href="../../Dashboard.html">
-                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center" ">
+            <a href=" ../../Dashboard.html">
+            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -213,7 +214,7 @@
             <div class="submenu">
                 <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
@@ -222,78 +223,94 @@
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                REGISTRAR ENTRADA
+                INFORMACIÓN GENERAL
             </div>
-
-            <form id="entrada2form" method="post" action="#">
+            <form id="venta1form" method="post" action="#">
                 <div class="form-grid">
+
                     <div class="input-grupo">
-                        <label>Nombre Material</label>
-                        <input type="text" list="listaMateriales" id="nombreMaterial" placeholder="Ingrese el nombre">
-                        <datalist id="listaMateriales">
-                            <option value="Carne"></option>
-                            <option value="Cebolla"></option>
-                            <option value="Tortilla de Maíz"></option>
-                            <option value="Tortilla de Harina"></option>
-                            <option value="Refresco"></option>
-                            <option value="Agua"></option>
-                            <option value="Servilletas"></option>
-                            <option value="Vasos"></option>
-                            <option value="Platos"></option>
-                            <option value="Cubiertos"></option>
-                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
+                        <label>Nombre Cliente</label>
+                        <select id="nombreCliente">
+                            <option value="">-- Seleccione --</option>
+                            <?php
+                            $result = mysqli_query($link, "SELECT id, nombre FROM t_clientes ORDER BY nombre") or die(mysqli_error($link));
+                            while($row = mysqli_fetch_array($result)){
+                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
 
                     <div class="input-grupo">
-                        <label>ID Material</label>
-                        <input type="number" id="idMaterial" placeholder="Ingrese el ID">
+                        <label>ID Cliente</label>
+                        <input type="number" id="idCliente" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
-                        <label>Cantidad</label>
-                        <input type="number" id="cantidad" placeholder="Ingrese la cantidad">
+                        <label>Fecha</label>
+                        <input type="date" id="fechaDia">
+                        <script>
+                            let fecha = new Date();
+                            let dia = fecha.getDate();
+                            let mes = fecha.getMonth() + 1;
+                            let anio = fecha.getFullYear();
+                            if (dia < 10) {
+                                dia = "0" + dia;
+                            }
+                            if (mes < 10) {
+                                mes = "0" + mes;
+                            }
+                            document.getElementById('fechaDia').value = anio + "-" + mes + "-" + dia;
+                        </script>
                     </div>
 
                     <div class="input-grupo">
-                        <label>Precio Unitario</label>
-                        <input type="number" id="precioUnitario" placeholder="Ingrese el precio unitario" step="0.01">
+                        <label>Servicio a Domicilio</label>
+                        <select>
+                            <option value="no">No</option>
+                            <option value="si">Sí</option>
+                        </select>
                     </div>
-                </div>
+                    <div class="input-grupo">
+                        <label>Nombre Empleado</label>
+                        <input type="text" id="nombreEmpleado" value="<?php echo isset($_SESSION['nombre_empleado']) ? $_SESSION['nombre_empleado'] : ''; ?>" readonly>
+                    </div>
 
-                <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-                    <button type="button" onclick="document.getElementById('entrada2form').reset()"
-                        style="background: none; border: none; cursor: pointer; padding: 0; margin: 0 auto 10px auto; display: block;">
-                        <img src="../../../Imagenes/masP.png" alt="Agregar" style="width: 45px; height: auto;">
-                    </button>
-                    <div style="color: #888; font-size: 16px;">¿Agregar otro material?</div>
-                </div>
-
-                <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                    <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
-                    <a class="btn-accion" onclick="validarEntrada()">CONFIRMAR</a>
+                    <div class="input-grupo">
+                        <label>ID Empleado</label>
+                        <input type="number" id="idEmpleado" value="<?php echo isset($_SESSION['id_empleado']) ? $_SESSION['id_empleado'] : ''; ?>" readonly>
+                    </div>
                 </div>
             </form>
+            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
+                <a class="btn-accion" href="../../Movimientos.html">CANCELAR</a>
+                <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
+            </div>
+
         </div>
     </div>
 
     <script>
-        function validarEntrada() {
-            var form = document.getElementById("entrada2form");
-            if (form.idMaterial.value == "") {
-                alert("ID de material no ingresado");
+        // Auto-llenar ID al seleccionar un cliente
+        document.getElementById('nombreCliente').addEventListener('change', function() {
+            document.getElementById('idCliente').value = this.value;
+        });
+
+        function valida_enviar() {
+            if (document.getElementById('nombreCliente').value == "") {
+                alert("Nombre del cliente no ingresado");
                 return 0;
-            } if (form.nombreMaterial.value == "") {
-                alert("Nombre de material no ingresado");
+            } if (document.getElementById('idCliente').value == "") {
+                alert("ID del cliente no ingresado");
                 return 0;
-            } if (form.cantidad.value == "") {
-                alert("Cantidad no ingresada");
+            } if (document.getElementById('nombreEmpleado').value == "") {
+                alert("Nombre del empleado no ingresado");
                 return 0;
-            } if (form.precioUnitario.value == "") {
-                alert("Precio unitario no ingresado");
+            } if (document.getElementById('idEmpleado').value == "") {
+                alert("ID del empleado no ingresado");
                 return 0;
             } else {
-                alert("Entrada registrada con éxito.");
-                window.location.href = "../../Movimientos.html";
+                window.location.href = "Ventas2.php";
             }
         }
     </script>

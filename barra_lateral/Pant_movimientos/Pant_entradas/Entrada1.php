@@ -1,3 +1,6 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -82,8 +85,7 @@
         }
 
         .input-grupo input,
-        .input-grupo select,
-        .input-grupo datalist {
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -95,8 +97,7 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus,
-        .input-grupo datalist:focus {
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
@@ -213,7 +214,7 @@
             <div class="submenu">
                 <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../Login.html" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
@@ -229,16 +230,19 @@
                 <div class="form-grid">
                     <div class="input-grupo">
                         <label>Nombre Proveedor</label>
-                        <input type="text" list="listaProveedores" id="nombreProveedor" placeholder="Ingrese el nombre">
-                        <datalist id="listaProveedores">
-                            <option value="Javier"></option>
-                            <option value="Gustavo"></option>
-                            <option value="Alejandro"></option>
-                        </datalist> <!--Preguntar en clase si hay algo distinto al datalist-->
+                        <select id="nombreProveedor">
+                            <option value="">-- Seleccione --</option>
+                            <?php
+                            $result = mysqli_query($link, "SELECT id, nombre FROM t_proovedores ORDER BY nombre") or die(mysqli_error($link));
+                            while($row = mysqli_fetch_array($result)){
+                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="input-grupo">
                         <label>ID Proveedor</label>
-                        <input type="number" id="idProveedor" placeholder="Ingrese el ID">
+                        <input type="number" id="idProveedor" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -269,17 +273,21 @@
     </div>
 
     <script>
+        // Auto-llenar ID al seleccionar un proveedor
+        document.getElementById('nombreProveedor').addEventListener('change', function() {
+            document.getElementById('idProveedor').value = this.value;
+        });
+
         function validarEntrada() {
-            var form = document.getElementById("entrada1form");
-            if (form.idProveedor.value == "") {
-                alert("ID del proveedor no ingresado");
-                return;
-            }
-            if (form.nombreProveedor.value == "") {
+            if (document.getElementById('nombreProveedor').value == "") {
                 alert("Nombre del proveedor no ingresado");
                 return;
+            }
+            if (document.getElementById('idProveedor').value == "") {
+                alert("ID del proveedor no ingresado");
+                return;
             } else {
-                window.location.href = "Entrada2.html";
+                window.location.href = "Entrada2.php";
             }
         }
     </script>
