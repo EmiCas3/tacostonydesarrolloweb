@@ -289,11 +289,11 @@
             if (document.getElementById("numeroTelefono").value == "") {
                 alert("Número de Teléfono no ingresado"); return;
             }
-            if (document.getElementById("numeroTelefono").length != 10) {
-                alert("Número de Teléfono no es válido"); return;
+            if (document.getElementById("numeroTelefono").value.length != 10) {
+                alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
             }
             if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return;
+                alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
             }
             if (document.getElementById("calle").value == "") {
                 alert("Calle no ingresada"); return;
