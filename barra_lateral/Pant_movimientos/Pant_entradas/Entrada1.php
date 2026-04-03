@@ -192,7 +192,7 @@ $link = Conectarse();
         <a href="../../Dashboard.html" class="menu-item">
             <img src="../../../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
         </a>
-        <a href="../../Inventario.html" class="menu-item">
+        <a href="../../Inventario.php" class="menu-item">
             <img src="../../../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
         </a>
         <a href="../../Movimientos.html" class="menu-item activo">

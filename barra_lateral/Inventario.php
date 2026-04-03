@@ -1,3 +1,6 @@
+<?php include("../conex.php");
+$link = Conectarse();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,7 +102,7 @@
 
         .tabla-body {
             background-color: #E6E6E6;
-            height: 180px;
+            height: 300px;
             overflow-y: auto;
             padding: 10px 0;
         }
@@ -210,32 +213,32 @@
 
         <a href="Dashboard.html" class="menu-item">
             <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
-
-            <a href="Inventario.html" class="menu-item activo">
-                <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
+        </a>
+        <a href="Inventario.php" class="menu-item activo">
+            <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
+        </a>
+        <a href="Movimientos.html" class="menu-item">
+            <img src="../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
+        </a>
+        <a href="Reportes.html" class="menu-item">
+            <img src="../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
+        </a>
+        <a href="Administracion.html" class="menu-item">
+            <img src="../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
+        </a>
+        <a href="Catalogo.html" class="menu-item">
+            <img src="../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
+        </a>
+        <div class="menu-dropdown">
+            <a class="menu-item">
+                <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
             </a>
-            <a href="Movimientos.html" class="menu-item">
-                <img src="../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
-            </a>
-            <a href="Reportes.html" class="menu-item">
-                <img src="../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
-            </a>
-            <a href="Administracion.html" class="menu-item">
-                <img src="../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
-            </a>
-            <a href="Catalogo.html" class="menu-item">
-                <img src="../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
-            </a>
-            <div class="menu-dropdown">
-                <a class="menu-item">
-                    <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
-                </a>
-                <div class="submenu">
-                    <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
-                    <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                    <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
-                </div>
+            <div class="submenu">
+                <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
+                <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
+        </div>
     </div>
 
     <div class="main-content">
@@ -270,31 +273,20 @@
                 </div>
                 <div class="tabla-body">
                     <table style="width: 100%; border-collapse: collapse;">
-                        <tr class="fila">
-                            <td class="col-id">1</td>
-                            <td class="col-mat">Carne cerdo</td>
-                            <td class="col-stock">2 Kg</td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">2</td>
-                            <td class="col-mat">Tortilla de maíz</td>
-                            <td class="col-stock">1 Kg</td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">3</td>
-                            <td class="col-mat">Cebolla</td>
-                            <td class="col-stock">2 Kg</td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">4</td>
-                            <td class="col-mat">Cilantro</td>
-                            <td class="col-stock">0.5 Kg</td>
-                        </tr>
-                        <tr class="fila">
-                            <td class="col-id">5</td>
-                            <td class="col-mat">Limones</td>
-                            <td class="col-stock">0 kg</td>
-                        </tr>
+                        <?php
+                        $query = "SELECT id, nombre, existencias FROM t_materiales ORDER BY id";
+                        $result = mysqli_query($link, $query) or die(mysqli_error($link));
+                        while($row = mysqli_fetch_array($result)){
+                            echo '<tr class="fila">';
+                            echo '<td class="col-id">'.$row['id'].'</td>';
+                            echo '<td class="col-mat">'.htmlspecialchars($row['nombre']).'</td>';
+                            echo '<td class="col-stock">'.$row['existencias'].'</td>';
+                            echo '</tr>';
+                        }
+                        if (mysqli_num_rows($result) == 0) {
+                            echo '<tr class="fila"><td colspan="3" style="text-align:center; padding:20px;">No hay materiales registrados.</td></tr>';
+                        }
+                        ?>
                     </table>
                 </div>
             </div>
