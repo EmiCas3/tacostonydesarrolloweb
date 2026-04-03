@@ -256,11 +256,11 @@
             if (document.getElementById("telefono").value == "") {
                 alert("Número de Teléfono no ingresado"); return;
             }
-            if (document.getElementById("telefono").length != 10) {
-                alert("Número de Teléfono no es válido"); return;
+            if (document.getElementById("telefono").value.length != 10) {
+                alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
             }
             if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return;
+                alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
             }
 
             alert("Proveedor registrado con éxito");
