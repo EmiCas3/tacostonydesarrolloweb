@@ -234,15 +234,15 @@ $link = Conectarse();
                 </table>
             </div>
 
-            <!-- VENTAS RECIENTES: últimas 5 ventas registradas -->
+
             <div class="caja">
                 <div class="encabezado-caja">
                     <img src="../Imagenes/icon-warning.png" width="20" name="Warning"> VENTAS RECIENTES
                 </div>
                 <table class="inventory">
                     <?php
-                    // Muestra las últimas 5 ventas con cliente y fecha
-                    $queryVentas = "SELECT vg.id, c.nombre AS cliente, vg.fecha 
+
+$queryVentas = "SELECT vg.id, c.nombre AS cliente, vg.fecha 
                                     FROM t_vender_general vg
                                     JOIN t_clientes c ON vg.id_cliente = c.id
                                     ORDER BY vg.fecha DESC LIMIT 5";
@@ -286,8 +286,8 @@ $link = Conectarse();
     </div>
 
     <?php
-    // Prepara datos de la gráfica: top 8 materiales con más existencias
-    $queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 8";
+
+$queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 8";
     $resGrafica = mysqli_query($link, $queryGrafica);
     $labelsGrafica = [];
     $datosGrafica = [];
@@ -302,7 +302,7 @@ $link = Conectarse();
     ?>
 
     <script>
-        // Gráfica de barras con datos reales de t_materiales
+
         var ctx = document.getElementById('graficaInventario').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
