@@ -1,3 +1,19 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+
+$idMaterial = isset($_POST['idMaterial']) ? $_POST['idMaterial'] : '';
+$nombre = "";
+$existencias = "";
+
+if ($idMaterial != '') {
+    $query = "SELECT nombre, existencias FROM t_materiales WHERE id = " . intval($idMaterial);
+    $result = mysqli_query($link, $query);
+    if ($row = mysqli_fetch_array($result)) {
+        $nombre = $row['nombre'];
+        $existencias = $row['existencias'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -202,20 +218,20 @@
             <form id="ajustes3form">
                 <div class="input-grupo">
                     <label>ID</label>
-                    <input type="text" class="read-only" readonly value="19">
+                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($idMaterial); ?>">
                 </div>
                 <div class="input-grupo">
-                    <label>QUESO GOUDA</label>
-                    <input type="text" class="read-only" readonly value="QUESO GOUDA">
+                    <label>Material</label>
+                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($nombre); ?>">
                 </div>
                 <div class="input-grupo">
-                    <label>2.5 KG</label>
-                    <input type="text" class="read-only" readonly value="2.5 KG">
+                    <label>Cantidad Actual</label>
+                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($existencias); ?>">
                 </div>
 
                 <div class="input-grupo">
-                    <label>NUEVA CANTIDAD</label>
-                    <input type="text" id="nuevaCantidad" name="nuevaCantidad" placeholder="INGRESA LA NUEVA CANTIDAD">
+                    <label>Nueva Cantidad</label>
+                    <input type="text" id="nuevaCantidad" name="nuevaCantidad" placeholder="Ingresa la nueva cantidad">
                 </div>
 
                 <a class="btn-accion" onclick="validarAjuste3()">CONFIRMAR</a>
@@ -231,7 +247,7 @@
                 return;
             } else {
                 alert("Ajuste realizado con éxito.");
-                window.location.href = "Ajustes1.html";
+                window.location.href = "ajustes1.php";
             }
         }
     </script>

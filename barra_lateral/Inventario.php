@@ -261,8 +261,8 @@ $link = Conectarse();
                         <label>Buscar por:</label>
                         <div class="input-caja">
                             <select id="criterioBusqueda">
-                                <option value="id">ID</option>
                                 <option value="nombre">Nombre</option>
+                                <option value="id">ID</option>
                             </select>
                         </div>
                     </div>
@@ -305,7 +305,7 @@ $link = Conectarse();
 
             <div class="botones-bottom">
                 <a href="Pant_inventario/Pant_altas/Altas1.html" class="btn-accion">ALTAS</a>
-                <a href="Pant_inventario/Pant_ajustes/ajustes1.html" class="btn-accion">AJUSTES</a>
+                <a href="Pant_inventario/Pant_ajustes/ajustes1.php" class="btn-accion">AJUSTES</a>
             </div>
 
         </div>

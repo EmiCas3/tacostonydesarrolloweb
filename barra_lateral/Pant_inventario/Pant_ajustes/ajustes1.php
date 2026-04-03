@@ -1,3 +1,6 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -110,7 +113,8 @@
             font-size: 14px;
         }
 
-        .input-grupo input {
+        .input-grupo input,
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -118,9 +122,12 @@
             font-size: 15px;
             outline: none;
             color: #333;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .input-grupo input:focus {
+        .input-grupo input:focus,
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
@@ -190,10 +197,18 @@
                 AJUSTES EN MATERIAL
             </div>
 
-            <form id="ajustes1form">
+            <form id="ajustes1form" method="POST" action="ajustes3.php">
                 <div class="input-grupo">
-                    <label>ID MATERIAL</label>
-                    <input type="text" id="idMaterial" name="idMaterial" placeholder="Ingrese el ID">
+                    <label>MATERIAL</label>
+                    <select id="idMaterial" name="idMaterial">
+                        <option value="">--Seleccione--</option>
+                        <?php
+                        $result = mysqli_query($link, "SELECT id, nombre FROM t_materiales ORDER BY id") or die(mysqli_error($link));
+                        while($row = mysqli_fetch_array($result)){
+                            echo '<option value="'.$row['id'].'">'.$row['id'].' - '.htmlspecialchars($row['nombre']).'</option>';
+                        }
+                        ?>
+                    </select>
                 </div>
                 <a class="btn-accion" onclick="validarAjuste1()">BUSCAR</a>
             </form>
@@ -204,10 +219,10 @@
         function validarAjuste1() {
             var form = document.getElementById("ajustes1form");
             if (form.idMaterial.value == "") {
-                alert("ID de material no ingresado");
+                alert("Material no seleccionado");
                 return;
             } else {
-                window.location.href = "Ajustes3.html";
+                form.submit();
             }
         }
     </script>
