@@ -259,7 +259,7 @@ $link = Conectarse();
             </form>
 
             <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-                <button type="button" onclick="document.getElementById('venta2form').reset(); document.getElementById('idProducto').value='';"
+                <button type="button" onclick="agregarProducto()"
                     style="background: none; border: none; cursor: pointer; ">
                     <img src="../../../Imagenes/masP.png" alt="Agregar" style="width: 45px; height: auto;">
                 </button>
@@ -276,6 +276,9 @@ $link = Conectarse();
     </div>
 
     <script>
+        // Arreglo para almacenar en sesion los productos de la venta actual
+        var productosVenta = JSON.parse(sessionStorage.getItem('productosVenta') || "[]");
+
         // Auto-llenar ID al seleccionar un producto y recalcular
         document.getElementById('nombreProducto').addEventListener('change', function() {
             document.getElementById('idProducto').value = this.value;
@@ -301,23 +304,56 @@ $link = Conectarse();
             }
         }
 
-        function valida_enviar() {
-            if (document.getElementById('nombreProducto').value == "") {
-                alert("Nombre de producto no ingresado");
-                return 0;
-            } if (document.getElementById('idProducto').value == "") {
-                alert("ID de producto no ingresado");
-                return 0;
-            } if (document.getElementById('cantidad').value == "") {
-                alert("Cantidad no ingresada");
-                return 0;
-            } if (document.getElementById('subtotal').value == "") {
-                alert("Subtotal no ingresado");
-                return 0;
-            } else {
-                alert("Finalizado con éxito.");
-                window.location.href = "../../Movimientos.html";
+        function agregarProducto() {
+            var select = document.getElementById('nombreProducto');
+            if (select.value == "") {
+                alert("Seleccione un producto para agregarlo.");
+                return;
             }
+            if (document.getElementById('cantidad').value == "" || document.getElementById('subtotal').value == "") {
+                alert("Ingrese una cantidad válida.");
+                return;
+            }
+
+            var selectedOption = select.options[select.selectedIndex];
+            productosVenta.push({
+                nombre: selectedOption.text,
+                id: document.getElementById('idProducto').value,
+                cantidad: document.getElementById('cantidad').value,
+                subtotal: document.getElementById('subtotal').value
+            });
+
+            sessionStorage.setItem('productosVenta', JSON.stringify(productosVenta));
+            alert("Producto agregado.");
+            
+            document.getElementById('venta2form').reset();
+            document.getElementById('idProducto').value = '';
+        }
+
+        function valida_enviar() {
+            var select = document.getElementById('nombreProducto');
+            
+            // Si hay algo escrito en el form, lo intentamos agregar o avisamos
+            if (select.value !== "" && document.getElementById('cantidad').value !== "") {
+                var selectedOption = select.options[select.selectedIndex];
+                productosVenta.push({
+                    nombre: selectedOption.text,
+                    id: document.getElementById('idProducto').value,
+                    cantidad: document.getElementById('cantidad').value,
+                    subtotal: document.getElementById('subtotal').value
+                });
+                sessionStorage.setItem('productosVenta', JSON.stringify(productosVenta));
+            } else if (select.value !== "" || document.getElementById('cantidad').value !== "") {
+                alert("Complete los campos del producto actual, o límpielos para continuar.");
+                return 0;
+            }
+
+            if (productosVenta.length === 0) {
+                alert("No hay productos agregados a la venta.");
+                return 0;
+            }
+
+            window.location.href = "Ventas3.html";
         }
     </script>
 </body>
