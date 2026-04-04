@@ -255,6 +255,9 @@ $link = Conectarse();
                         <label>Subtotal</label>
                         <input type="number" id="subtotal" placeholder="Se calcula automáticamente" step="0.01" readonly>
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
             </form>
 

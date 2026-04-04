@@ -244,6 +244,9 @@ $jsonNombres = json_encode($nombres);
                         <label>Cantidad Inicial</label>
                         <input type="number" id="cantidadInicial" placeholder="Ingrese la cantidad" min="0" step="0.1">
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
 
                 <div class="botones-bottom">

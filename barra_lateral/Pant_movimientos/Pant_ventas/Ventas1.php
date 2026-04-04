@@ -288,6 +288,9 @@ $link = Conectarse();
                         <label>ID Empleado</label>
                         <input type="number" id="idEmpleado" value="<?php echo isset($_SESSION['id_empleado']) ? $_SESSION['id_empleado'] : ''; ?>" readonly>
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
             </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">

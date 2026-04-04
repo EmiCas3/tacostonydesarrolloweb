@@ -254,6 +254,9 @@ $jsonNombres = json_encode($nombres);
                         <label>Precio</label>
                         <input type="number" id="precioProducto" placeholder="Ingrese el precio" step="0.01">
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
             </form>
 

@@ -240,7 +240,7 @@ $jsonCorreos = json_encode($correos);
             <form id="clienteForm" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
+                        <label>Nombre Cliente <span style="color: #073A79;">*</span></label>
                         <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
@@ -256,11 +256,11 @@ $jsonCorreos = json_encode($correos);
                         <input type="number" id="codigoPostal" placeholder="Ingrese el CP">
                     </div>
                     <div class="input-grupo">
-                        <label>Número de Teléfono</label>
+                        <label>Número de Teléfono <span style="color: #073A79;">*</span></label>
                         <input type="number" id="numeroTelefono" placeholder="Ingrese el número">
                     </div>
                     <div class="input-grupo">
-                        <label>Correo Electrónico</label>
+                        <label>Correo Electrónico <span style="color: #073A79;">*</span></label>
                         <input type="text" id="correo" placeholder="Ingrese el correo">
                     </div>
                     <div class="input-grupo">
@@ -274,6 +274,9 @@ $jsonCorreos = json_encode($correos);
                     <div class="input-grupo">
                         <label>Estado</label>
                         <input type="text" id="estado" placeholder="Ingrese el estado">
+                    </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">* Campos obligatorios</label>
                     </div>
                 </div>
             </form>

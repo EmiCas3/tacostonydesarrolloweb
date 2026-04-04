@@ -264,6 +264,9 @@ $jsonCorreos = json_encode($correos);
                         <label>Contraseña</label>
                         <input type="password" id="contrasenaEmpleado" placeholder="Ingrese la contraseña">
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
             </form>
 

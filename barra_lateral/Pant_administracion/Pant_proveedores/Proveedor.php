@@ -251,6 +251,9 @@ $jsonCorreos = json_encode($correos);
                         <label>Correo Electrónico</label>
                         <input type="text" id="correo" placeholder="Ingrese el correo">
                     </div>
+                    <div class="input-grupo">
+                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
+                    </div>
                 </div>
             </form>
 
