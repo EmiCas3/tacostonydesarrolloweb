@@ -264,11 +264,10 @@ $jsonNombres = json_encode($nombres);
             var nombreStr = nombreInput.value.trim().toLowerCase();
 
             if (nombreInput.value.trim() == "") {
-                alert("Nombre del material no ingresado"); //Agregar que no se repita en la base de datos
+                alert("Nombre del material no ingresado");
                 nombreInput.focus();
                 return false;
             }
-            
             var nombreExiste = nombresDB.some(n => n.toLowerCase() === nombreStr);
             if (nombreExiste) {
                 alert("Este material ya existe en la base de datos.");

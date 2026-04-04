@@ -271,7 +271,7 @@ $jsonNombres = json_encode($nombres);
             var nombreStr = form.nombreProducto.value.trim().toLowerCase();
 
             if (form.nombreProducto.value == "") {
-                alert("Nombre del producto no ingresado"); //Agregar que no se repita en la base de datos
+                alert("Nombre del producto no ingresado");
                 return 0;
             }
             var nombreExiste = nombresDB.some(n => n.toLowerCase() === nombreStr);

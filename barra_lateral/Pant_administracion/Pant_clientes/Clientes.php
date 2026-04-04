@@ -307,13 +307,13 @@ $jsonCorreos = json_encode($correos);
                 alert("Número de Teléfono no ingresado"); return;
             }
             if (document.getElementById("numeroTelefono").value.length != 10) {
-                alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
+                alert("Número de Teléfono no es válido"); return;
             }
             if (telefonosDB.includes(document.getElementById("numeroTelefono").value)) {
                 alert("El número de teléfono ya está registrado en la base de datos."); return;
             }
             if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
+                alert("Correo Electrónico no ingresado"); return;
             }
             if (correosDB.includes(document.getElementById("correo").value)) {
                 alert("El correo electrónico ya está registrado en la base de datos."); return;

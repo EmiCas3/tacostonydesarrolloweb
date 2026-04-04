@@ -283,7 +283,7 @@ $jsonCorreos = json_encode($correos);
                 return 0;
             } if (form.correoEmpleado.value == "") {
                 alert("Correo del empleado no ingresado");
-                return 0; //Agregar que no se repita en la base de datos
+                return 0;
             } if (correosDB.includes(form.correoEmpleado.value)) {
                 alert("El correo electrónico ya está registrado en la base de datos.");
                 return 0;
