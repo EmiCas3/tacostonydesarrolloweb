@@ -233,10 +233,18 @@ $link = Conectarse();
                         <select id="nombreCliente">
                             <option value="">-- Seleccione --</option>
                             <?php
-                            $result = mysqli_query($link, "SELECT id, nombre FROM t_clientes ORDER BY nombre") or die(mysqli_error($link));
+                            $clientesData = [];
+                            $result = mysqli_query($link, "SELECT id, nombre, codigo_postal, calle, colonia, estado FROM t_clientes ORDER BY nombre") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
                                 echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                                $clientesData[$row['id']] = [
+                                    'cp' => $row['codigo_postal'],
+                                    'calle' => $row['calle'],
+                                    'colonia' => $row['colonia'],
+                                    'estado' => $row['estado']
+                                ];
                             }
+                            $jsonClientes = json_encode($clientesData);
                             ?>
                         </select>
                     </div>
@@ -266,7 +274,7 @@ $link = Conectarse();
 
                     <div class="input-grupo">
                         <label>Servicio a Domicilio</label>
-                        <select>
+                        <select id="servicioDomicilio">
                             <option value="no">No</option>
                             <option value="si">Sí</option>
                         </select>
@@ -291,16 +299,21 @@ $link = Conectarse();
     </div>
 
     <script>
+        var clientesData = <?php echo isset($jsonClientes) ? $jsonClientes : '{}'; ?>;
+
         // Auto-llenar ID al seleccionar un cliente
         document.getElementById('nombreCliente').addEventListener('change', function() {
             document.getElementById('idCliente').value = this.value;
         });
 
         function valida_enviar() {
+            var idCli = document.getElementById('idCliente').value;
+            var servDom = document.getElementById('servicioDomicilio').value;
+
             if (document.getElementById('nombreCliente').value == "") {
                 alert("Nombre del cliente no ingresado");
                 return 0;
-            } if (document.getElementById('idCliente').value == "") {
+            } if (idCli == "") {
                 alert("ID del cliente no ingresado");
                 return 0;
             } if (document.getElementById('nombreEmpleado').value == "") {
@@ -309,9 +322,17 @@ $link = Conectarse();
             } if (document.getElementById('idEmpleado').value == "") {
                 alert("ID del empleado no ingresado");
                 return 0;
-            } else {
-                window.location.href = "Ventas2.php";
             }
+
+            if (servDom === "si") {
+                var c = clientesData[idCli];
+                if (!c || !c.cp || !c.calle || !c.colonia || !c.estado || c.cp.trim() === "" || c.calle.trim() === "" || c.colonia.trim() === "" || c.estado.trim() === "") {
+                    alert("El cliente no cuenta con una dirección completa (código postal, calle, colonia y estado) para el servicio a domicilio.");
+                    return 0;
+                }
+            }
+
+            window.location.href = "Ventas2.php";
         }
     </script>
 </body>
