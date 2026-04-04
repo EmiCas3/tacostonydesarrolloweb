@@ -1,3 +1,17 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+$telefonos = [];
+$correos = [];
+$res = mysqli_query($link, "SELECT numero_telefono, correo FROM t_proovedores");
+if ($res) {
+    while($row = mysqli_fetch_array($res)) {
+        $telefonos[] = $row['numero_telefono'];
+        $correos[] = $row['correo'];
+    }
+}
+$jsonTelefonos = json_encode($telefonos);
+$jsonCorreos = json_encode($correos);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +19,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administración - Clientes</title>
+    <title>Tacos Tony - Administración - Proveedores</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -220,46 +234,22 @@
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN DEL CLIENTE
+                DATOS DEL PROVEEDOR
             </div>
 
-            <form id="clienteForm" method="post" action="#">
+            <form id="proveedorForm" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
-                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
-                    </div>
-                    <div class="input-grupo">
-                        <label>RFC</label>
-                        <input type="text" id="rfc" placeholder="Ingrese el RFC">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Razón Social</label>
-                        <input type="text" id="razonSocial" placeholder="Ingrese la razón social">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Código Postal</label>
-                        <input type="number" id="codigoPostal" placeholder="Ingrese el CP">
+                        <label>Nombre</label>
+                        <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
                         <label>Número de Teléfono</label>
-                        <input type="number" id="numeroTelefono" placeholder="Ingrese el número">
+                        <input type="number" id="telefono" placeholder="Ingrese el número">
                     </div>
                     <div class="input-grupo">
                         <label>Correo Electrónico</label>
                         <input type="text" id="correo" placeholder="Ingrese el correo">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Calle</label>
-                        <input type="text" id="calle" placeholder="Ingrese la calle">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Colonia</label>
-                        <input type="text" id="colonia" placeholder="Ingrese la colonia">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Estado</label>
-                        <input type="text" id="estado" placeholder="Ingrese el estado">
                     </div>
                 </div>
             </form>
@@ -274,38 +264,29 @@
 
     <script>
         function valida_enviar() {
-            if (document.getElementById("nombreCliente").value == "") {
-                alert("Nombre del cliente no ingresado"); return;
+            var telefonosDB = <?php echo $jsonTelefonos; ?>;
+            var correosDB = <?php echo $jsonCorreos; ?>;
+
+            if (document.getElementById("nombreProveedor").value == "") {
+                alert("Nombre del proveedor no ingresado"); return;
             }
-            if (document.getElementById("rfc").value == "") {
-                alert("RFC no ingresado"); return;
-            }
-            if (document.getElementById("razonSocial").value == "") {
-                alert("Razón Social no ingresada"); return;
-            }
-            if (document.getElementById("codigoPostal").value == "") {
-                alert("Código Postal no ingresado"); return;
-            }
-            if (document.getElementById("numeroTelefono").value == "") {
+            if (document.getElementById("telefono").value == "") {
                 alert("Número de Teléfono no ingresado"); return;
             }
-            if (document.getElementById("numeroTelefono").value.length != 10) {
+            if (document.getElementById("telefono").value.length != 10) {
                 alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
+            }
+            if (telefonosDB.includes(document.getElementById("telefono").value)) {
+                alert("El número de teléfono ya está registrado en la base de datos."); return;
             }
             if (document.getElementById("correo").value == "") {
                 alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
             }
-            if (document.getElementById("calle").value == "") {
-                alert("Calle no ingresada"); return;
-            }
-            if (document.getElementById("colonia").value == "") {
-                alert("Colonia no ingresada"); return;
-            }
-            if (document.getElementById("estado").value == "") {
-                alert("Estado no ingresado"); return;
+            if (correosDB.includes(document.getElementById("correo").value)) {
+                alert("El correo electrónico ya está registrado en la base de datos."); return;
             }
 
-            alert("Cliente registrado con éxito");
+            alert("Proveedor registrado con éxito");
             window.location.href = "../../Administracion.html";
         }
     </script>

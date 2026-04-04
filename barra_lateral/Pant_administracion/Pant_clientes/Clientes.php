@@ -1,3 +1,17 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+$telefonos = [];
+$correos = [];
+$res = mysqli_query($link, "SELECT numero_telefono, correo FROM t_clientes");
+if ($res) {
+    while($row = mysqli_fetch_array($res)) {
+        $telefonos[] = $row['numero_telefono'];
+        $correos[] = $row['correo'];
+    }
+}
+$jsonTelefonos = json_encode($telefonos);
+$jsonCorreos = json_encode($correos);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +19,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administracion - Colaboradores</title>
+    <title>Tacos Tony - Administración - Clientes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,7 +55,7 @@
             justify-content: center;
         }
 
-        .colaboradores-card {
+        .formulario-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
@@ -82,8 +96,7 @@
         }
 
         .input-grupo input,
-        .input-grupo select,
-        .input-grupo datalist {
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -95,14 +108,13 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus,
-        .input-grupo datalist:focus {
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
         }
 
         .btn-accion {
@@ -180,12 +192,11 @@
 </head>
 
 <body>
-
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center" ">
-            <a href=" ../../Dashboard.php">
-            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center">
+            <a href="../../Dashboard.php">
+                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -220,68 +231,105 @@
     </div>
 
     <div class="main-content">
-        <div class="colaboradores-card">
+        <div class="formulario-card">
 
             <div class="titulo-caja">
-                INFORMACIÓN DEL COLABORADOR
+                INFORMACIÓN DEL CLIENTE
             </div>
 
-            <form id="colaboradores1form" method="post" action="#">
+            <form id="clienteForm" method="post" action="#">
                 <div class="form-grid">
-
                     <div class="input-grupo">
-                        <label>Nombre Empleado</label>
-                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
-                        <datalist id="listaEmpleados">
-                            <option value="Raul"></option>
-                            <option value="Cesar"></option>
-                            <option value="Fernando"></option>
-                        </datalist>
+                        <label>Nombre Cliente</label>
+                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
                     </div>
-
+                    <div class="input-grupo">
+                        <label>RFC</label>
+                        <input type="text" id="rfc" placeholder="Ingrese el RFC">
+                    </div>
+                    <div class="input-grupo">
+                        <label>Razón Social</label>
+                        <input type="text" id="razonSocial" placeholder="Ingrese la razón social">
+                    </div>
+                    <div class="input-grupo">
+                        <label>Código Postal</label>
+                        <input type="number" id="codigoPostal" placeholder="Ingrese el CP">
+                    </div>
+                    <div class="input-grupo">
+                        <label>Número de Teléfono</label>
+                        <input type="number" id="numeroTelefono" placeholder="Ingrese el número">
+                    </div>
                     <div class="input-grupo">
                         <label>Correo Electrónico</label>
-                        <input type="email" id="correoEmpleado" placeholder="Ingrese el correo">
+                        <input type="text" id="correo" placeholder="Ingrese el correo">
                     </div>
-
                     <div class="input-grupo">
-                        <label>Salario</label>
-                        <input type="number" id="salarioEmpleado" placeholder="Ingrese el salario" step="0.01">
+                        <label>Calle</label>
+                        <input type="text" id="calle" placeholder="Ingrese la calle">
                     </div>
-
                     <div class="input-grupo">
-                        <label>Contraseña</label>
-                        <input type="password" id="contrasenaEmpleado" placeholder="Ingrese la contraseña">
+                        <label>Colonia</label>
+                        <input type="text" id="colonia" placeholder="Ingrese la colonia">
+                    </div>
+                    <div class="input-grupo">
+                        <label>Estado</label>
+                        <input type="text" id="estado" placeholder="Ingrese el estado">
                     </div>
                 </div>
             </form>
 
-            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                <a class="btn-accion" href="../../Administracion.html">CANCELAR</a>
+            <div class="botones-bottom">
+                <a class="btn-secundario" href="../../Administracion.html">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
             </div>
+
         </div>
     </div>
 
     <script>
         function valida_enviar() {
-            var form = document.getElementById("colaboradores1form");
-            if (form.nombreEmpleado.value == "") {
-                alert("Nombre del empleado no ingresado");
-                return 0;
-            } if (form.correoEmpleado.value == "") {
-                alert("Correo del empleado no ingresado");
-                return 0; //Agregar que no se repita en la base de datos
-            } if (form.salarioEmpleado.value == "") {
-                alert("Salario del empleado no ingresado");
-                return 0;
-            } if (form.contrasenaEmpleado.value == "") {
-                alert("Contraseña del empleado no ingresada");
-                return 0;
-            } else {
-                alert("Colaborador registrado con éxito.");
-                window.location.href = "../../Administracion.html";
+            var telefonosDB = <?php echo $jsonTelefonos; ?>;
+            var correosDB = <?php echo $jsonCorreos; ?>;
+
+            if (document.getElementById("nombreCliente").value == "") {
+                alert("Nombre del cliente no ingresado"); return;
             }
+            if (document.getElementById("rfc").value == "") {
+                alert("RFC no ingresado"); return;
+            }
+            if (document.getElementById("razonSocial").value == "") {
+                alert("Razón Social no ingresada"); return;
+            }
+            if (document.getElementById("codigoPostal").value == "") {
+                alert("Código Postal no ingresado"); return;
+            }
+            if (document.getElementById("numeroTelefono").value == "") {
+                alert("Número de Teléfono no ingresado"); return;
+            }
+            if (document.getElementById("numeroTelefono").value.length != 10) {
+                alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
+            }
+            if (telefonosDB.includes(document.getElementById("numeroTelefono").value)) {
+                alert("El número de teléfono ya está registrado en la base de datos."); return;
+            }
+            if (document.getElementById("correo").value == "") {
+                alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
+            }
+            if (correosDB.includes(document.getElementById("correo").value)) {
+                alert("El correo electrónico ya está registrado en la base de datos."); return;
+            }
+            if (document.getElementById("calle").value == "") {
+                alert("Calle no ingresada"); return;
+            }
+            if (document.getElementById("colonia").value == "") {
+                alert("Colonia no ingresada"); return;
+            }
+            if (document.getElementById("estado").value == "") {
+                alert("Estado no ingresado"); return;
+            }
+
+            alert("Cliente registrado con éxito");
+            window.location.href = "../../Administracion.html";
         }
     </script>
 </body>

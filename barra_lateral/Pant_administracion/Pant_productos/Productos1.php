@@ -1,3 +1,14 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+$nombres = [];
+$res = mysqli_query($link, "SELECT nombre FROM t_productos");
+if ($res) {
+    while($row = mysqli_fetch_array($res)) {
+        $nombres[] = $row['nombre'];
+    }
+}
+$jsonNombres = json_encode($nombres);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Inventario - Altas</title>
+    <title>Tacos Tony - Administracion - Productos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,7 +52,7 @@
             justify-content: center;
         }
 
-        .formulario-card {
+        .productos-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
@@ -82,7 +93,8 @@
         }
 
         .input-grupo input,
-        .input-grupo select {
+        .input-grupo select,
+        .input-grupo datalist {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -94,13 +106,14 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus {
+        .input-grupo select:focus,
+        .input-grupo datalist:focus {
             border-color: #f6821f;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
         }
 
         .btn-accion {
@@ -178,18 +191,19 @@
 </head>
 
 <body>
+
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center">
-            <a href="../../Dashboard.php">
-                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center" ">
+            <a href=" ../../Dashboard.php">
+            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
         <a href="../../Dashboard.php" class="menu-item">
             <img src="../../../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
         </a>
-        <a href="../../Inventario.php" class="menu-item activo">
+        <a href="../../Inventario.php" class="menu-item">
             <img src="../../../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
         </a>
         <a href="../../Movimientos.html" class="menu-item">
@@ -198,7 +212,7 @@
         <a href="../../Reportes.html" class="menu-item">
             <img src="../../../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
         </a>
-        <a href="../../Administracion.html" class="menu-item">
+        <a href="../../Administracion.html" class="menu-item activo">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
         <a href="../../Catalogo.html" class="menu-item">
@@ -217,58 +231,61 @@
     </div>
 
     <div class="main-content">
-        <div class="formulario-card">
+        <div class="productos-card">
 
             <div class="titulo-caja">
-                REGISTRAR NUEVO MATERIAL
+                INFORMACIÓN DEL PRODUCTO
             </div>
 
-            <form id="altasForm1" method="post" action="#">
+            <form id="productos1form" method="post" action="#">
                 <div class="form-grid">
-                    <div class="input-grupo">
-                        <label>Nombre del Material</label>
-                        <input type="text" id="nombreMaterial" placeholder="Ingrese el nombre">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Cantidad Inicial</label>
-                        <input type="number" id="cantidadInicial" placeholder="Ingrese la cantidad" min="0" step="0.1">
-                    </div>
-                </div>
 
-                <div class="botones-bottom">
-                    <input type="button" value="CANCELAR" onclick="history.go(-1)" class="btn-secundario">
-                    <a class="btn-accion" onclick="validarAlta()">CONTINUAR</a>
+                    <div class="input-grupo">
+                        <label>Nombre Producto</label>
+                        <input type="text" list="listaProductos" id="nombreProducto" placeholder="Ingrese el nombre">
+                        <datalist id="listaProductos">
+                            <option value="Taco de Arabe"></option>
+                            <option value="Falafel"></option>
+                            <option value="Pizza Arabe"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Precio</label>
+                        <input type="number" id="precioProducto" placeholder="Ingrese el precio" step="0.01">
+                    </div>
                 </div>
             </form>
 
+            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
+                <a class="btn-accion" href="../../Administracion.html">CANCELAR</a>
+                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+            </div>
         </div>
     </div>
 
     <script>
-        function validarAlta() {
-            var form = document.getElementById("altasForm1");
-            var nombreInput = document.getElementById("nombreMaterial");
-            var cantidadInput = document.getElementById("cantidadInicial");
+        function valida_enviar() {
+            var nombresDB = <?php echo $jsonNombres; ?>;
+            var form = document.getElementById("productos1form");
+            var nombreStr = form.nombreProducto.value.trim().toLowerCase();
 
-            if (nombreInput.value.trim() == "") {
-                alert("Nombre del material no ingresado"); //Agregar que no se repita en la base de datos
-                nombreInput.focus();
-                return false;
+            if (form.nombreProducto.value == "") {
+                alert("Nombre del producto no ingresado"); //Agregar que no se repita en la base de datos
+                return 0;
             }
-            if (cantidadInput.value.trim() == "") {
-                alert("Cantidad inicial no ingresada");
-                cantidadInput.focus();
-                return false;
+            var nombreExiste = nombresDB.some(n => n.toLowerCase() === nombreStr);
+            if (nombreExiste) {
+                alert("El nombre de este producto ya está registrado en la base de datos.");
+                return 0;
             }
-            if (isNaN(cantidadInput.value) || parseFloat(cantidadInput.value) < 0) {
-                alert("Ingrese una cantidad válida");
-                cantidadInput.focus();
-                return false;
+            if (form.precioProducto.value == "") {
+                alert("Precio del producto no ingresado");
+                return 0;
+            } else {
+                alert("Producto registrado con éxito.");
+                window.location.href = "../../Administracion.html";
             }
-
-            sessionStorage.setItem("alta_nombre", nombreInput.value.trim());
-            sessionStorage.setItem("alta_cantidad", cantidadInput.value.trim());
-            window.location.href = "Altas2.html";
         }
     </script>
 </body>

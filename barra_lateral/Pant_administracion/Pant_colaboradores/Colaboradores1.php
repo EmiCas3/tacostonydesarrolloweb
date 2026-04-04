@@ -1,3 +1,14 @@
+<?php include("../../../conex.php");
+$link = Conectarse();
+$correos = [];
+$res = mysqli_query($link, "SELECT correo FROM t_empleados");
+if ($res) {
+    while($row = mysqli_fetch_array($res)) {
+        $correos[] = $row['correo'];
+    }
+}
+$jsonCorreos = json_encode($correos);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administración - Proveedores</title>
+    <title>Tacos Tony - Administracion - Colaboradores</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,7 +52,7 @@
             justify-content: center;
         }
 
-        .formulario-card {
+        .colaboradores-card {
             background-color: #FFFFFF;
             border-radius: 15px;
             padding: 50px;
@@ -82,7 +93,8 @@
         }
 
         .input-grupo input,
-        .input-grupo select {
+        .input-grupo select,
+        .input-grupo datalist {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -94,13 +106,14 @@
         }
 
         .input-grupo input:focus,
-        .input-grupo select:focus {
+        .input-grupo select:focus,
+        .input-grupo datalist:focus {
             border-color: #f6821f;
         }
 
         .botones-bottom {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
         }
 
         .btn-accion {
@@ -178,11 +191,12 @@
 </head>
 
 <body>
+
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px;">
-        <div align="center">
-            <a href="../../Dashboard.php">
-                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center" ">
+            <a href=" ../../Dashboard.php">
+            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -217,54 +231,72 @@
     </div>
 
     <div class="main-content">
-        <div class="formulario-card">
+        <div class="colaboradores-card">
 
             <div class="titulo-caja">
-                DATOS DEL PROVEEDOR
+                INFORMACIÓN DEL COLABORADOR
             </div>
 
-            <form id="proveedorForm" method="post" action="#">
+            <form id="colaboradores1form" method="post" action="#">
                 <div class="form-grid">
+
                     <div class="input-grupo">
-                        <label>Nombre</label>
-                        <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
+                        <label>Nombre Empleado</label>
+                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
+                        <datalist id="listaEmpleados">
+                            <option value="Raul"></option>
+                            <option value="Cesar"></option>
+                            <option value="Fernando"></option>
+                        </datalist>
                     </div>
-                    <div class="input-grupo">
-                        <label>Número de Teléfono</label>
-                        <input type="number" id="telefono" placeholder="Ingrese el número">
-                    </div>
+
                     <div class="input-grupo">
                         <label>Correo Electrónico</label>
-                        <input type="text" id="correo" placeholder="Ingrese el correo">
+                        <input type="email" id="correoEmpleado" placeholder="Ingrese el correo">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Salario</label>
+                        <input type="number" id="salarioEmpleado" placeholder="Ingrese el salario" step="0.01">
+                    </div>
+
+                    <div class="input-grupo">
+                        <label>Contraseña</label>
+                        <input type="password" id="contrasenaEmpleado" placeholder="Ingrese la contraseña">
                     </div>
                 </div>
             </form>
 
-            <div class="botones-bottom">
-                <a class="btn-secundario" href="../../Administracion.html">CANCELAR</a>
+            <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
+                <a class="btn-accion" href="../../Administracion.html">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
             </div>
-
         </div>
     </div>
 
     <script>
         function valida_enviar() {
-            if (document.getElementById("nombreProveedor").value == "") {
-                alert("Nombre del proveedor no ingresado"); return;
+            var correosDB = <?php echo $jsonCorreos; ?>;
+            var form = document.getElementById("colaboradores1form");
+            if (form.nombreEmpleado.value == "") {
+                alert("Nombre del empleado no ingresado");
+                return 0;
+            } if (form.correoEmpleado.value == "") {
+                alert("Correo del empleado no ingresado");
+                return 0; //Agregar que no se repita en la base de datos
+            } if (correosDB.includes(form.correoEmpleado.value)) {
+                alert("El correo electrónico ya está registrado en la base de datos.");
+                return 0;
+            } if (form.salarioEmpleado.value == "") {
+                alert("Salario del empleado no ingresado");
+                return 0;
+            } if (form.contrasenaEmpleado.value == "") {
+                alert("Contraseña del empleado no ingresada");
+                return 0;
+            } else {
+                alert("Colaborador registrado con éxito.");
+                window.location.href = "../../Administracion.html";
             }
-            if (document.getElementById("telefono").value == "") {
-                alert("Número de Teléfono no ingresado"); return;
-            }
-            if (document.getElementById("telefono").value.length != 10) {
-                alert("Número de Teléfono no es válido"); return; //Agregar que no se repita en la base de datos
-            }
-            if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return; //Agregar que no se repita en la base de datos
-            }
-
-            alert("Proveedor registrado con éxito");
-            window.location.href = "../../Administracion.html";
         }
     </script>
 </body>
