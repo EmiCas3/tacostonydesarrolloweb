@@ -175,11 +175,11 @@ if ($idMaterial != '') {
     <div
         style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
         <div align="center">
-            <a href="../../Dashboard.html">
+            <a href="../../Dashboard.php">
                 <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
-        <a href="../../Dashboard.html" class="menu-item">
+        <a href="../../Dashboard.php" class="menu-item">
             <img src="../../../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
         </a>
         <a href="../../Inventario.php" class="menu-item activo">

@@ -211,7 +211,7 @@ $link = Conectarse();
             </a>
         </div>
 
-        <a href="Dashboard.html" class="menu-item">
+        <a href="Dashboard.php" class="menu-item">
             <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
         </a>
         <a href="Inventario.php" class="menu-item activo">

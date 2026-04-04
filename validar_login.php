@@ -65,6 +65,6 @@ $_SESSION['correo_empleado'] = $empleado['correo'];
 $_SESSION['salario_empleado'] = $empleado['salario'];
 
 // Redirigimos al Dashboard
-header("Location: barra_lateral/Dashboard.html");
+header("Location: barra_lateral/Dashboard.php");
 exit();
 ?>

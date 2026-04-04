@@ -242,7 +242,7 @@ $link = Conectarse();
                             while ($rowBajo = mysqli_fetch_array($resBajo)) {
                                 echo '<tr>';
                                 echo '<td>' . htmlspecialchars($rowBajo['nombre']) . '</td>';
-                                echo '<td align="right">' . $rowBajo['existencias'] . ' kg</td>';
+                                echo '<td align="right">' . $rowBajo['existencias'] . '</td>';
                                 echo '</tr>';
                             }
                         } else {
@@ -265,7 +265,7 @@ $link = Conectarse();
                                             DATEDIFF(NOW(), MAX(ng.fecha)) AS dias_guardado
                                         FROM t_materiales m
                                         JOIN t_necesitar_particular np ON np.id_material = m.id
-                                        JOIN t_necesitar_general ng ON ng.id = np.id_ng
+                                        JOIN t_necesitar_general ng ON ng.id_ng = np.id_ng
                                         GROUP BY m.id, m.nombre
                                         ORDER BY dias_guardado DESC
                                         LIMIT 5";
