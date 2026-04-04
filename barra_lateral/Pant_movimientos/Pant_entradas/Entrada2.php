@@ -258,7 +258,7 @@ $link = Conectarse();
                 </div>
 
                 <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-                    <button type="button" onclick="document.getElementById('entrada2form').reset(); document.getElementById('idMaterial').value='';"
+                    <button type="button" onclick="agregarEntrada()"
                         style="background: none; border: none; cursor: pointer; padding: 0; margin: 0 auto 10px auto; display: block;">
                         <img src="../../../Imagenes/masP.png" alt="Agregar" style="width: 45px; height: auto;">
                     </button>
@@ -274,28 +274,71 @@ $link = Conectarse();
     </div>
 
     <script>
+        // Arreglo para almacenar en sesión los productos de la entrada actual
+        var productosEntrada = JSON.parse(sessionStorage.getItem('productosEntrada') || "[]");
+
         // Auto-llenar ID al seleccionar un material
         document.getElementById('nombreMaterial').addEventListener('change', function() {
             document.getElementById('idMaterial').value = this.value;
         });
 
-        function validarEntrada() {
-            if (document.getElementById('nombreMaterial').value == "") {
-                alert("Nombre de material no ingresado");
-                return 0;
-            } if (document.getElementById('idMaterial').value == "") {
-                alert("ID de material no ingresado");
-                return 0;
-            } if (document.getElementById('cantidad').value == "") {
-                alert("Cantidad no ingresada");
-                return 0;
-            } if (document.getElementById('precioUnitario').value == "") {
-                alert("Precio unitario no ingresado");
-                return 0;
-            } else {
-                alert("Entrada registrada con éxito.");
-                window.location.href = "../../Movimientos.html";
+        function agregarEntrada() {
+            var select = document.getElementById('nombreMaterial');
+            if (select.value == "") {
+                alert("Seleccione un material para agregarlo.");
+                return;
             }
+            var cantidad = document.getElementById('cantidad').value;
+            var precio = document.getElementById('precioUnitario').value;
+
+            if (cantidad == "" || precio == "") {
+                alert("Ingrese cantidad y precio unitario válidos.");
+                return;
+            }
+
+            var selectedOption = select.options[select.selectedIndex];
+            productosEntrada.push({
+                nombre: selectedOption.text,
+                id: document.getElementById('idMaterial').value,
+                cantidad: cantidad,
+                precio: precio,
+                subtotal: (parseFloat(cantidad) * parseFloat(precio)).toFixed(2)
+            });
+
+            sessionStorage.setItem('productosEntrada', JSON.stringify(productosEntrada));
+            alert("Material agregado.");
+            
+            document.getElementById('entrada2form').reset();
+            document.getElementById('idMaterial').value = '';
+        }
+
+        function validarEntrada() {
+            var select = document.getElementById('nombreMaterial');
+            var cantidad = document.getElementById('cantidad').value;
+            var precio = document.getElementById('precioUnitario').value;
+            
+            // Si hay algo escrito en el form, lo intentamos agregar o avisamos
+            if (select.value !== "" && cantidad !== "" && precio !== "") {
+                var selectedOption = select.options[select.selectedIndex];
+                productosEntrada.push({
+                    nombre: selectedOption.text,
+                    id: document.getElementById('idMaterial').value,
+                    cantidad: cantidad,
+                    precio: precio,
+                    subtotal: (parseFloat(cantidad) * parseFloat(precio)).toFixed(2)
+                });
+                sessionStorage.setItem('productosEntrada', JSON.stringify(productosEntrada));
+            } else if (select.value !== "" || cantidad !== "" || precio !== "") {
+                alert("Complete los campos del material actual, o límpielos para continuar.");
+                return 0;
+            }
+
+            if (productosEntrada.length === 0) {
+                alert("No hay materiales agregados a la entrada.");
+                return 0;
+            }
+
+            window.location.href = "Entrada3.html";
         }
     </script>
 </body>
