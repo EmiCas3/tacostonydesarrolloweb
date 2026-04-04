@@ -84,6 +84,24 @@ $link = Conectarse();
             width: 100%;
         }
 
+        .inventory-scroll {
+            max-height: 90px;
+            overflow-y: auto;
+        }
+
+        .inventory-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .inventory-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .inventory-scroll::-webkit-scrollbar-thumb {
+            background-color: #A0A0A0;
+            border-radius: 10px;
+        }
+
         .inventory td {
             padding: 4px 6px;
         }
@@ -168,8 +186,7 @@ $link = Conectarse();
 </head>
 
 <body>
-    <div
-        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+    <div style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
         <div align="center">
             <a href="Dashboard.php">
                 <img src="../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
@@ -178,89 +195,96 @@ $link = Conectarse();
 
         <a href="Dashboard.php" class="menu-item activo">
             <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
-
-            <a href="Inventario.php" class="menu-item">
-                <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
+        </a>
+        <a href="Inventario.php" class="menu-item">
+            <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
+        </a>
+        <a href="Movimientos.html" class="menu-item">
+            <img src="../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
+        </a>
+        <a href="Reportes.html" class="menu-item">
+            <img src="../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
+        </a>
+        <a href="Administracion.html" class="menu-item">
+            <img src="../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
+        </a>
+        <a href="Catalogo.html" class="menu-item">
+            <img src="../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
+        </a>
+        <div class="menu-dropdown">
+            <a class="menu-item">
+                <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
             </a>
-            <a href="Movimientos.html" class="menu-item">
-                <img src="../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
-            </a>
-            <a href="Reportes.html" class="menu-item">
-                <img src="../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
-            </a>
-            <a href="Administracion.html" class="menu-item">
-                <img src="../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
-            </a>
-            <a href="Catalogo.html" class="menu-item">
-                <img src="../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
-            </a>
-            <div class="menu-dropdown">
-                <a class="menu-item">
-                    <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
-                </a>
-                <div class="submenu">
-                    <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
-                    <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                    <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
-                </div>
+            <div class="submenu">
+                <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
+                <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
+        </div>
     </div>
 
     <div style="flex-grow:1">
         <h1>Dashboard</h1>
 
         <div class="cajas-superiores">
-            <!-- INVENTARIO BAJO: materiales con existencias <= 5 (umbral bajo) -->
+
+            <!-- INVENTARIO BAJO -->
             <div class="caja">
                 <div class="encabezado-caja">
                     <img src="../Imagenes/icon-warning.png" width="20" name="Warning"> INVENTARIO BAJO
                 </div>
-                <table class="inventory">
-                    <?php
-                    // Muestra materiales con existencias <= 5 (umbral de inventario bajo)
-                    $queryBajo = "SELECT nombre, existencias FROM t_materiales WHERE existencias <= 5 ORDER BY existencias ASC";
-                    $resBajo = mysqli_query($link, $queryBajo);
-                    if ($resBajo && mysqli_num_rows($resBajo) > 0) {
-                        while ($rowBajo = mysqli_fetch_array($resBajo)) {
-                            echo '<tr>';
-                            echo '<td>' . htmlspecialchars($rowBajo['nombre']) . '</td>';
-                            echo '<td align="right">' . $rowBajo['existencias'] . ' uds</td>';
-                            echo '</tr>';
+                <div class="inventory-scroll">
+                    <table class="inventory">
+                        <?php
+                        $queryBajo = "SELECT nombre, existencias FROM t_materiales WHERE existencias <= 5 ORDER BY existencias ASC";
+                        $resBajo = mysqli_query($link, $queryBajo);
+                        if ($resBajo && mysqli_num_rows($resBajo) > 0) {
+                            while ($rowBajo = mysqli_fetch_array($resBajo)) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($rowBajo['nombre']) . '</td>';
+                                echo '<td align="right">' . $rowBajo['existencias'] . ' kg</td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo '<tr><td class="sin-datos" colspan="2">Sin materiales con inventario bajo</td></tr>';
                         }
-                    } else {
-                        echo '<tr><td class="sin-datos" colspan="2">Sin materiales con inventario bajo</td></tr>';
-                    }
-                    ?>
-                </table>
+                        ?>
+                    </table>
+                </div>
             </div>
 
-
+            <!-- TIEMPO GUARDADO -->
             <div class="caja">
                 <div class="encabezado-caja">
-                    <img src="../Imagenes/icon-warning.png" width="20" name="Warning"> VENTAS RECIENTES
+                    <img src="../Imagenes/icon-warning.png" width="20" name="Warning"> TIEMPO GUARDADO
                 </div>
-                <table class="inventory">
-                    <?php
-
-$queryVentas = "SELECT vg.id, c.nombre AS cliente, vg.fecha 
-                                    FROM t_vender_general vg
-                                    JOIN t_clientes c ON vg.id_cliente = c.id
-                                    ORDER BY vg.fecha DESC LIMIT 5";
-                    $resVentas = mysqli_query($link, $queryVentas);
-                    if ($resVentas && mysqli_num_rows($resVentas) > 0) {
-                        while ($rowV = mysqli_fetch_array($resVentas)) {
-                            $fechaCorta = date('d/m/Y', strtotime($rowV['fecha']));
-                            echo '<tr>';
-                            echo '<td>' . htmlspecialchars($rowV['cliente']) . '</td>';
-                            echo '<td align="right">' . $fechaCorta . '</td>';
-                            echo '</tr>';
+                <div class="inventory-scroll">
+                    <table class="inventory">
+                        <?php
+                        $queryTiempo = "SELECT m.nombre, 
+                                            DATEDIFF(NOW(), MAX(ng.fecha)) AS dias_guardado
+                                        FROM t_materiales m
+                                        JOIN t_necesitar_particular np ON np.id_material = m.id
+                                        JOIN t_necesitar_general ng ON ng.id = np.id_ng
+                                        GROUP BY m.id, m.nombre
+                                        ORDER BY dias_guardado DESC
+                                        LIMIT 5";
+                        $resTiempo = mysqli_query($link, $queryTiempo);
+                        if ($resTiempo && mysqli_num_rows($resTiempo) > 0) {
+                            while ($rowT = mysqli_fetch_array($resTiempo)) {
+                                echo '<tr>';
+                                echo '<td>' . htmlspecialchars($rowT['nombre']) . '</td>';
+                                echo '<td align="right">' . $rowT['dias_guardado'] . ' Días</td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo '<tr><td class="sin-datos" colspan="2">Sin datos de entradas registradas</td></tr>';
                         }
-                    } else {
-                        echo '<tr><td class="sin-datos" colspan="2">Sin ventas registradas</td></tr>';
-                    }
-                    ?>
-                </table>
+                        ?>
+                    </table>
+                </div>
             </div>
+
         </div>
 
         <div class="caja-inferior">
@@ -271,7 +295,6 @@ $queryVentas = "SELECT vg.id, c.nombre AS cliente, vg.fecha
                     <a href="Pant_movimientos/Pant_entradas/Entrada1.php">
                         <button class="botones">REGISTRAR ENTRADA</button>
                     </a>
-
                     <a href="Pant_inventario/Pant_ajustes/ajustes1.html">
                         <button class="botones">AJUSTAR INVENTARIO</button>
                     </a>
@@ -286,15 +309,14 @@ $queryVentas = "SELECT vg.id, c.nombre AS cliente, vg.fecha
     </div>
 
     <?php
-
-$queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 8";
+    $queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 8";
     $resGrafica = mysqli_query($link, $queryGrafica);
     $labelsGrafica = [];
-    $datosGrafica = [];
+    $datosGrafica  = [];
     if ($resGrafica) {
         while ($rowG = mysqli_fetch_array($resGrafica)) {
             $labelsGrafica[] = htmlspecialchars($rowG['nombre']);
-            $datosGrafica[] = (float)$rowG['existencias'];
+            $datosGrafica[]  = (float)$rowG['existencias'];
         }
     }
     $labelsJson = json_encode($labelsGrafica);
@@ -302,7 +324,6 @@ $queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existenci
     ?>
 
     <script>
-
         var ctx = document.getElementById('graficaInventario').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
