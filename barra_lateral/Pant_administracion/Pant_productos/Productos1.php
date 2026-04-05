@@ -242,12 +242,7 @@ $jsonNombres = json_encode($nombres);
 
                     <div class="input-grupo">
                         <label>Nombre Producto</label>
-                        <input type="text" list="listaProductos" id="nombreProducto" placeholder="Ingrese el nombre">
-                        <datalist id="listaProductos">
-                            <option value="Taco de Arabe"></option>
-                            <option value="Falafel"></option>
-                            <option value="Pizza Arabe"></option>
-                        </datalist>
+                        <input type="text" id="nombreProducto" placeholder="Ingrese el nombre">
                     </div>
 
                     <div class="input-grupo">

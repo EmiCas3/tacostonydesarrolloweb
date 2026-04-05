@@ -242,12 +242,7 @@ $jsonCorreos = json_encode($correos);
 
                     <div class="input-grupo">
                         <label>Nombre Empleado</label>
-                        <input type="text" list="listaEmpleados" id="nombreEmpleado" placeholder="Ingrese el nombre">
-                        <datalist id="listaEmpleados">
-                            <option value="Raul"></option>
-                            <option value="Cesar"></option>
-                            <option value="Fernando"></option>
-                        </datalist>
+                        <input type="text" id="nombreEmpleado" placeholder="Ingrese el nombre">
                     </div>
 
                     <div class="input-grupo">
