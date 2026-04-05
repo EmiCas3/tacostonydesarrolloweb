@@ -1,16 +1,25 @@
-<?php include("../conex.php");
+<?php
+include("../../conex.php");
 $link = Conectarse();
-$anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
-$mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
+
+// Recibir fechas o usar la semana actual por defecto
+if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
+    $fecha_inicio = $_GET['fecha_inicio'];
+    $fecha_fin    = $_GET['fecha_fin'];
+} else {
+    // Lunes de esta semana
+    $fecha_inicio = date('Y-m-d', strtotime('monday this week'));
+    // Domingo de esta semana
+    $fecha_fin    = date('Y-m-d', strtotime('sunday this week'));
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="16x16" href="../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Reporte Administración</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
+    <title>Tacos Tony - Ventas por Semana</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -131,11 +140,12 @@ $mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
 
         .tabla-body {
             background-color: #E6E6E6;
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
         .tabla-body::-webkit-scrollbar { width: 6px; }
+
         .tabla-body::-webkit-scrollbar-thumb { background-color: #A0A0A0; border-radius: 10px; }
 
         .fila {
@@ -154,6 +164,18 @@ $mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
             text-align: center;
             color: #888;
             font-style: italic;
+        }
+
+        .total-box {
+            background: #073A79;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
         }
 
         .menu-dropdown { position: relative; }
@@ -187,94 +209,115 @@ $mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
         }
     </style>
 </head>
-
 <body>
     <div style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
         <div align="center">
-            <a href="Dashboard.php"><img src="../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo"></a>
+            <a href="../Dashboard.php"><img src="../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo"></a>
         </div>
-        <a href="Dashboard.php" class="menu-item"><img src="../Imagenes/icon-dash.png" width="25"> Dashboard</a>
-        <a href="Inventario.php" class="menu-item"><img src="../Imagenes/icon-inv.png" width="25"> Inventario</a>
-        <a href="Movimientos.html" class="menu-item"><img src="../Imagenes/icon-mov.png" width="25"> Movimientos</a>
-        <a href="Reportes.html" class="menu-item activo"><img src="../Imagenes/icon-repo.png" width="25"> Reportes</a>
-        <a href="Administracion.html" class="menu-item"><img src="../Imagenes/icon-admin.png" width="25"> Administración</a>
-        <a href="Catalogo.html" class="menu-item"><img src="../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
+        <a href="../Dashboard.php" class="menu-item"><img src="../../Imagenes/icon-dash.png" width="25"> Dashboard</a>
+        <a href="../Inventario.php" class="menu-item"><img src="../../Imagenes/icon-inv.png" width="25"> Inventario</a>
+        <a href="../Movimientos.html" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
+        <a href="../Reportes.html" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
+        <a href="../Administracion.html" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
+        <a href="../Catalogo.html" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
         <div class="menu-dropdown">
-            <a class="menu-item"><img src="../Imagenes/icon-config.png" width="25"> Configuración</a>
+            <a class="menu-item"><img src="../../Imagenes/icon-config.png" width="25"> Configuración</a>
             <div class="submenu">
-                <a href="Configuracion.html" class="submenu-item">Editar Perfil</a>
-                <a href="Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../Login.php" class="submenu-item">Cerrar Sesión</a>
+                <a href="../Configuracion.html" class="submenu-item">Editar Perfil</a>
+                <a href="../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../../Login.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
 
     <div class="main-content">
         <div class="formulario-card">
-            <div class="titulo-caja">ADMINISTRACIÓN POR MES</div>
-
+            <div class="titulo-caja">VENTAS POR SEMANA</div>
             <div class="form-grid">
                 <div class="input-grupo">
-                    <label>Mes</label>
-                    <select id="mes">
-                        <?php
-                        $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-                        for ($i = 1; $i <= 12; $i++) {
-                            $sel = ($i == $mes_sel) ? 'selected' : '';
-                            echo "<option value='$i' $sel>{$meses[$i]}</option>";
-                        }
-                        ?>
-                    </select>
+                    <label>Fecha Inicio</label>
+                    <input type="date" id="fecha_inicio" value="<?php echo $fecha_inicio; ?>">
                 </div>
                 <div class="input-grupo">
-                    <label>Año</label>
-                    <input type="number" id="anio" value="<?php echo $anio_sel; ?>" min="2020" max="2099">
+                    <label>Fecha Fin</label>
+                    <input type="date" id="fecha_fin" value="<?php echo $fecha_fin; ?>">
                 </div>
             </div>
-
             <div style="display: flex; justify-content: flex-end;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
             </div>
-
             <?php
-            $qProd = "SELECT p.nombre, SUM(vp.cantidad) AS cantidad, SUM(vp.subtotal) AS total
-                      FROM t_vender_particular vp
-                      JOIN t_productos p ON vp.id_producto = p.id
-                      JOIN t_vender_general vg ON vp.id_vg = vg.id
-                      WHERE MONTH(vg.fecha) = $mes_sel AND YEAR(vg.fecha) = $anio_sel
-                      GROUP BY p.id, p.nombre ORDER BY cantidad DESC";
-            $rProd = mysqli_query($link, $qProd);
-            ?>
+            // Query basado en el procedimiento ventas_semana
+            $fi = $fecha_inicio . ' 00:00:00';
+            $ff = $fecha_fin . ' 23:59:59';
 
+            $qSemana = "SELECT 
+                            DAYNAME(vg.fecha) AS dia_semana,
+                            CONCAT('\$', FORMAT(ROUND(SUM(vp.cantidad * pr.precio), 2), 2)) AS total_ventas,
+                            SUM(vp.cantidad) AS total_productos_vendidos,
+                            SUM(vp.cantidad * pr.precio) AS total_num
+                        FROM t_vender_general vg
+                        JOIN t_vender_particular vp ON vg.id = vp.id_vg
+                        JOIN t_productos pr ON vp.id_producto = pr.id
+                        WHERE vg.fecha BETWEEN '$fi' AND '$ff'
+                        GROUP BY dia_semana
+                        ORDER BY FIELD(dia_semana, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')";
+            $rSemana = mysqli_query($link, $qSemana);
+
+            // Total general del rango
+            $qTotal = "SELECT SUM(vp.cantidad * pr.precio) AS total
+                       FROM t_vender_general vg
+                       JOIN t_vender_particular vp ON vg.id = vp.id_vg
+                       JOIN t_productos pr ON vp.id_producto = pr.id
+                       WHERE vg.fecha BETWEEN '$fi' AND '$ff'";
+            $rTotal = mysqli_query($link, $qTotal);
+            $rowTotal = $rTotal ? mysqli_fetch_assoc($rTotal) : null;
+            $totalGeneral = ($rowTotal && $rowTotal['total']) ? $rowTotal['total'] : 0;
+
+            // Traducción de días
+            $dias_es = [
+                'Monday'    => 'Lunes',
+                'Tuesday'   => 'Martes',
+                'Wednesday' => 'Miércoles',
+                'Thursday'  => 'Jueves',
+                'Friday'    => 'Viernes',
+                'Saturday'  => 'Sábado',
+                'Sunday'    => 'Domingo'
+            ];
+            ?>
+            <div class="total-box">
+                Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>
+            </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header">
-                    <span>Producto</span><span>Cantidad</span><span>Total</span>
+                    <span>Día</span><span>Productos Vendidos</span><span>Total Ventas</span>
                 </div>
                 <div class="tabla-body">
                     <?php
-                    if ($rProd && mysqli_num_rows($rProd) > 0) {
-                        while ($row = mysqli_fetch_array($rProd)) {
+                    if ($rSemana && mysqli_num_rows($rSemana) > 0) {
+                        while ($row = mysqli_fetch_array($rSemana)) {
+                            $dia_nombre = isset($dias_es[$row['dia_semana']]) ? $dias_es[$row['dia_semana']] : $row['dia_semana'];
                             echo '<div class="fila">';
-                            echo '<span>' . htmlspecialchars($row['nombre']) . '</span>';
-                            echo '<span>' . $row['cantidad'] . '</span>';
-                            echo '<span>$' . number_format($row['total'], 2) . '</span>';
+                            echo '<span>' . $dia_nombre . '</span>';
+                            echo '<span>' . $row['total_productos_vendidos'] . '</span>';
+                            echo '<span>' . $row['total_ventas'] . '</span>';
                             echo '</div>';
                         }
                     } else {
-                        echo '<div class="sin-datos">Sin datos para este mes</div>';
+                        echo '<div class="sin-datos">Sin datos para este periodo</div>';
                     }
                     ?>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         function filtrar() {
-            var mes  = document.getElementById('mes').value;
-            var anio = document.getElementById('anio').value;
-            if (!anio) { alert('Ingrese un año válido'); return; }
-            window.location.href = 'Reportes_Administracion.php?mes=' + mes + '&anio=' + anio;
+            var fi = document.getElementById('fecha_inicio').value;
+            var ff = document.getElementById('fecha_fin').value;
+            if (!fi || !ff) { alert('Seleccione ambas fechas'); return; }
+            if (fi > ff) { alert('La fecha de inicio debe ser anterior a la fecha fin'); return; }
+            window.location.href = 'Reportes_Semanal.php?fecha_inicio=' + fi + '&fecha_fin=' + ff;
         }
     </script>
 </body>
