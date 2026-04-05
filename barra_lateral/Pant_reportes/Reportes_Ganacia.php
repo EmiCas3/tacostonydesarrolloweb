@@ -191,6 +191,7 @@ $link = Conectarse();
                     ON (pp.id_material = ult_pp.id_material)
                     JOIN t_proporcionar_general pg ON (pp.id_pg = pg.id AND pg.fecha = ult_pp.fecha_ultima)) uc 
                 ON (np.id_material = uc.id_material))
+            WHERE np.id_material NOT IN (7, 8, 9) OR np.id_material IS NULL
             GROUP BY p.id, p.nombre, p.precio
             HAVING SUM(IFNULL((np.cantidad * uc.costo_unitario), 0)) > 0
             ORDER BY margen_num DESC, ganancia_real DESC";
