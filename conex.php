@@ -9,7 +9,6 @@ define('DB_ADMIN_PASS', 'admin123');
 define('DB_EMPLEADO_USER', 'empleado');
 define('DB_EMPLEADO_PASS', 'emple456');
 define('DB_NAME', '2doAvance');
-
 function Conectarse($user = null, $pass = null) {
     // Si no se pasan credenciales, usamos las de la sesión activa
     if ($user === null && $pass === null) {
