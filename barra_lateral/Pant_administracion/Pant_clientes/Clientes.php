@@ -297,15 +297,6 @@ $jsonCorreos = json_encode($correos);
             if (document.getElementById("nombreCliente").value == "") {
                 alert("Nombre del cliente no ingresado"); return;
             }
-            if (document.getElementById("rfc").value == "") {
-                alert("RFC no ingresado"); return;
-            }
-            if (document.getElementById("razonSocial").value == "") {
-                alert("Razón Social no ingresada"); return;
-            }
-            if (document.getElementById("codigoPostal").value == "") {
-                alert("Código Postal no ingresado"); return;
-            }
             if (document.getElementById("numeroTelefono").value == "") {
                 alert("Número de Teléfono no ingresado"); return;
             }
@@ -321,16 +312,6 @@ $jsonCorreos = json_encode($correos);
             if (correosDB.includes(document.getElementById("correo").value)) {
                 alert("El correo electrónico ya está registrado en la base de datos."); return;
             }
-            if (document.getElementById("calle").value == "") {
-                alert("Calle no ingresada"); return;
-            }
-            if (document.getElementById("colonia").value == "") {
-                alert("Colonia no ingresada"); return;
-            }
-            if (document.getElementById("estado").value == "") {
-                alert("Estado no ingresado"); return;
-            }
-
             alert("Cliente registrado con éxito");
             window.location.href = "../../Administracion.html";
         }
