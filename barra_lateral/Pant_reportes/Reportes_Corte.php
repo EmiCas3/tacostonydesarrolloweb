@@ -24,7 +24,8 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             padding: 20px;
             display: flex;
             box-sizing: border-box;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .menu-item {
@@ -47,6 +48,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             justify-content: center;
             overflow-y: auto;
             padding-bottom: 20px;
+            max-height: calc(100vh - 40px);
         }
 
         .reporte-card {
@@ -277,7 +279,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 </head>
 
 <body>
-    <div style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+    <div style="background-color: #FFFFFF; width: 250px; min-width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); position: sticky; top: 20px; align-self: flex-start; max-height: calc(100vh - 40px); overflow-y: auto;">
         <div align="center">
             <a href="../Dashboard.php"><img src="../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo"></a>
         </div>
