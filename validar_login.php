@@ -8,7 +8,7 @@ $contra = isset($_POST['contra']) ? $_POST['contra'] : '';
 if ($correo === '' || $contra === '') {
     echo "<script>
             alert('Debe ingresar usuario y contraseña');
-            window.location.href='Login.php';
+            window.location.href='index.php';
           </script>";
     exit();
 }
@@ -19,7 +19,7 @@ $link_temp = Conectarse(DB_ADMIN_USER, DB_ADMIN_PASS);
 if (!$link_temp) {
     echo "<script>
             alert('Error interno: no se pudo conectar a la base de datos.');
-            window.location.href='Login.php';
+            window.location.href='index.php';
           </script>";
     exit();
 }
@@ -35,7 +35,7 @@ if (!$resultado || mysqli_num_rows($resultado) === 0) {
     mysqli_close($link_temp);
     echo "<script>
             alert('Usuario o contraseña incorrectos');
-            window.location.href='Login.php';
+            window.location.href='index.php';
           </script>";
     exit();
 }

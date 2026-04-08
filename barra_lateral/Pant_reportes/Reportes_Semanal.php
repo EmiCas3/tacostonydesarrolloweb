@@ -225,7 +225,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             <div class="submenu">
                 <a href="../Configuracion.html" class="submenu-item">Editar Perfil</a>
                 <a href="../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../Login.php" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../index.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
