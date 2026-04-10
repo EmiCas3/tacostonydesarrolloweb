@@ -64,6 +64,9 @@ $_SESSION['nombre_empleado'] = $empleado['nombre'];
 $_SESSION['correo_empleado'] = $empleado['correo'];
 $_SESSION['salario_empleado'] = $empleado['salario'];
 
+// Marcamos la sesión como autentificada
+$_SESSION["autentificado"] = "SI";
+
 // Redirigimos al Dashboard
 header("Location: barra_lateral/Dashboard.php");
 exit();

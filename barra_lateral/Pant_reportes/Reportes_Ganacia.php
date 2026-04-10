@@ -1,4 +1,5 @@
 <?php
+include("../../seguridad.php");
 include("../../conex.php");
 $link = Conectarse();
 ?>
@@ -146,16 +147,16 @@ $link = Conectarse();
         </div>
         <a href="../Dashboard.php" class="menu-item"><img src="../../Imagenes/icon-dash.png" width="25"> Dashboard</a>
         <a href="../Inventario.php" class="menu-item"><img src="../../Imagenes/icon-inv.png" width="25"> Inventario</a>
-        <a href="../Movimientos.html" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
-        <a href="../Reportes.html" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
-        <a href="../Administracion.html" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
-        <a href="../Catalogo.html" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
+        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
+        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
+        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
+        <a href="../Catalogo.php" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
         <div class="menu-dropdown">
             <a class="menu-item"><img src="../../Imagenes/icon-config.png" width="25"> Configuración</a>
             <div class="submenu">
-                <a href="../Configuracion.html" class="submenu-item">Editar Perfil</a>
-                <a href="../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../index.php" class="submenu-item">Cerrar Sesión</a>
+                <a href="../Configuracion.php" class="submenu-item">Editar Perfil</a>
+                <a href="../Pant_Ajustes/AjustesSitio.php" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../../salir.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>

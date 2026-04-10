@@ -1,3 +1,8 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -75,6 +80,22 @@
     <div class="login-card">
         <img src="./Imagenes/Tacos_tony_logo.png" name="Logo" width="220" margin-bottom="25px">
         <h2 style="font-size: large;">Sistema de control de inventario</h2>
+
+        <?php if (!empty($_GET['error'])) { ?>
+            <p style="color: red; font-weight: bold; margin-bottom: 15px;">
+            <?php
+                if ($_GET['error'] == 'auth_required') {
+                    echo 'Debe iniciar sesión para acceder al sistema';
+                } else {
+                    echo 'Error de autenticación';
+                }
+            ?>
+            </p>
+        <?php } ?>
+
+        <?php if (isset($_GET['logout']) && $_GET['logout'] == 'success') { ?>
+            <script>alert("Sesión cerrada correctamente")</script>
+        <?php } ?>
 
         <form id="loginForm" method="post" action="validar_login.php">
             <div class="input-group">

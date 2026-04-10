@@ -1,0 +1,242 @@
+<?php include("../seguridad.php"); ?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="../Imagenes/TTlogomini.png">
+    <title>Tacos Tony - Configuración</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E5E5E5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            color: #000000;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-item.activo {
+            background-color: #F6821F;
+        }
+
+        .menu-item:hover:not(.activo) {
+            background-color: #F9D864;
+        }
+
+        .caja-principal {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .perfil-imagen-container {
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .perfil-imagen {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #F6821F;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #000000;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-color: #F6821F;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group input[readonly] {
+            background-color: #F0F0F0;
+            color: #666;
+            cursor: not-allowed;
+            border: 1px solid #ddd;
+        }
+
+        .form-group input[readonly]:focus {
+            border-color: #ccc;
+            box-shadow: none;
+        }
+
+        .botones {
+            background-color: #F6821F;
+            color: #000000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .botones:hover {
+            background-color: #c9793c;
+        }
+
+        .menu-dropdown {
+            position: relative;
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            border-left: 4px solid #F6821F;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: -5px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .menu-dropdown:hover .submenu {
+            display: flex;
+        }
+
+        .submenu-item {
+            padding: 12px 20px;
+            color: #333333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .submenu-item:hover {
+            color: #F6821F;
+            background-color: #E5E5E5;
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+        <div align="center">
+            <a href="Dashboard.php">
+                <img src="../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+            </a>
+        </div>
+
+        <a href="Dashboard.php" class="menu-item">
+            <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
+        </a>
+        <a href="Inventario.php" class="menu-item">
+            <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
+        </a>
+        <a href="Movimientos.php" class="menu-item">
+            <img src="../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
+        </a>
+        <a href="Reportes.php" class="menu-item">
+            <img src="../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
+        </a>
+        <a href="Administracion.php" class="menu-item">
+            <img src="../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
+        </a>
+        <a href="Catalogo.php" class="menu-item">
+            <img src="../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
+        </a>
+        <div class="menu-dropdown">
+            <a class="menu-item activo">
+                <img src="../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
+            </a>
+            <div class="submenu">
+                <a href="Configuracion.php" class="submenu-item">Editar Perfil</a>
+                <a href="Pant_Ajustes/AjustesSitio.php" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../salir.php" class="submenu-item">Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <div style="flex-grow:1">
+
+        <div class="caja-principal">
+            <div class="perfil-imagen-container">
+                <img src="../Imagenes/imagn-perfil.png" alt="Imagen de Perfil" class="perfil-imagen">
+                <input type="file" id="file-upload" style="display: none;" accept="image/*">
+            </div>
+
+            <form style="width: 100%;" action="#" method="POST">
+                <div class="form-group">
+                    <h2 for="nombre">Nombre Completo</h2>
+                    <input type="text" id="nombre" name="nombre" value="<?php echo isset($_SESSION['nombre_empleado']) ? htmlspecialchars($_SESSION['nombre_empleado']) : ''; ?>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <h2 for="correo">Correo Electrónico</h2>
+                    <input type="email" id="correo" name="correo" value="<?php echo isset($_SESSION['correo_empleado']) ? htmlspecialchars($_SESSION['correo_empleado']) : ''; ?>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <h2 for="password">Nueva Contraseña</h2>
+                    <input type="password" id="password" name="password" placeholder="Ingrese nueva contraseña">
+                </div>
+
+                <button type="button" class="botones" onclick="guardar_cambios()">GUARDAR CAMBIOS</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function guardar_cambios() {
+            var password = document.getElementById("password").value;
+
+            if (password === "") {
+                alert("Ingrese una nueva contraseña");
+                return;
+            }
+            if (password.length < 8) {
+                alert("La contraseña debe tener al menos 8 caracteres");
+                return;
+            }
+            alert("Contraseña actualizada exitosamente");
+            document.getElementById("password").value = "";
+        }
+    </script>
+</body>
+
+</html>

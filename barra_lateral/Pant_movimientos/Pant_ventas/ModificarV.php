@@ -1,4 +1,5 @@
-<?php include("../../../conex.php");
+<?php include("../../../seguridad.php");
+include("../../../conex.php");
 $link = Conectarse();
 ?>
 <!DOCTYPE html>
@@ -195,16 +196,16 @@ $link = Conectarse();
         <a href="../../Inventario.php" class="menu-item">
             <img src="../../../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
         </a>
-        <a href="../../Movimientos.html" class="menu-item activo">
+        <a href="../../Movimientos.php" class="menu-item activo">
             <img src="../../../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
         </a>
-        <a href="../../Reportes.html" class="menu-item">
+        <a href="../../Reportes.php" class="menu-item">
             <img src="../../../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
         </a>
-        <a href="../../Administracion.html" class="menu-item">
+        <a href="../../Administracion.php" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
-        <a href="../../Catalogo.html" class="menu-item">
+        <a href="../../Catalogo.php" class="menu-item">
             <img src="../../../Imagenes/icon-catalogo.png" width="25" name="Catálogo"> Catálogo
         </a>
         <div class="menu-dropdown">
@@ -212,9 +213,9 @@ $link = Conectarse();
                 <img src="../../../Imagenes/icon-config.png" width="25" name="Configuración"> Configuración
             </a>
             <div class="submenu">
-                <a href="../../Configuracion.html" class="submenu-item">Editar Perfil</a>
-                <a href="../../Pant_Ajustes/AjustesSitio.html" class="submenu-item">Ajustes del Sitio</a>
-                <a href="../../../index.php" class="submenu-item">Cerrar Sesión</a>
+                <a href="../../Configuracion.php" class="submenu-item">Editar Perfil</a>
+                <a href="../../Pant_Ajustes/AjustesSitio.php" class="submenu-item">Ajustes del Sitio</a>
+                <a href="../../../salir.php" class="submenu-item">Cerrar Sesión</a>
             </div>
         </div>
     </div>
@@ -306,7 +307,7 @@ $link = Conectarse();
                 </div>
             </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                <a class="btn-accion" href="../../Movimientos.html">CANCELAR</a>
+                <a class="btn-accion" href="../../Movimientos.php">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
             </div>
 

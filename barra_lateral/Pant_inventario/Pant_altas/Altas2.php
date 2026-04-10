@@ -1,18 +1,4 @@
-<?php include("../../../seguridad.php");
-include("../../../conex.php");
-$link = Conectarse();
-$telefonos = [];
-$correos = [];
-$res = mysqli_query($link, "SELECT numero_telefono, correo FROM t_proovedores");
-if ($res) {
-    while($row = mysqli_fetch_array($res)) {
-        $telefonos[] = $row['numero_telefono'];
-        $correos[] = $row['correo'];
-    }
-}
-$jsonTelefonos = json_encode($telefonos);
-$jsonCorreos = json_encode($correos);
-?>
+<?php include("../../../seguridad.php"); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,7 +6,7 @@ $jsonCorreos = json_encode($correos);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administración - Proveedores</title>
+    <title>Tacos Tony - Inventario - Altas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,40 +63,46 @@ $jsonCorreos = json_encode($correos);
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+        .tabla-contenedor {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             margin-bottom: 40px;
         }
 
-        .input-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .tabla-contenedor table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .input-grupo label {
+        .tabla-contenedor thead th {
+            background: #f6821f;
+            color: #000;
             font-weight: bold;
-            color: #333333;
-            font-size: 14px;
+            padding: 15px 30px;
+            text-align: left;
         }
 
-        .input-grupo input,
-        .input-grupo select {
-            background-color: #F0F0F0;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 15px;
-            outline: none;
+        .tabla-contenedor tbody td {
+            padding: 12px 30px;
+            background-color: #E6E6E6;
+            font-weight: bold;
             color: #333;
-            font-family: Arial, sans-serif;
+            border-bottom: 1px solid #D0D0D0;
         }
 
-        .input-grupo input:focus,
-        .input-grupo select:focus {
-            border-color: #f6821f;
+        .tabla-contenedor tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .col-campo {
+            width: 50%;
+            color: #555;
+        }
+
+        .col-valor {
+            width: 50%;
+            font-weight: bold;
         }
 
         .botones-bottom {
@@ -204,7 +196,7 @@ $jsonCorreos = json_encode($correos);
         <a href="../../Dashboard.php" class="menu-item">
             <img src="../../../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
         </a>
-        <a href="../../Inventario.php" class="menu-item">
+        <a href="../../Inventario.php" class="menu-item activo">
             <img src="../../../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
         </a>
         <a href="../../Movimientos.php" class="menu-item">
@@ -213,7 +205,7 @@ $jsonCorreos = json_encode($correos);
         <a href="../../Reportes.php" class="menu-item">
             <img src="../../../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
         </a>
-        <a href="../../Administracion.php" class="menu-item activo">
+        <a href="../../Administracion.php" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
         <a href="../../Catalogo.php" class="menu-item">
@@ -235,63 +227,58 @@ $jsonCorreos = json_encode($correos);
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                DATOS DEL PROVEEDOR
+                CONFIRMAR REGISTRO
             </div>
 
-            <form id="proveedorForm" method="post" action="#">
-                <div class="form-grid">
-                    <div class="input-grupo">
-                        <label>Nombre</label>
-                        <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Número de Teléfono</label>
-                        <input type="number" id="telefono" placeholder="Ingrese el número">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Correo Electrónico</label>
-                        <input type="text" id="correo" placeholder="Ingrese el correo">
-                    </div>
-                    <div class="input-grupo">
-                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
-                    </div>
-                </div>
-            </form>
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-campo">Campo</th>
+                            <th class="col-valor">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-campo">Nombre del Material</td>
+                            <td class="col-valor" id="show-nombre">—</td>
+                        </tr>
+                        <tr>
+                            <td class="col-campo">Cantidad Inicial</td>
+                            <td class="col-valor" id="show-cantidad">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="botones-bottom">
-                <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
-                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+                <input type="button" value="ATRÁS" onclick="history.go(-1)" class="btn-secundario">
+                <a class="btn-accion" onclick="confirmarAlta()">CONFIRMAR</a>
             </div>
 
         </div>
     </div>
 
     <script>
-        function valida_enviar() {
-            var telefonosDB = <?php echo $jsonTelefonos; ?>;
-            var correosDB = <?php echo $jsonCorreos; ?>;
+        window.onload = function () {
+            var nombre = sessionStorage.getItem("alta_nombre");
+            var cantidad = sessionStorage.getItem("alta_cantidad");
 
-            if (document.getElementById("nombreProveedor").value == "") {
-                alert("Nombre del proveedor no ingresado"); return;
-            }
-            if (document.getElementById("telefono").value == "") {
-                alert("Número de Teléfono no ingresado"); return;
-            }
-            if (document.getElementById("telefono").value.length != 10) {
-                alert("Número de Teléfono no es válido"); return;
-            }
-            if (telefonosDB.includes(document.getElementById("telefono").value)) {
-                alert("El número de teléfono ya está registrado en la base de datos."); return;
-            }
-            if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return;
-            }
-            if (correosDB.includes(document.getElementById("correo").value)) {
-                alert("El correo electrónico ya está registrado en la base de datos."); return;
+            if (!nombre || !cantidad) {
+                alert("Error: No se encontraron los datos del material");
+                window.location.href = "Altas1.php";
+                return;
             }
 
-            alert("Proveedor registrado con éxito");
-            window.location.href = "../../Administracion.php";
+            document.getElementById("show-nombre").textContent = nombre;
+            document.getElementById("show-cantidad").textContent = cantidad;
+        };
+
+        function confirmarAlta() {
+            sessionStorage.removeItem("alta_nombre");
+            sessionStorage.removeItem("alta_cantidad");
+            alert("Material registrado con éxito.");
+            window.location.href = "../../Inventario.php";
         }
     </script>
 </body>

@@ -1,18 +1,4 @@
-<?php include("../../../seguridad.php");
-include("../../../conex.php");
-$link = Conectarse();
-$telefonos = [];
-$correos = [];
-$res = mysqli_query($link, "SELECT numero_telefono, correo FROM t_proovedores");
-if ($res) {
-    while($row = mysqli_fetch_array($res)) {
-        $telefonos[] = $row['numero_telefono'];
-        $correos[] = $row['correo'];
-    }
-}
-$jsonTelefonos = json_encode($telefonos);
-$jsonCorreos = json_encode($correos);
-?>
+<?php include("../../../seguridad.php"); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,7 +6,7 @@ $jsonCorreos = json_encode($correos);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Administración - Proveedores</title>
+    <title>Tacos Tony - Movimientos - Ventas - Confirmar</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,40 +63,36 @@ $jsonCorreos = json_encode($correos);
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 40px;
+        .tabla-contenedor {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
+            margin-bottom: 20px;
         }
 
-        .input-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .tabla-contenedor table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .input-grupo label {
+        .tabla-contenedor thead th {
+            background: #f6821f;
+            color: #000;
             font-weight: bold;
-            color: #333333;
-            font-size: 14px;
+            padding: 15px 30px;
+            text-align: left;
         }
 
-        .input-grupo input,
-        .input-grupo select {
-            background-color: #F0F0F0;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 15px;
-            outline: none;
+        .tabla-contenedor tbody td {
+            padding: 12px 30px;
+            background-color: #E6E6E6;
+            font-weight: bold;
             color: #333;
-            font-family: Arial, sans-serif;
+            border-bottom: 1px solid #D0D0D0;
         }
 
-        .input-grupo input:focus,
-        .input-grupo select:focus {
-            border-color: #f6821f;
+        .tabla-contenedor tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .botones-bottom {
@@ -189,6 +171,14 @@ $jsonCorreos = json_encode($correos);
             color: #F6821F;
             background-color: #E5E5E5;
         }
+
+        .total-container {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000;
+        }
     </style>
 </head>
 
@@ -207,13 +197,13 @@ $jsonCorreos = json_encode($correos);
         <a href="../../Inventario.php" class="menu-item">
             <img src="../../../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
         </a>
-        <a href="../../Movimientos.php" class="menu-item">
+        <a href="../../Movimientos.php" class="menu-item activo">
             <img src="../../../Imagenes/icon-mov.png" width="25" name="Movimientos"> Movimientos
         </a>
         <a href="../../Reportes.php" class="menu-item">
             <img src="../../../Imagenes/icon-repo.png" width="25" name="Reportes"> Reportes
         </a>
-        <a href="../../Administracion.php" class="menu-item activo">
+        <a href="../../Administracion.php" class="menu-item">
             <img src="../../../Imagenes/icon-admin.png" width="25" name="Administración"> Administración
         </a>
         <a href="../../Catalogo.php" class="menu-item">
@@ -235,63 +225,86 @@ $jsonCorreos = json_encode($correos);
         <div class="formulario-card">
 
             <div class="titulo-caja">
-                DATOS DEL PROVEEDOR
+                RESUMEN DE VENTA
             </div>
 
-            <form id="proveedorForm" method="post" action="#">
-                <div class="form-grid">
-                    <div class="input-grupo">
-                        <label>Nombre</label>
-                        <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Número de Teléfono</label>
-                        <input type="number" id="telefono" placeholder="Ingrese el número">
-                    </div>
-                    <div class="input-grupo">
-                        <label>Correo Electrónico</label>
-                        <input type="text" id="correo" placeholder="Ingrese el correo">
-                    </div>
-                    <div class="input-grupo">
-                        <label style="color: #073A79;">Todos los campos son obligatorios</label>
-                    </div>
-                </div>
-            </form>
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Nombre del Producto</th>
+                            <th style="width: 25%; text-align: center;">Cantidad</th>
+                            <th style="width: 25%; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body">
+                        <!-- Las filas se agregarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-container">
+                TOTAL GENERAL: $<span id="total-general">0.00</span>
+            </div>
 
             <div class="botones-bottom">
-                <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
-                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+                <input type="button" value="ATRÁS" onclick="history.go(-1)" class="btn-secundario">
+                <a class="btn-accion" onclick="confirmarVenta()">CONFIRMAR</a>
             </div>
 
         </div>
     </div>
 
     <script>
-        function valida_enviar() {
-            var telefonosDB = <?php echo $jsonTelefonos; ?>;
-            var correosDB = <?php echo $jsonCorreos; ?>;
-
-            if (document.getElementById("nombreProveedor").value == "") {
-                alert("Nombre del proveedor no ingresado"); return;
-            }
-            if (document.getElementById("telefono").value == "") {
-                alert("Número de Teléfono no ingresado"); return;
-            }
-            if (document.getElementById("telefono").value.length != 10) {
-                alert("Número de Teléfono no es válido"); return;
-            }
-            if (telefonosDB.includes(document.getElementById("telefono").value)) {
-                alert("El número de teléfono ya está registrado en la base de datos."); return;
-            }
-            if (document.getElementById("correo").value == "") {
-                alert("Correo Electrónico no ingresado"); return;
-            }
-            if (correosDB.includes(document.getElementById("correo").value)) {
-                alert("El correo electrónico ya está registrado en la base de datos."); return;
+        window.onload = function () {
+            var storedData = sessionStorage.getItem("productosVenta");
+            
+            if (!storedData) {
+                alert("Error: No se encontraron los datos de la venta");
+                window.location.href = "Ventas2.php";
+                return;
             }
 
-            alert("Proveedor registrado con éxito");
-            window.location.href = "../../Administracion.php";
+            var productos = JSON.parse(storedData);
+            
+            if (productos.length === 0) {
+                alert("No hay productos agregados a la venta.");
+                window.location.href = "Ventas2.php";
+                return;
+            }
+
+            var tablaBody = document.getElementById("tabla-body");
+            var totalGeneral = 0;
+
+            productos.forEach(function(producto) {
+                var tr = document.createElement("tr");
+
+                var tdNombre = document.createElement("td");
+                tdNombre.textContent = producto.nombre;
+
+                var tdCantidad = document.createElement("td");
+                tdCantidad.textContent = producto.cantidad;
+                tdCantidad.style.textAlign = "center";
+
+                var tdSubtotal = document.createElement("td");
+                tdSubtotal.textContent = "$" + parseFloat(producto.subtotal).toFixed(2);
+                tdSubtotal.style.textAlign = "right";
+
+                tr.appendChild(tdNombre);
+                tr.appendChild(tdCantidad);
+                tr.appendChild(tdSubtotal);
+                tablaBody.appendChild(tr);
+
+                totalGeneral += parseFloat(producto.subtotal);
+            });
+
+            document.getElementById("total-general").textContent = totalGeneral.toFixed(2);
+        };
+
+        function confirmarVenta() {
+            sessionStorage.removeItem("productosVenta");
+            alert("Venta registrada con éxito.");
+            window.location.href = "../../Movimientos.php";
         }
     </script>
 </body>
