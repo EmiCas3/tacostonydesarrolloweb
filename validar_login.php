@@ -24,11 +24,11 @@ if (!$link) {
     exit();
 }
 
-// Paso 2: Buscamos al empleado por correo y contraseña (texto plano) en t_empleados
+// Paso 2: Buscamos al empleado por correo y contraseña (hasheada con SHA2-256) en t_empleados
 $correo_esc = mysqli_real_escape_string($link, $correo);
 $contra_esc = mysqli_real_escape_string($link, $contra);
 
-$query = "SELECT id, nombre, salario, correo FROM t_empleados WHERE correo = '$correo_esc' AND contrasena = '$contra_esc'";
+$query = "SELECT id, nombre, salario, correo FROM t_empleados WHERE correo = '$correo_esc' AND contrasena = SHA2('$contra_esc', 256)";
 $resultado = mysqli_query($link, $query);
 
 if (!$resultado || mysqli_num_rows($resultado) === 0) {
