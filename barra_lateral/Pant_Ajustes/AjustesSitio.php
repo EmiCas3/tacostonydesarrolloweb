@@ -1,4 +1,28 @@
-<?php include("../../seguridad.php"); ?>
+<?php 
+include("../../seguridad.php"); 
+include("../../conex.php");
+
+$conexion = Conectarse();
+$query = "SELECT id, nombre, precio, imagen FROM t_productos";
+$resultado = mysqli_query($conexion, $query);
+
+$productosDB = [];
+if ($resultado && mysqli_num_rows($resultado) > 0) {
+    while ($row = mysqli_fetch_assoc($resultado)) {
+        // Extraemos solo el nombre de la foto y construimos la ruta relativa
+        $nombre_foto = basename($row['imagen']);
+        $ruta_segura = "../../Imagenes/Productos/" . $nombre_foto;
+
+        $productosDB[] = [
+            'id' => (int)$row['id'],
+            'nombre' => $row['nombre'],
+            'precio' => (float)$row['precio'],
+            'imagen' => $ruta_segura
+        ];
+    }
+}
+if(isset($conexion)) { mysqli_close($conexion); }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <!-- Solo el administrador puede acceder a esta pagina -->
@@ -473,48 +497,8 @@
 
 
     <script>
-        // Datos originales del catálogo (extraídos de Catalogo.html)
-        // Las rutas de imagen son relativas a la ubicación de Catalogo.html (../barra_lateral/)
-        var productosOriginales = [
-            { id: 1, nombre: "Taco Árabe", precio: 39, imagen: "../../Imagenes/Productos/TacoArabe.png" },
-            { id: 2, nombre: "Torta Árabe", precio: 39, imagen: "../../Imagenes/Productos/TortaArabe.png" },
-            { id: 3, nombre: "Tony Especial Árabe", precio: 41, imagen: "../../Imagenes/Productos/TonyEArabe.png" },
-            { id: 4, nombre: "Tony Especial Torta", precio: 41, imagen: "../../Imagenes/Productos/TortaEArabe.png" },
-            { id: 5, nombre: "Cemita Árabe", precio: 40, imagen: "../../Imagenes/Productos/CemitaArabe.png" },
-            { id: 6, nombre: "Taco Oriental", precio: 24, imagen: "../../Imagenes/Productos/TacoOriental.png" },
-            { id: 7, nombre: "Cremita", precio: 37, imagen: "../../Imagenes/Productos/Cremita.png" },
-            { id: 8, nombre: "Tony Especial Oriental", precio: 26, imagen: "../../Imagenes/Productos/TonyEOrien.png" },
-            { id: 9, nombre: "Falafel", precio: 39, imagen: "../../Imagenes/Productos/Falafel.png" },
-            { id: 10, nombre: "Kilo de Carne Árabe", precio: 400, imagen: "../../Imagenes/Productos/Carne.png" },
-            { id: 11, nombre: "1/2 de Kilo de Árabe", precio: 200, imagen: "../../Imagenes/Productos/Carne.png" },
-            { id: 12, nombre: "Salsa / Gine 100 ml", precio: 30, imagen: "../../Imagenes/Productos/Gine.jpeg" },
-            { id: 13, nombre: "Salsa / Gine 250 ml", precio: 40, imagen: "../../Imagenes/Productos/Salsa.jpeg" },
-            { id: 14, nombre: "Queso Fundido", precio: 115, imagen: "../../Imagenes/Productos/QuesoFundido.png" },
-            { id: 15, nombre: "Queso Fundido Preparado", precio: 120, imagen: "../../Imagenes/Productos/QuesoPrepa.png" },
-            { id: 16, nombre: "Quesadilla", precio: 45, imagen: "../../Imagenes/Productos/Quesadilla.png" },
-            { id: 17, nombre: "Quesadilla Árabe con Gine", precio: 67, imagen: "../../Imagenes/Productos/QuesaAGine.png" },
-            { id: 18, nombre: "Torta Árabe con Queso", precio: 65, imagen: "../../Imagenes/Productos/TortaAQueso.png" },
-            { id: 19, nombre: "Cemita Árabe con Queso", precio: 65, imagen: "../../Imagenes/Productos/CemitaArabeQ.png" },
-            { id: 20, nombre: "Quesadilla Árabe", precio: 65, imagen: "../../Imagenes/Productos/QuesaArabe.png" },
-            { id: 21, nombre: "Queso fundido con Carne", precio: 120, imagen: "../../Imagenes/Productos/QuesoFCarne.png" },
-            { id: 22, nombre: "Queso Tony Especial", precio: 140, imagen: "../../Imagenes/Productos/QuesoTonyE.png" },
-            { id: 23, nombre: "Quesadilla Maíz", precio: 35, imagen: "../../Imagenes/Productos/QuesaMaiz.png" },
-            { id: 24, nombre: "Quesadilla Oriental", precio: 40, imagen: "../../Imagenes/Productos/QuesaOriental.png" },
-            { id: 25, nombre: "Cebollitas", precio: 28, imagen: "../../Imagenes/Productos/Cebollitas.png" },
-            { id: 26, nombre: "Caldo de Camarón", precio: 38, imagen: "../../Imagenes/Productos/CaldoCam.png" },
-            { id: 27, nombre: "Jocoque Seco", precio: 55, imagen: "../../Imagenes/Productos/JocoSeco.png" },
-            { id: 28, nombre: "Papas a la Francesa", precio: 45, imagen: "../../Imagenes/Productos/PapasFran.png" },
-            { id: 29, nombre: "Jocoque Cremoso", precio: 48, imagen: "../../Imagenes/Productos/JocoCrem.png" },
-            { id: 30, nombre: "Flan Horneado", precio: 34, imagen: "../../Imagenes/Productos/FlanHorn.png" },
-            { id: 31, nombre: "Paleta Helada", precio: 27, imagen: "../../Imagenes/Productos/Paleta.png" },
-            { id: 32, nombre: "Agua Embotellada", precio: 29, imagen: "../../Imagenes/Productos/Agua.png" },
-            { id: 33, nombre: "Michelada", precio: 48, imagen: "../../Imagenes/Productos/Michelada.png" },
-            { id: 34, nombre: "Dedo de Novia", precio: 40, imagen: "../../Imagenes/Productos/DedoNovia.png" },
-            { id: 35, nombre: "Refresco Lata", precio: 29, imagen: "../../Imagenes/Productos/Refersco.png" },
-            { id: 36, nombre: "Cerveza", precio: 45, imagen: "../../Imagenes/Productos/Cerveza.png" },
-            { id: 37, nombre: "Café Soluble", precio: 25, imagen: "../../Imagenes/Productos/Cafe.png" },
-            { id: 38, nombre: "Pizza árabe", precio: 65, imagen: "../../Imagenes/Productos/PizzaArabe.png" }
-        ];
+        // Datos originales del catálogo obtenidos desde la base de datos
+        var productosOriginales = <?php echo json_encode($productosDB); ?>;
 
         var productos = [];
         var imagenTemporal = null;
