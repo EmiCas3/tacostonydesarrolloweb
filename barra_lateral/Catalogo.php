@@ -253,37 +253,8 @@ $resultado = mysqli_query($conexion, $query);
         </div>
     </div>
 
-    <script>
-        // Aplicar cambios del catálogo guardados desde Ajustes del Sitio (opcional si ya usas BD)
-        (function () {
-            var guardados = localStorage.getItem('catalogoProductos');
-            if (!guardados) return;
 
-            var productos = JSON.parse(guardados);
-            var cards = document.querySelectorAll('.producto-card');
 
-            for (var i = 0; i < cards.length && i < productos.length; i++) {
-                var p = productos[i];
-                var card = cards[i];
-
-                var nombreEl = card.querySelector('.producto-nombre');
-                if (nombreEl) nombreEl.textContent = p.nombre;
-
-                var precioEl = card.querySelector('.producto-precio');
-                if (precioEl) precioEl.textContent = '$' + p.precio;
-
-                var imgEl = card.querySelector('.producto-img-container img');
-                if (imgEl) {
-                    var nuevaSrc = p.imagen;
-                    if (nuevaSrc && nuevaSrc.indexOf('data:') !== 0) {
-                        nuevaSrc = p.imagen;
-                    }
-                    imgEl.src = nuevaSrc;
-                    imgEl.alt = p.nombre;
-                }
-            }
-        })();
-    </script>
 </body>
 
 </html>

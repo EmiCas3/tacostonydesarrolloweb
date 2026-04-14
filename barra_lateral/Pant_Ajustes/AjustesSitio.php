@@ -497,25 +497,9 @@ if(isset($conexion)) { mysqli_close($conexion); }
 
 
     <script>
-        // Datos originales del catálogo obtenidos desde la base de datos
-        var productosOriginales = <?php echo json_encode($productosDB); ?>;
-
-        var productos = [];
-        var imagenTemporal = null;
-
-        // Cargar productos desde localStorage o usar los originales
-        function cargarProductos() {
-            var guardados = localStorage.getItem('catalogoProductos');
-            if (guardados) {
-                productos = JSON.parse(guardados);
-            } else {
-                productos = JSON.parse(JSON.stringify(productosOriginales));
-            }
-        }
-
-        function guardarEnStorage() {
-            localStorage.setItem('catalogoProductos', JSON.stringify(productos));
-        }
+        // Datos del catálogo obtenidos desde la base de datos
+        var productos = <?php echo json_encode($productosDB); ?>;
+        var archivoImagen = null;
 
         function renderTabla(listaFiltrada) {
             var lista = listaFiltrada || productos;
@@ -582,14 +566,14 @@ if(isset($conexion)) { mysqli_close($conexion); }
                 this.src = '../../Imagenes/TTlogomini.png';
             };
             document.getElementById('modalTitulo').textContent = 'Editar: ' + p.nombre;
-            imagenTemporal = null;
+            archivoImagen = null;
             document.getElementById('editImgFile').value = '';
             document.getElementById('modalOverlay').classList.add('activo');
         }
 
         function cerrarModal() {
             document.getElementById('modalOverlay').classList.remove('activo');
-            imagenTemporal = null;
+            archivoImagen = null;
         }
 
         function previsualizarImagen(event) {
@@ -602,18 +586,21 @@ if(isset($conexion)) { mysqli_close($conexion); }
                 return;
             }
 
+            // Guardamos el archivo real para enviarlo al servidor
+            archivoImagen = file;
+
             var reader = new FileReader();
             reader.onload = function (e) {
                 document.getElementById('editImgPreview').src = e.target.result;
-                imagenTemporal = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
         function guardarCambios() {
             var index = parseInt(document.getElementById('editIndex').value);
+            var p = productos[index];
             var nombre = document.getElementById('editNombre').value.trim();
-            var precio = parseInt(document.getElementById('editPrecio').value);
+            var precio = parseFloat(document.getElementById('editPrecio').value);
 
             if (!nombre) {
                 alert('El nombre no puede estar vacío');
@@ -624,24 +611,41 @@ if(isset($conexion)) { mysqli_close($conexion); }
                 return;
             }
 
-            productos[index].nombre = nombre;
-            productos[index].precio = precio;
+            // Construir FormData para enviar al servidor (incluye archivo si hay)
+            var formData = new FormData();
+            formData.append('id', p.id);
+            formData.append('nombre', nombre);
+            formData.append('precio', precio);
 
-            if (imagenTemporal) {
-                productos[index].imagen = imagenTemporal;
+            if (archivoImagen) {
+                formData.append('imagen', archivoImagen);
             }
 
-            guardarEnStorage();
-            renderTabla();
-            cerrarModal();
-            alert('Producto actualizado correctamente');
-
-            // Aplicar filtro activo
-            var busqueda = document.getElementById('buscarProducto').value;
-            if (busqueda) filtrarProductos();
+            // Enviar por AJAX a guardar_producto.php
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'guardar_producto.php', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var resp = JSON.parse(xhr.responseText);
+                            if (resp.ok) {
+                                alert('Producto actualizado correctamente');
+                                // Recargar la página para traer los datos frescos de la BD
+                                window.location.reload();
+                            } else {
+                                alert('Error: ' + resp.msg);
+                            }
+                        } catch (e) {
+                            alert('Error inesperado al procesar la respuesta');
+                        }
+                    } else {
+                        alert('Error de conexión con el servidor');
+                    }
+                }
+            };
+            xhr.send(formData);
         }
-
-
 
         // Cerrar modal al hacer clic fuera
         document.getElementById('modalOverlay').addEventListener('click', function (e) {
@@ -654,7 +658,6 @@ if(isset($conexion)) { mysqli_close($conexion); }
         });
 
         // Inicializar
-        cargarProductos();
         renderTabla();
     </script>
 </body>
