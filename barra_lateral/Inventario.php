@@ -306,7 +306,7 @@ $link = Conectarse();
 
             <div class="botones-bottom">
                 <a href="Pant_inventario/Pant_altas/Altas1.php" class="btn-accion">ALTAS</a>
-                <a href="Pant_inventario/Pant_ajustes/ajustes1.php" class="btn-accion">AJUSTES</a>
+                <a href="Pant_inventario/Pant_asignar/asignar1.php" class="btn-accion">ASIGNAR</a>
             </div>
 
         </div>

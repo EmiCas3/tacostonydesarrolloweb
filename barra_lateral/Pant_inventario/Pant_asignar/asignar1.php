@@ -9,7 +9,7 @@ $link = Conectarse();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Ajustes - Buscar</title>
+    <title>Tacos Tony - Asignar</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -195,10 +195,10 @@ $link = Conectarse();
     <div class="main-content">
         <div class="ajustes-card">
             <div class="titulo-caja">
-                AJUSTES EN MATERIAL
+                ASIGNAR MATERIALES
             </div>
 
-            <form id="ajustes1form" method="POST" action="ajustes3.php">
+            <form id="ajustes1form" method="POST" action="asignar2.php">
                 <div class="input-grupo">
                     <label>MATERIAL</label>
                     <select id="idMaterial" name="idMaterial">

@@ -296,8 +296,8 @@ $link = Conectarse();
                     <a href="Pant_movimientos/Pant_entradas/Entrada1.php">
                         <button class="botones">REGISTRAR ENTRADA</button>
                     </a>
-                    <a href="Pant_inventario/Pant_ajustes/ajustes1.php">
-                        <button class="botones">AJUSTAR INVENTARIO</button>
+                    <a href="Pant_inventario/Pant_asignar/asignar1.php">
+                        <button class="botones">ASIGNAR MATERIALES</button>
                     </a>
                 </div>
 
