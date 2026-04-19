@@ -2,17 +2,61 @@
 include("../../../conex.php");
 $link = Conectarse();
 
-$idMaterial = isset($_POST['idMaterial']) ? $_POST['idMaterial'] : '';
-$nombre = "";
-$existencias = "";
+$idProducto = isset($_POST['idProducto']) ? intval($_POST['idProducto']) : 0;
+$nombreProducto = "";
+$precioProducto = "";
 
-if ($idMaterial != '') {
-    $query = "SELECT nombre, existencias FROM t_materiales WHERE id = " . intval($idMaterial);
+if ($idProducto > 0) {
+    $query = "SELECT nombre, precio FROM t_productos WHERE id = $idProducto";
     $result = mysqli_query($link, $query);
     if ($row = mysqli_fetch_array($result)) {
-        $nombre = $row['nombre'];
-        $existencias = $row['existencias'];
+        $nombreProducto = $row['nombre'];
+        $precioProducto = $row['precio'];
     }
+}
+
+// Obtener materiales ya asignados a este producto (del registro más reciente en t_necesitar_general)
+$materialesAsignados = [];
+if ($idProducto > 0) {
+    $queryAsignados = "SELECT np.id_material, m.nombre, np.cantidad
+                       FROM t_necesitar_general ng
+                       JOIN t_necesitar_particular np ON ng.id_ng = np.id_ng
+                       JOIN t_materiales m ON np.id_material = m.id
+                       WHERE ng.id_producto = $idProducto
+                       ORDER BY ng.fecha DESC, m.nombre ASC";
+    $resultAsignados = mysqli_query($link, $queryAsignados);
+
+    // Agrupar por el registro más reciente (tomar el id_ng más alto)
+    $ultimoNg = null;
+    while ($row = mysqli_fetch_array($resultAsignados)) {
+        $materialesAsignados[] = $row;
+    }
+
+    // Obtener solo los del último id_ng para mostrar como "actuales"
+    $queryUltimo = "SELECT ng.id_ng FROM t_necesitar_general ng
+                    WHERE ng.id_producto = $idProducto
+                    ORDER BY ng.id_ng DESC LIMIT 1";
+    $resUltimo = mysqli_query($link, $queryUltimo);
+    if ($rowUltimo = mysqli_fetch_array($resUltimo)) {
+        $ultimoNg = $rowUltimo['id_ng'];
+        $materialesAsignados = [];
+        $queryActuales = "SELECT np.id_material, m.nombre, np.cantidad
+                          FROM t_necesitar_particular np
+                          JOIN t_materiales m ON np.id_material = m.id
+                          WHERE np.id_ng = $ultimoNg
+                          ORDER BY m.nombre ASC";
+        $resActuales = mysqli_query($link, $queryActuales);
+        while ($row = mysqli_fetch_array($resActuales)) {
+            $materialesAsignados[] = $row;
+        }
+    }
+}
+
+// Obtener todos los materiales disponibles para el select
+$todosLosMateriales = [];
+$resMateriales = mysqli_query($link, "SELECT id, nombre FROM t_materiales ORDER BY nombre");
+while ($row = mysqli_fetch_array($resMateriales)) {
+    $todosLosMateriales[] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -22,7 +66,7 @@ if ($idMaterial != '') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../Imagenes/TTlogomini.png">
-    <title>Tacos Tony - Ajustes - Editar</title>
+    <title>Tacos Tony - Asignar Materiales</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +76,6 @@ if ($idMaterial != '') {
             display: flex;
             box-sizing: border-box;
         }
-
 
         .menu-item {
             padding: 15px 20px;
@@ -99,7 +142,7 @@ if ($idMaterial != '') {
             border-radius: 15px;
             padding: 50px;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
             text-align: center;
         }
@@ -129,7 +172,8 @@ if ($idMaterial != '') {
             font-size: 14px;
         }
 
-        .input-grupo input {
+        .input-grupo input,
+        .input-grupo select {
             background-color: #F0F0F0;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
@@ -137,9 +181,12 @@ if ($idMaterial != '') {
             font-size: 15px;
             outline: none;
             color: #333;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .input-grupo input:focus {
+        .input-grupo input:focus,
+        .input-grupo select:focus {
             border-color: #f6821f;
         }
 
@@ -169,12 +216,127 @@ if ($idMaterial != '') {
         .btn-accion:hover {
             background-color: #DC7B3C;
         }
+
+        .btn-agregar {
+            background: #073A79;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-agregar:hover {
+            background-color: #074c9fff;
+        }
+
+        .btn-eliminar {
+            background: #f6821f;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-eliminar:hover {
+            background-color: #DC7B3C;
+        }
+
+        .material-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .material-row select,
+        .material-row input {
+            background-color: #F0F0F0;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .material-row select {
+            flex: 3;
+        }
+
+        .material-row input {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .material-row select:focus,
+        .material-row input:focus {
+            border-color: #f6821f;
+        }
+
+        .materiales-actuales {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .materiales-actuales h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .tabla-materiales {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .tabla-materiales th {
+            background-color: #f6821f;
+            color: #000;
+            padding: 10px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .tabla-materiales td {
+            padding: 10px;
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 14px;
+        }
+
+        .tabla-materiales tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .seccion-titulo {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+            text-align: left;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #f6821f;
+        }
     </style>
 </head>
 
 <body>
     <div
-        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px; align-self: flex-start;">
         <div align="center">
             <a href="../../Dashboard.php">
                 <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
@@ -213,42 +375,168 @@ if ($idMaterial != '') {
     <div class="main-content">
         <div class="ajustes-card">
             <div class="titulo-caja">
-                AJUSTES EN MATERIAL
+                ASIGNAR MATERIALES A PRODUCTO
             </div>
 
-            <form id="ajustes3form">
-                <div class="input-grupo">
-                    <label>ID</label>
-                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($idMaterial); ?>">
-                </div>
-                <div class="input-grupo">
-                    <label>Material</label>
-                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($nombre); ?>">
-                </div>
-                <div class="input-grupo">
-                    <label>Cantidad Actual</label>
-                    <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($existencias); ?>">
+            <!-- Información del producto seleccionado -->
+            <div class="input-grupo">
+                <label>ID del Producto</label>
+                <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($idProducto); ?>">
+            </div>
+            <div class="input-grupo">
+                <label>Producto</label>
+                <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($nombreProducto); ?>">
+            </div>
+            <div class="input-grupo">
+                <label>Precio</label>
+                <input type="text" class="read-only" readonly value="$<?php echo htmlspecialchars($precioProducto); ?>">
+            </div>
+
+            <!-- Materiales actualmente asignados -->
+            <?php if (!empty($materialesAsignados)): ?>
+            <div class="materiales-actuales">
+                <div class="seccion-titulo">Materiales Actualmente Asignados</div>
+                <table class="tabla-materiales">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($materialesAsignados as $mat): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($mat['nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($mat['cantidad']); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+            <div class="materiales-actuales">
+                <div class="seccion-titulo">Sin materiales asignados</div>
+                <p style="text-align: left; color: #888; font-size: 14px;">Este producto aún no tiene materiales asignados.</p>
+            </div>
+            <?php endif; ?>
+
+            <!-- Formulario para asignar nuevos materiales -->
+            <div class="seccion-titulo">Asignar Nuevos Materiales</div>
+            <form id="formAsignar" method="POST" action="guardar_asignacion.php">
+                <input type="hidden" name="idProducto" value="<?php echo $idProducto; ?>">
+
+                <div id="contenedorMateriales">
+                    <div class="material-row">
+                        <select name="materiales[]" required>
+                            <option value="">--Material--</option>
+                            <?php foreach ($todosLosMateriales as $mat): ?>
+                            <option value="<?php echo $mat['id']; ?>"><?php echo htmlspecialchars($mat['nombre']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="number" name="cantidades[]" placeholder="Cantidad" step="0.01" min="0.01" required>
+                        <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">✕</button>
+                    </div>
                 </div>
 
-                <div class="input-grupo">
-                    <label>Nueva Cantidad</label>
-                    <input type="text" id="nuevaCantidad" name="nuevaCantidad" placeholder="Ingresa la nueva cantidad">
-                </div>
+                <button type="button" class="btn-agregar" onclick="agregarMaterial()">+ Agregar Material</button>
 
-                <a class="btn-accion" onclick="validarAjuste3()">CONFIRMAR</a>
+                <br>
+                <div style="display: flex; justify-content: space-between;">
+                    <a class="btn-accion" href="../../Inventario.php">CANCELAR</a>
+                    <a class="btn-accion" onclick="validarForm()">CONFIRMAR</a>
+                </div>
             </form>
         </div>
     </div>
 
     <script>
-        function validarAjuste3() {
-            var form = document.getElementById("ajustes3form");
-            if (form.nuevaCantidad.value == "") {
-                alert("Nueva cantidad no ingresada");
-                return;
+        var materialesJSON = <?php echo json_encode($todosLosMateriales); ?>;
+
+        function agregarMaterial() {
+            var contenedor = document.getElementById('contenedorMateriales');
+            var fila = document.createElement('div');
+            fila.className = 'material-row';
+
+            var select = document.createElement('select');
+            select.name = 'materiales[]';
+            select.required = true;
+            var optDefault = document.createElement('option');
+            optDefault.value = '';
+            optDefault.textContent = '--Material--';
+            select.appendChild(optDefault);
+
+            for (var i = 0; i < materialesJSON.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = materialesJSON[i]['id'];
+                opt.textContent = materialesJSON[i]['nombre'];
+                select.appendChild(opt);
+            }
+
+            var input = document.createElement('input');
+            input.type = 'number';
+            input.name = 'cantidades[]';
+            input.placeholder = 'Cantidad';
+            input.step = '0.01';
+            input.min = '0.01';
+            input.required = true;
+
+            var btnEliminar = document.createElement('button');
+            btnEliminar.type = 'button';
+            btnEliminar.className = 'btn-eliminar';
+            btnEliminar.textContent = '✕';
+            btnEliminar.onclick = function() { eliminarFila(this); };
+
+            fila.appendChild(select);
+            fila.appendChild(input);
+            fila.appendChild(btnEliminar);
+
+            contenedor.appendChild(fila);
+        }
+
+        function eliminarFila(btn) {
+            var contenedor = document.getElementById('contenedorMateriales');
+            if (contenedor.children.length > 1) {
+                btn.parentElement.remove();
             } else {
-                alert("Ajuste realizado con éxito.");
-                window.location.href = "ajustes1.php";
+                alert("Debe haber al menos un material.");
+            }
+        }
+
+        function validarForm() {
+            var form = document.getElementById('formAsignar');
+            var selects = form.querySelectorAll('select[name="materiales[]"]');
+            var inputs = form.querySelectorAll('input[name="cantidades[]"]');
+            var valido = true;
+
+            // Verificar que no haya campos vacíos
+            for (var i = 0; i < selects.length; i++) {
+                if (selects[i].value === '') {
+                    alert('Seleccione un material en la fila ' + (i + 1));
+                    valido = false;
+                    break;
+                }
+                if (inputs[i].value === '' || parseFloat(inputs[i].value) <= 0) {
+                    alert('Ingrese una cantidad válida en la fila ' + (i + 1));
+                    valido = false;
+                    break;
+                }
+            }
+
+            // Verificar materiales duplicados
+            if (valido) {
+                var valores = [];
+                for (var i = 0; i < selects.length; i++) {
+                    if (valores.indexOf(selects[i].value) !== -1) {
+                        alert('El material en la fila ' + (i + 1) + ' está duplicado. Seleccione uno diferente.');
+                        valido = false;
+                        break;
+                    }
+                    valores.push(selects[i].value);
+                }
+            }
+
+            if (valido) {
+                form.submit();
             }
         }
     </script>

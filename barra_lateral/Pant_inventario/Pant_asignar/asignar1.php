@@ -195,23 +195,23 @@ $link = Conectarse();
     <div class="main-content">
         <div class="ajustes-card">
             <div class="titulo-caja">
-                ASIGNAR MATERIALES
+                ASIGNAR MATERIALES A PRODUCTO
             </div>
 
             <form id="ajustes1form" method="POST" action="asignar2.php">
                 <div class="input-grupo">
-                    <label>MATERIAL</label>
-                    <select id="idMaterial" name="idMaterial">
+                    <label>PRODUCTO</label>
+                    <select id="idProducto" name="idProducto">
                         <option value="">--Seleccione--</option>
                         <?php
-                        $result = mysqli_query($link, "SELECT id, nombre FROM t_materiales ORDER BY id") or die(mysqli_error($link));
+                        $result = mysqli_query($link, "SELECT id, nombre FROM t_productos ORDER BY id") or die(mysqli_error($link));
                         while($row = mysqli_fetch_array($result)){
                             echo '<option value="'.$row['id'].'">'.$row['id'].' - '.htmlspecialchars($row['nombre']).'</option>';
                         }
                         ?>
                     </select>
                 </div>
-                <a class="btn-accion" onclick="validarAjuste1()">BUSCAR</a>
+                <a class="btn-accion" onclick="validarAjuste1()">CONFIRMAR</a>
             </form>
         </div>
     </div>
@@ -219,8 +219,8 @@ $link = Conectarse();
     <script>
         function validarAjuste1() {
             var form = document.getElementById("ajustes1form");
-            if (form.idMaterial.value == "") {
-                alert("Material no seleccionado");
+            if (form.idProducto.value == "") {
+                alert("Producto no seleccionado");
                 return;
             } else {
                 form.submit();
