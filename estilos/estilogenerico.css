@@ -376,14 +376,53 @@ h2 {
 }
 
 /* Utilidades Grid Específicas para Tablas de Reportes */
-.tabla-header.grid-ganancia, .fila.grid-ganancia { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; }
-.tabla-header.grid-corte, .fila.grid-corte { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
-.tabla-header.grid-desmensual, .fila.grid-desmensual { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
-.tabla-header.grid-materiales, .fila.grid-materiales { display: grid; grid-template-columns: 2fr 1fr; }
-.tabla-header.grid-rotacion, .fila.grid-rotacion { display: grid; grid-template-columns: 2fr 1fr; }
-.tabla-header.grid-semanal, .fila.grid-semanal { display: grid; grid-template-columns: 2fr 1fr 1fr; }
-.tabla-header.grid-ingreso, .fila.grid-ingreso { display: grid; grid-template-columns: 2fr 1fr 1fr; }
-.tabla-header.grid-suministro, .fila.grid-suministro { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.tabla-header.grid-ganancia,
+.fila.grid-ganancia {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+}
+
+.tabla-header.grid-corte,
+.fila.grid-corte {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+}
+
+.tabla-header.grid-desmensual,
+.fila.grid-desmensual {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+}
+
+.tabla-header.grid-materiales,
+.fila.grid-materiales {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.tabla-header.grid-rotacion,
+.fila.grid-rotacion {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.tabla-header.grid-semanal,
+.fila.grid-semanal {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.tabla-header.grid-ingreso,
+.fila.grid-ingreso {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.tabla-header.grid-suministro,
+.fila.grid-suministro {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
 
 .col-id {
     width: 15%;
@@ -1337,12 +1376,12 @@ h2 {
 }
 
 .btn-eliminar {
-    background-color: #cc3333;
-    color: #FFFFFF;
+    background-color: #f6821f;
+    color: #000000;
     border: none;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     display: flex;
@@ -1353,7 +1392,7 @@ h2 {
 }
 
 .btn-eliminar:hover {
-    background-color: #aa2222;
+    background-color: #DC7B3C;
 }
 
 .read-only {
@@ -1367,13 +1406,16 @@ h2 {
     .resumen-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .grid-empleados {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 600px) {
-    .resumen-grid, .grid-empleados {
+
+    .resumen-grid,
+    .grid-empleados {
         grid-template-columns: 1fr;
     }
 }

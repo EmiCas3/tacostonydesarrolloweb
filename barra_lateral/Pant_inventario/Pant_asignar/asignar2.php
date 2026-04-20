@@ -114,15 +114,15 @@ while ($row = mysqli_fetch_array($resMateriales)) {
             </div>
 
             <!-- Información del producto seleccionado -->
-            <div class="input-grupo">
+            <div class="input-grupo" style="margin-bottom: 10px;">
                 <label>ID del Producto</label>
                 <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($idProducto); ?>">
             </div>
-            <div class="input-grupo">
+            <div class="input-grupo" style="margin-bottom: 10px;">
                 <label>Producto</label>
                 <input type="text" class="read-only" readonly value="<?php echo htmlspecialchars($nombreProducto); ?>">
             </div>
-            <div class="input-grupo">
+            <div class="input-grupo" style="margin-bottom: 10px;">
                 <label>Precio</label>
                 <input type="text" class="read-only" readonly value="$<?php echo htmlspecialchars($precioProducto); ?>">
             </div>
@@ -174,10 +174,9 @@ while ($row = mysqli_fetch_array($resMateriales)) {
                         <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">✕</button>
                     </div>
                 </div>
-
-                <button type="button" class="btn-agregar" onclick="agregarMaterial()">+ Agregar Material</button>
-
-                <br>
+                <div style="display: flex; justify-content: center;">                
+                    <button type="button" class="btn-agregar" onclick="agregarMaterial()">+ Agregar Material</button>
+                </div>
                 <div style="display: flex; justify-content: space-between; margin-top: 30px;">
                     <a class="btn-accion" href="../../Inventario.php">CANCELAR</a>
                     <a class="btn-accion" onclick="validarForm()">CONFIRMAR</a>
