@@ -375,6 +375,16 @@ h2 {
     flex: 1;
 }
 
+/* Utilidades Grid Específicas para Tablas de Reportes */
+.tabla-header.grid-ganancia, .fila.grid-ganancia { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; }
+.tabla-header.grid-corte, .fila.grid-corte { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
+.tabla-header.grid-desmensual, .fila.grid-desmensual { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
+.tabla-header.grid-materiales, .fila.grid-materiales { display: grid; grid-template-columns: 2fr 1fr; }
+.tabla-header.grid-rotacion, .fila.grid-rotacion { display: grid; grid-template-columns: 2fr 1fr; }
+.tabla-header.grid-semanal, .fila.grid-semanal { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.tabla-header.grid-ingreso, .fila.grid-ingreso { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.tabla-header.grid-suministro, .fila.grid-suministro { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+
 .col-id {
     width: 15%;
 }
@@ -493,7 +503,7 @@ h2 {
 
 .input-grupo input,
 .input-grupo select {
-    background-color: #F0F0F0;
+    background-color: #FFFFFF;
     border: 1px solid #E0E0E0;
     border-radius: 8px;
     padding: 12px 15px;
@@ -605,6 +615,21 @@ h2 {
     margin-bottom: 30px;
     gap: 20px;
     flex-wrap: wrap;
+}
+
+.filtro-container .form-grid {
+    margin-bottom: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.filtro-container .btn-accion {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, .3);
 }
 
 .resumen-grid {

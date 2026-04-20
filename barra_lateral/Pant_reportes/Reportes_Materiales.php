@@ -14,6 +14,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Materiales Más Usados</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
+    
 </head>
 <body>
     <div class="sidebar">
@@ -36,7 +37,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">MATERIALES MÁS USADOS</div>
 
@@ -80,14 +81,14 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
             ?>
 
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-materiales">
                     <span>Material</span><span>Productos Asociados</span>
                 </div>
                 <div class="tabla-body">
                     <?php
                     if ($rMateriales && mysqli_num_rows($rMateriales) > 0) {
                         while ($row = mysqli_fetch_array($rMateriales)) {
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-materiales">';
                             echo '<span>' . htmlspecialchars($row['material']) . '</span>';
                             echo '<span>' . $row['productos_asociados'] . '</span>';
                             echo '</div>';

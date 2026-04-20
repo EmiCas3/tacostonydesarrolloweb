@@ -19,6 +19,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Rotación de Productos</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
+    
 </head>
 <body>
     <div class="sidebar">
@@ -41,7 +42,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">ROTACIÓN DE PRODUCTOS</div>
             <div class="form-grid">
@@ -91,14 +92,14 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                 Total productos vendidos: <?php echo number_format($totalGeneral, 0); ?>
             </div>
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-rotacion">
                     <span>Producto</span><span>Cantidad Vendida</span>
                 </div>
                 <div class="tabla-body">
                     <?php
                     if ($rRotacion && mysqli_num_rows($rRotacion) > 0) {
                         while ($row = mysqli_fetch_array($rRotacion)) {
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-rotacion">';
                             echo '<span>' . htmlspecialchars($row['producto']) . '</span>';
                             echo '<span>' . number_format($row['total_vendido'], 0) . '</span>';
                             echo '</div>';
