@@ -47,7 +47,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             <div class="titulo-caja">CORTE DIARIO</div>
 
             <div class="filtro-container">
-                <div class="form-grid" style="gap:15px; margin-bottom:0;">
+                <div class="form-grid" style="gap:15px; margin-bottom:0; grid-template-columns: 1fr 1fr 1fr;">
                     <div class="input-grupo">
                         <label>Día</label>
                         <select id="dia">
