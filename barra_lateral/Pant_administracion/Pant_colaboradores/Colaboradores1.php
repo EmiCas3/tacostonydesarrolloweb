@@ -93,6 +93,8 @@ $jsonCorreos = json_encode($correos);
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
                     </div>
                 </div>
+                                <button type="submit" id="btnSubmitColab" style="display:none;"></button>
+
             </form>
 
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
@@ -122,8 +124,8 @@ $jsonCorreos = json_encode($correos);
                 alert("Contraseña del empleado no ingresada");
                 return 0;
             } else {
-                alert("Colaborador registrado con éxito.");
-                window.location.href = "../../Administracion.php";
+                document.getElementById("btnSubmitColab").click();
+
             }
         }
     </script>
