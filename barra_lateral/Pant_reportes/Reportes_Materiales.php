@@ -66,8 +66,8 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
             </div>
             <div style="display: flex; justify-content: flex-end;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
-                <br>
-                <br>
+                <?php echo "<br>"; ?>
+                <?php echo "<br>"; ?>
 
             </div>
 
@@ -110,13 +110,13 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
         </div>
     </div>
     <script>
-        function filtrar() {
-            var mes = document.getElementById('mes').value;
-            var anio = document.getElementById('anio').value;
-            if (!anio) { alert('Ingrese un año válido'); return; }
-            window.location.href = 'Reportes_Materiales.php?mes=' + mes + '&anio=' + anio;
-        }
-    </script>
+            function filtrar() {
+                var mes = document.getElementById('mes').value;
+                var anio = document.getElementById('anio').value;
+                if (!anio) { alert('Ingrese un año válido'); return; }
+                window.location.href = 'Reportes_Materiales.php?mes=' + mes + '&anio=' + anio;
+            }
+        </script>
 </body>
 
 </html>
