@@ -404,6 +404,7 @@ h2 {
 .botones-bottom {
     display: flex;
     justify-content: space-between;
+    margin-top: 30px;
 }
 
 .btn-accion {
@@ -419,6 +420,8 @@ h2 {
     text-decoration: none;
     text-align: center;
     transition: background-color 0.2s;
+    display: inline-block;
+    box-sizing: border-box;
 }
 
 .btn-accion:hover {
@@ -438,6 +441,7 @@ h2 {
     text-decoration: none;
     text-align: center;
     transition: background-color 0.2s;
+    display: inline-block;
 }
 
 .btn-secundario:hover {

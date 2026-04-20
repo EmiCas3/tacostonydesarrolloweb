@@ -178,7 +178,7 @@ while ($row = mysqli_fetch_array($resMateriales)) {
                 <button type="button" class="btn-agregar" onclick="agregarMaterial()">+ Agregar Material</button>
 
                 <br>
-                <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
                     <a class="btn-accion" href="../../Inventario.php">CANCELAR</a>
                     <a class="btn-accion" onclick="validarForm()">CONFIRMAR</a>
                 </div>

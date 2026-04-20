@@ -69,7 +69,9 @@ $link = Conectarse();
                         ?>
                     </select>
                 </div>
-                <a class="btn-accion" onclick="validarAjuste1()">CONFIRMAR</a>
+                <div style="text-align: right; margin-top: 30px;">
+                    <a class="btn-accion" onclick="validarAjuste1()">CONFIRMAR</a>
+                </div>
             </form>
         </div>
     </div>
