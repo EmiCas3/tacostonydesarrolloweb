@@ -235,15 +235,15 @@ $jsonNombres = json_encode($nombres);
                 REGISTRAR NUEVO MATERIAL
             </div>
 
-            <form id="altasForm1" method="post" action="#">
+            <form id="altasForm1" method="post" action="Altas2.php">
                 <div class="form-grid">
                     <div class="input-grupo">
                         <label>Nombre del Material</label>
-                        <input type="text" id="nombreMaterial" placeholder="Ingrese el nombre">
+                        <input type="text" id="nombreMaterial" name="nombre" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
                         <label>Cantidad Inicial</label>
-                        <input type="number" id="cantidadInicial" placeholder="Ingrese la cantidad" min="0" step="0.1">
+                        <input type="number" id="cantidadInicial" name="cantidad" placeholder="Ingrese la cantidad" min="0" step="0.1">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
@@ -289,9 +289,7 @@ $jsonNombres = json_encode($nombres);
                 return false;
             }
 
-            sessionStorage.setItem("alta_nombre", nombreInput.value.trim());
-            sessionStorage.setItem("alta_cantidad", cantidadInput.value.trim());
-            window.location.href = "Altas2.php";
+form.submit();
         }
     </script>
 </body>

@@ -1,4 +1,12 @@
-<?php include("../../../seguridad.php"); ?>
+<?php include("../../../seguridad.php"); 
+
+$nombre=isset($_POST['nombre']? trim($_POST['nombre']): '';
+$cantidad = isset($_POST['cantidad']) ? trim($_POST['cantidad']) : '';
+if($nombre==='' || $cantidad===''){
+    echo "<script>alert('Error:datos incompletos');window.location.href='Atlas1.php';</script>";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -241,46 +249,35 @@
                     <tbody>
                         <tr>
                             <td class="col-campo">Nombre del Material</td>
-                            <td class="col-valor" id="show-nombre">—</td>
+                            <td class="col-valor"><?php echo htmlspecialchars($nombre); ?></td>
+
                         </tr>
                         <tr>
                             <td class="col-campo">Cantidad Inicial</td>
-                            <td class="col-valor" id="show-cantidad">—</td>
+                            <td class="col-valor"><?php echo htmlspecialchars($cantidad); ?></td>
+
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="botones-bottom">
-                <input type="button" value="ATRÁS" onclick="history.go(-1)" class="btn-secundario">
-                <a class="btn-accion" onclick="confirmarAlta()">CONFIRMAR</a>
-            </div>
+
+
+
+
+             <form id="confirmarForm" method="post" action="guardar_alta.php">
+                <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
+                <input type="hidden" name="cantidad" value="<?php echo htmlspecialchars($cantidad); ?>">
+                <div class="botones-bottom">
+                    <input type="button" value="ATRÁS" onclick="history.go(-1)" class="btn-secundario">
+                    <input type="submit" value="CONFIRMAR" class="btn-accion">
+                </div>
+            </form>
 
         </div>
     </div>
 
-    <script>
-        window.onload = function () {
-            var nombre = sessionStorage.getItem("alta_nombre");
-            var cantidad = sessionStorage.getItem("alta_cantidad");
-
-            if (!nombre || !cantidad) {
-                alert("Error: No se encontraron los datos del material");
-                window.location.href = "Altas1.php";
-                return;
-            }
-
-            document.getElementById("show-nombre").textContent = nombre;
-            document.getElementById("show-cantidad").textContent = cantidad;
-        };
-
-        function confirmarAlta() {
-            sessionStorage.removeItem("alta_nombre");
-            sessionStorage.removeItem("alta_cantidad");
-            alert("Material registrado con éxito.");
-            window.location.href = "../../Inventario.php";
-        }
-    </script>
+    <script></script>
 </body>
 
 </html>
