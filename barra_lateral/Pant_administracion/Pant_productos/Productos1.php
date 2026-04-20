@@ -83,6 +83,7 @@ $jsonNombres = json_encode($nombres);
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
                     </div>
                 </div>
+                <button type="submit" id="btnSubmitProd" style="display:none;"></button>
             </form>
 
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
@@ -111,8 +112,7 @@ $jsonNombres = json_encode($nombres);
                 alert("Precio del producto no ingresado");
                 return 0;
             } else {
-                alert("Producto registrado con éxito.");
-                window.location.href = "../../Administracion.php";
+                document.getElementById("btnSubmitProd").click();
             }
         }
     </script>
