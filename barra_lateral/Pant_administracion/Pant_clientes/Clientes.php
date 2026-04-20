@@ -69,43 +69,43 @@ $jsonCorreos = json_encode($correos);
                 INFORMACIÓN DEL CLIENTE
             </div>
 
-            <form id="clienteForm" method="post" action="#">
+            <form id="clienteForm" method="post" action="guardar_cliente.php">
                 <div class="form-grid">
                     <div class="input-grupo">
                         <label>Nombre Cliente <span style="color: #073A79;">*</span></label>
-                        <input type="text" id="nombreCliente" placeholder="Ingrese el nombre">
+                        <input type="text" id="nombreCliente" name="nombre" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
                         <label>RFC</label>
-                        <input type="text" id="rfc" placeholder="Ingrese el RFC">
+                        <input type="text" id="rfc" name="rfc" placeholder="Ingrese el RFC">
                     </div>
                     <div class="input-grupo">
                         <label>Razón Social</label>
-                        <input type="text" id="razonSocial" placeholder="Ingrese la razón social">
+                        <input type="text" id="razonSocial" name="razon_social" placeholder="Ingrese la razón social">
                     </div>
                     <div class="input-grupo">
                         <label>Código Postal</label>
-                        <input type="number" id="codigoPostal" placeholder="Ingrese el CP">
+                        <input type="number" id="codigoPostal" name="codigo_postal" placeholder="Ingrese el CP">
                     </div>
                     <div class="input-grupo">
                         <label>Número de Teléfono <span style="color: #073A79;">*</span></label>
-                        <input type="number" id="numeroTelefono" placeholder="Ingrese el número">
+                        <input type="text" id="numeroTelefono" name="numero_telefono" placeholder="Ingrese el número">
                     </div>
                     <div class="input-grupo">
                         <label>Correo Electrónico <span style="color: #073A79;">*</span></label>
-                        <input type="text" id="correo" placeholder="Ingrese el correo">
+                        <input type="text" id="correo" name="correo" placeholder="Ingrese el correo">
                     </div>
                     <div class="input-grupo">
                         <label>Calle</label>
-                        <input type="text" id="calle" placeholder="Ingrese la calle">
+                        <input type="text" id="calle" name="calle" placeholder="Ingrese la calle">
                     </div>
                     <div class="input-grupo">
                         <label>Colonia</label>
-                        <input type="text" id="colonia" placeholder="Ingrese la colonia">
+                        <input type="text" id="colonia" name="colonia" placeholder="Ingrese la colonia">
                     </div>
                     <div class="input-grupo">
                         <label>Estado</label>
-                        <input type="text" id="estado" placeholder="Ingrese el estado">
+                        <input type="text" id="estado" name="estado" placeholder="Ingrese el estado">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">* Campos obligatorios</label>
@@ -116,6 +116,7 @@ $jsonCorreos = json_encode($correos);
             <div class="botones-bottom">
                 <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+                <button type="submit" id="btnSubmitCliente" form="clienteForm" style="display:none;"></button>
             </div>
 
         </div>
@@ -144,8 +145,8 @@ $jsonCorreos = json_encode($correos);
             if (correosDB.includes(document.getElementById("correo").value)) {
                 alert("El correo electrónico ya está registrado en la base de datos."); return;
             }
-            alert("Cliente registrado con éxito");
-            window.location.href = "../../Administracion.php";
+            document.getElementById("btnSubmitCliente").click();
+
         }
     </script>
 </body>
