@@ -1,6 +1,6 @@
 <?php include("../../../seguridad.php"); 
 
-$nombre=isset($_POST['nombre']? trim($_POST['nombre']): '';
+$nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
 $cantidad = isset($_POST['cantidad']) ? trim($_POST['cantidad']) : '';
 if($nombre==='' || $cantidad===''){
     echo "<script>alert('Error:datos incompletos');window.location.href='Atlas1.php';</script>";
