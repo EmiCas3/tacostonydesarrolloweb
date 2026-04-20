@@ -105,7 +105,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
 
     <div class="main-content-top">
         <div class="formulario-card">
-            <div class="titulo-caja">SUMINISTROS POR FECHA</div>
+            <div class="titulo-caja">SUMINISTROS MENSUALES</div>
             <div class="form-grid">
                 <div class="input-grupo">
                     <label>Mes</label>

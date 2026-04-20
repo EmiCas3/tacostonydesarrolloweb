@@ -922,6 +922,10 @@ h2 {
     overflow: hidden;
 }
 
+.tabla-container .tabla-body {
+    background-color: #FFFFFF;
+}
+
 .tabla-header-grid {
     background-color: #F6821F;
     color: #000000;
