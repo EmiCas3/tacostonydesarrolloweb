@@ -111,8 +111,8 @@ $jsonCorreos = json_encode($correos);
                         <label style="color: #073A79;">* Campos obligatorios</label>
                     </div>
                 </div>
+                <button type="submit" id="btnSubmitCliente" style="display:none;"></button>
             </form>
-
 
             <div class="botones-bottom">
                 <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
