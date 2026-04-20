@@ -129,30 +129,31 @@ while ($row = mysqli_fetch_array($resMateriales)) {
 
             <!-- Materiales actualmente asignados -->
             <?php if (!empty($materialesAsignados)): ?>
-            <div class="materiales-actuales">
-                <div class="seccion-titulo">Materiales Actualmente Asignados</div>
-                <table class="tabla-materiales">
-                    <thead>
-                        <tr>
-                            <th>Material</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($materialesAsignados as $mat): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($mat['nombre']); ?></td>
-                            <td><?php echo htmlspecialchars($mat['cantidad']); ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                <div class="materiales-actuales">
+                    <div class="seccion-titulo">Materiales Actualmente Asignados</div>
+                    <table class="tabla-materiales">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($materialesAsignados as $mat): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($mat['nombre']); ?></td>
+                                    <td><?php echo htmlspecialchars($mat['cantidad']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php else: ?>
-            <div class="materiales-actuales">
-                <div class="seccion-titulo">Sin materiales asignados</div>
-                <p style="text-align: left; color: #888; font-size: 14px;">Este producto aún no tiene materiales asignados.</p>
-            </div>
+                <div class="materiales-actuales">
+                    <div class="seccion-titulo">Sin materiales asignados</div>
+                    <p style="text-align: left; color: #888; font-size: 14px;">Este producto aún no tiene materiales
+                        asignados.</p>
+                </div>
             <?php endif; ?>
 
             <!-- Formulario para asignar nuevos materiales -->
@@ -165,7 +166,8 @@ while ($row = mysqli_fetch_array($resMateriales)) {
                         <select name="materiales[]" required>
                             <option value="">--Material--</option>
                             <?php foreach ($todosLosMateriales as $mat): ?>
-                            <option value="<?php echo $mat['id']; ?>"><?php echo htmlspecialchars($mat['nombre']); ?></option>
+                                <option value="<?php echo $mat['id']; ?>"><?php echo htmlspecialchars($mat['nombre']); ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <input type="number" name="cantidades[]" placeholder="Cantidad" step="0.01" min="0.01" required>
@@ -219,7 +221,7 @@ while ($row = mysqli_fetch_array($resMateriales)) {
             btnEliminar.type = 'button';
             btnEliminar.className = 'btn-eliminar';
             btnEliminar.textContent = '✕';
-            btnEliminar.onclick = function() { eliminarFila(this); };
+            btnEliminar.onclick = function () { eliminarFila(this); };
 
             fila.appendChild(select);
             fila.appendChild(input);

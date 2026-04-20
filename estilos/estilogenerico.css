@@ -272,8 +272,9 @@ h2 {
 .sin-datos {
     color: #888;
     font-style: italic;
-    font-size: 13px;
-    padding: 8px 6px;
+    font-size: 14px;
+    padding: 20px;
+    text-align: center;
 }
 
 /* ===== 6. INVENTARIO ===== */
@@ -333,6 +334,10 @@ h2 {
     padding: 15px 30px;
 }
 
+.tabla-header span {
+    flex: 1;
+}
+
 .tabla-body {
     background-color: #E6E6E6;
     max-height: 300px;
@@ -359,6 +364,15 @@ h2 {
     padding: 10px 30px;
     font-weight: bold;
     color: #333;
+    border-bottom: 1px solid #D0D0D0;
+}
+
+.fila:last-child {
+    border-bottom: none;
+}
+
+.fila span {
+    flex: 1;
 }
 
 .col-id {
@@ -431,7 +445,9 @@ h2 {
 }
 
 /* ===== 7. FORMULARIOS ===== */
-.formulario-card {
+.formulario-card,
+.colaboradores-card,
+.productos-card {
     background-color: #FFFFFF;
     border-radius: 15px;
     padding: 50px;
@@ -1168,7 +1184,156 @@ h2 {
     font-style: italic;
 }
 
-/* ===== 16. MEDIA QUERIES ===== */
+/* ===== 15b. INDICADORES DE MARGEN ===== */
+.margen-positivo {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.margen-bajo {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.margen-negativo {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* ===== 16. ASIGNAR MATERIALES ===== */
+.ajustes-card {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    padding: 50px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
+}
+
+.seccion-titulo {
+    font-weight: bold;
+    font-size: 16px;
+    color: #073A79;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #F6821F;
+}
+
+.materiales-actuales {
+    margin-bottom: 20px;
+}
+
+.tabla-materiales {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabla-materiales thead th {
+    background-color: #F6821F;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+.tabla-materiales tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #E0E0E0;
+    font-weight: bold;
+    color: #333;
+    background-color: #F9F9F9;
+}
+
+.tabla-materiales tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.material-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.material-row select {
+    flex: 2;
+    background-color: #F0F0F0;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 15px;
+    outline: none;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.material-row select:focus {
+    border-color: #F6821F;
+}
+
+.material-row input[type="number"] {
+    flex: 1;
+    background-color: #F0F0F0;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 15px;
+    outline: none;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.material-row input[type="number"]:focus {
+    border-color: #F6821F;
+}
+
+.btn-agregar {
+    background-color: #073A79;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: background-color 0.2s;
+}
+
+.btn-agregar:hover {
+    background-color: #0a4a94;
+}
+
+.btn-eliminar {
+    background-color: #cc3333;
+    color: #FFFFFF;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-eliminar:hover {
+    background-color: #aa2222;
+}
+
+.read-only {
+    background-color: #F0F0F0 !important;
+    color: #666 !important;
+    cursor: not-allowed;
+}
+
+/* ===== 17. MEDIA QUERIES ===== */
 @media (max-width: 900px) {
     .resumen-grid {
         grid-template-columns: repeat(2, 1fr);

@@ -1,5 +1,5 @@
-<?php 
-include("../../seguridad.php"); 
+<?php
+include("../../seguridad.php");
 include("../../conex.php");
 
 $conexion = Conectarse();
@@ -14,14 +14,16 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
         $ruta_segura = "../../Imagenes/Productos/" . $nombre_foto;
 
         $productosDB[] = [
-            'id' => (int)$row['id'],
+            'id' => (int) $row['id'],
             'nombre' => $row['nombre'],
-            'precio' => (float)$row['precio'],
+            'precio' => (float) $row['precio'],
             'imagen' => $ruta_segura
         ];
     }
 }
-if(isset($conexion)) { mysqli_close($conexion); }
+if (isset($conexion)) {
+    mysqli_close($conexion);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -73,7 +75,7 @@ if(isset($conexion)) { mysqli_close($conexion); }
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-column">
         <h1>Ajustes del Sitio</h1>
         <div class="barra-acciones">
             <div style="display: flex; align-items: center;">
@@ -87,7 +89,7 @@ if(isset($conexion)) { mysqli_close($conexion); }
         </div>
 
         <div class="tabla-container">
-            <div class="tabla-header">
+            <div class="tabla-header-grid">
                 <span>ID</span>
                 <span>Imagen</span>
                 <span>Nombre</span>

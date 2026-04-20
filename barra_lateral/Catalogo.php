@@ -57,7 +57,7 @@ $resultado = mysqli_query($conexion, $query);
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-column">
         <h1>Catálogo de Productos</h1>
         <div class="catalogo-container">
             <div class="productos-grid">
