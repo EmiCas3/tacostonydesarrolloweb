@@ -67,6 +67,7 @@ $link = Conectarse();
                                          FROM t_vender_general v 
                                          INNER JOIN t_clientes c ON v.id_cliente = c.id
                                          INNER JOIN t_empleados e ON v.id_empleado = e.id
+                                         WHERE DATE(v.fecha) = CURDATE()
                                          ORDER BY v.id ASC";
                         $result_ventas = mysqli_query($link, $query_ventas) or die(mysqli_error($link));
                         while($row_v = mysqli_fetch_array($result_ventas)){
