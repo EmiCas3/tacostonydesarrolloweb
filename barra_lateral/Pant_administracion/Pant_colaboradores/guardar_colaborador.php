@@ -7,10 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$nombre    = isset($_POST['nombre'])    ? trim($_POST['nombre'])    : '';
-$correo    = isset($_POST['correo'])    ? trim($_POST['correo'])    : '';
-$salario   = isset($_POST['salario'])   ? trim($_POST['salario'])   : '';
-$contrasena= isset($_POST['contrasena'])? trim($_POST['contrasena']): '';
+$nombre     = isset($_POST['nombre'])     ? trim($_POST['nombre'])     : '';
+$correo     = isset($_POST['correo'])     ? trim($_POST['correo'])     : '';
+$salario    = isset($_POST['salario'])    ? trim($_POST['salario'])    : '';
+$contrasena = isset($_POST['contrasena']) ? trim($_POST['contrasena']) : '';
+// Check if phone was sent, otherwise set to null
+$telefono   = isset($_POST['numero_telefono']) ? trim($_POST['numero_telefono']) : null;
 
 if ($nombre === '' || $correo === '' || $salario === '' || $contrasena === '') {
     echo "<script>alert('Error: todos los campos son obligatorios.'); window.location.href='Colaboradores1.php';</script>";
@@ -28,12 +30,20 @@ if (!$link) {
     exit;
 }
 
-$nombre_esc     = mysqli_real_escape_string($link, $nombre);
-$correo_esc     = mysqli_real_escape_string($link, $correo);
-$salario_val    = floatval($salario);
-$hash_contrasena= hash('sha256', $contrasena);
+$nombre_esc      = mysqli_real_escape_string($link, $nombre);
+$correo_esc      = mysqli_real_escape_string($link, $correo);
+$salario_val     = floatval($salario);
+$hash_contrasena = hash('sha256', $contrasena);
 
-// Verificar duplicado
+// Prepare the phone value for the SQL query
+if ($telefono === null || $telefono === '') {
+    $tel_value = "NULL"; 
+} else {
+    $telefono_esc = mysqli_real_escape_string($link, $telefono);
+    $tel_value = "'$telefono_esc'";
+}
+
+// Check for duplicate email
 $checkCor = mysqli_query($link, "SELECT id FROM t_empleados WHERE LOWER(correo) = LOWER('$correo_esc')");
 if ($checkCor && mysqli_num_rows($checkCor) > 0) {
     mysqli_close($link);
@@ -41,8 +51,9 @@ if ($checkCor && mysqli_num_rows($checkCor) > 0) {
     exit;
 }
 
+// INSERT using the $tel_value (which will be NULL or the actual number)
 $query = "INSERT INTO t_empleados (nombre, salario, numero_telefono, correo, contrasena)
-          VALUES ('$nombre_esc', $salario_val, '', '$correo_esc', '$hash_contrasena')";
+          VALUES ('$nombre_esc', $salario_val, $tel_value, '$correo_esc', '$hash_contrasena')";
 
 $result = mysqli_query($link, $query);
 mysqli_close($link);
