@@ -56,7 +56,7 @@
                 <input type="file" id="file-upload" style="display: none;" accept="image/*">
             </div>
 
-            <form style="width: 100%;" action="#" method="POST">
+            <form id="form-config" style="width: 100%;" action="Pant_Ajustes/guardar_contrasena.php" method="POST">
                 <div class="form-group">
                     <h2 for="nombre">Nombre Completo</h2>
                     <input type="text" id="nombre" name="nombre" value="<?php echo isset($_SESSION['nombre_empleado']) ? htmlspecialchars($_SESSION['nombre_empleado']) : ''; ?>" readonly>
@@ -89,8 +89,8 @@
                 alert("La contraseña debe tener al menos 8 caracteres");
                 return;
             }
-            alert("Contraseña actualizada exitosamente");
-            document.getElementById("password").value = "";
+            // Enviar el formulario
+            document.getElementById("form-config").submit();
         }
     </script>
 </body>
