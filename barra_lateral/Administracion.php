@@ -20,7 +20,7 @@
         </div>
 
         <a href="Dashboard.php" class="menu-item">
-            <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard
+            <img src="../Imagenes/icon-dash.png" width="25" name="Dashboard"> Dashboard</a>
 
             <a href="Inventario.php" class="menu-item">
                 <img src="../Imagenes/icon-inv.png" width="25" name="Inventario"> Inventario
