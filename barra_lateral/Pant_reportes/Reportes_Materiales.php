@@ -3,19 +3,21 @@ include("../../seguridad.php");
 include("../../conex.php");
 $link = Conectarse();
 
-$mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
+$mes_sel = isset($_GET['mes']) ? intval($_GET['mes']) : intval(date('m'));
 $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Materiales Más Usados</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+
 </head>
+
 <body>
     <div class="sidebar">
         <div align="center">
@@ -23,9 +25,12 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
         </div>
         <a href="../Dashboard.php" class="menu-item"><img src="../../Imagenes/icon-dash.png" width="25"> Dashboard</a>
         <a href="../Inventario.php" class="menu-item"><img src="../../Imagenes/icon-inv.png" width="25"> Inventario</a>
-        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
-        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
-        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
+        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25">
+            Movimientos</a>
+        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25">
+            Reportes</a>
+        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25">
+            Administración</a>
         <a href="../Catalogo.php" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
         <div class="menu-dropdown">
             <a class="menu-item"><img src="../../Imagenes/icon-config.png" width="25"> Configuración</a>
@@ -46,7 +51,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     <label>Mes</label>
                     <select id="mes">
                         <?php
-                        $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                        $meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                         for ($i = 1; $i <= 12; $i++) {
                             $sel = ($i == $mes_sel) ? 'selected' : '';
                             echo "<option value='$i' $sel>{$meses[$i]}</option>";
@@ -61,6 +66,9 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
             </div>
             <div style="display: flex; justify-content: flex-end;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
+                <br>
+                <br>
+
             </div>
 
             <?php
@@ -103,11 +111,12 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
     </div>
     <script>
         function filtrar() {
-            var mes  = document.getElementById('mes').value;
+            var mes = document.getElementById('mes').value;
             var anio = document.getElementById('anio').value;
             if (!anio) { alert('Ingrese un año válido'); return; }
             window.location.href = 'Reportes_Materiales.php?mes=' + mes + '&anio=' + anio;
         }
     </script>
 </body>
+
 </html>
