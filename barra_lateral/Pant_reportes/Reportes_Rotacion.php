@@ -18,7 +18,8 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Rotación de Productos</title>
-    <link rel="stylesheet" href="../../estilos/estilogenerico.css">
+    <link rel=\"stylesheet\" href=\"../../estilos/estilogenerico.css\">
+    
 </head>
 <body>
     <div class="sidebar">

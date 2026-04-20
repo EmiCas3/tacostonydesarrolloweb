@@ -503,7 +503,7 @@ h2 {
 
 .input-grupo input,
 .input-grupo select {
-    background-color: #F0F0F0;
+    background-color: #FFFFFF;
     border: 1px solid #E0E0E0;
     border-radius: 8px;
     padding: 12px 15px;
@@ -615,6 +615,21 @@ h2 {
     margin-bottom: 30px;
     gap: 20px;
     flex-wrap: wrap;
+}
+
+.filtro-container .form-grid {
+    margin-bottom: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.filtro-container .btn-accion {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, .3);
 }
 
 .resumen-grid {
