@@ -153,10 +153,34 @@ if ($id_venta > 0 && $id_producto_modificar > 0) {
             } if (form.subtotal.value == "") {
                 alert("Subtotal no ingresado");
                 return 0;
-            } else {
-                alert("Guardado correctamente.");
-                window.location.href = "ModificarV2.php?id_venta=<?php echo $id_venta; ?>";
             }
+
+            // Preparar datos para el handler
+            var datos = {
+                id_venta: <?php echo $id_venta; ?>,
+                id_producto: parseInt(form.idProducto.value),
+                cantidad: parseFloat(form.cantidad.value),
+                id_producto_anterior: <?php echo $id_producto_modificar; ?>
+            };
+
+            // Enviar datos al handler via AJAX
+            fetch("handler_modificar_venta.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    alert("Guardado correctamente.");
+                    window.location.href = "ModificarV2.php?id_venta=<?php echo $id_venta; ?>";
+                } else {
+                    alert("Error al guardar: " + result.message);
+                }
+            })
+            .catch(function(error) {
+                alert("Error de conexión: " + error.message);
+            });
         }
     </script>
 </body>

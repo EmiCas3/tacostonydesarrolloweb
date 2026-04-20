@@ -129,9 +129,57 @@
         };
 
         function confirmarVenta() {
-            sessionStorage.removeItem("productosVenta");
-            alert("Venta registrada con éxito.");
-            window.location.href = "../../Movimientos.php";
+            var storedData = sessionStorage.getItem("productosVenta");
+            var idCliente = sessionStorage.getItem("ventaIdCliente");
+            var fecha = sessionStorage.getItem("ventaFecha");
+            var servicioDomicilio = sessionStorage.getItem("ventaServicioDomicilio");
+            var idEmpleado = sessionStorage.getItem("ventaIdEmpleado");
+
+            if (!storedData || !idCliente || !fecha || !idEmpleado) {
+                alert("Error: Faltan datos para registrar la venta.");
+                return;
+            }
+
+            var productos = JSON.parse(storedData);
+
+            // Preparar datos para el handler
+            var datos = {
+                id_cliente: parseInt(idCliente),
+                fecha: fecha,
+                servicio_domicilio: servicioDomicilio === "si" ? "SI" : "NO",
+                id_empleado: parseInt(idEmpleado),
+                productos: productos.map(function(p) {
+                    return {
+                        id: parseInt(p.id),
+                        cantidad: parseFloat(p.cantidad)
+                    };
+                })
+            };
+
+            // Enviar datos al handler via AJAX
+            fetch("handler_venta.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    // Limpiar sessionStorage
+                    sessionStorage.removeItem("productosVenta");
+                    sessionStorage.removeItem("ventaIdCliente");
+                    sessionStorage.removeItem("ventaFecha");
+                    sessionStorage.removeItem("ventaServicioDomicilio");
+                    sessionStorage.removeItem("ventaIdEmpleado");
+                    alert("Venta registrada con éxito.");
+                    window.location.href = "../../Movimientos.php";
+                } else {
+                    alert("Error al registrar la venta: " + result.message);
+                }
+            })
+            .catch(function(error) {
+                alert("Error de conexión: " + error.message);
+            });
         }
     </script>
 </body>

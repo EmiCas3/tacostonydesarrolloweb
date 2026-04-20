@@ -167,6 +167,11 @@ $link = Conectarse();
                 }
             }
 
+            // Guardar datos generales de la venta en sessionStorage para Ventas3
+            sessionStorage.setItem('ventaIdCliente', document.getElementById('idCliente').value);
+            sessionStorage.setItem('ventaFecha', document.getElementById('fechaDia').value);
+            sessionStorage.setItem('ventaServicioDomicilio', document.getElementById('servicioDomicilio').value);
+            sessionStorage.setItem('ventaIdEmpleado', document.getElementById('idEmpleado').value);
             window.location.href = "Ventas2.php";
         }
     </script>
