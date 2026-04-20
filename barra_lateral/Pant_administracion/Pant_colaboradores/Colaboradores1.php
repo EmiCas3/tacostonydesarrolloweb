@@ -75,10 +75,6 @@ $jsonCorreos = json_encode($correos);
                         <input type="text" id="nombreEmpleado" name="nombre" placeholder="Ingrese el nombre">
                     </div>
 
-<div class="input-grupo">
-    <label>Número de Teléfono</label>
-    <input type="text" name="numero_telefono" id="telefonoColaborador" placeholder="10 dígitos" maxlength="10">
-</div>
 
 
                     <div class="input-grupo">

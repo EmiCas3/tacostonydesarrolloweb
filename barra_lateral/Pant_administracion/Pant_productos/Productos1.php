@@ -24,9 +24,9 @@ $jsonNombres = json_encode($nombres);
 <body>
 
     <div class="sidebar">
-        <div align="center" ">
-            <a href=" ../../Dashboard.php">
-            <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
+        <div align="center">
+            <a href="../../Dashboard.php">
+                <img src="../../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
             </a>
         </div>
 
@@ -67,17 +67,17 @@ $jsonNombres = json_encode($nombres);
                 INFORMACIÓN DEL PRODUCTO
             </div>
 
-            <form id="productos1form" method="post" action="#">
-                <div class="form-grid">
+<form id="productos1form" method="post" action="guardar_producto.php">
+                    <div class="form-grid">
 
                     <div class="input-grupo">
                         <label>Nombre Producto</label>
-                        <input type="text" id="nombreProducto" placeholder="Ingrese el nombre">
+                        <input type="text" id="nombreProducto" name="nombre" placeholder="Ingrese el nombre">
                     </div>
 
                     <div class="input-grupo">
                         <label>Precio</label>
-                        <input type="number" id="precioProducto" placeholder="Ingrese el precio" step="0.01">
+                        <input type="number" id="precioProducto" name="precio" placeholder="Ingrese el precio" step="0.01">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
@@ -97,9 +97,9 @@ $jsonNombres = json_encode($nombres);
         function valida_enviar() {
             var nombresDB = <?php echo $jsonNombres; ?>;
             var form = document.getElementById("productos1form");
-            var nombreStr = form.nombreProducto.value.trim().toLowerCase();
+            var nombreStr = document.getElementById("nombreProducto").value.trim().toLowerCase();
 
-            if (form.nombreProducto.value == "") {
+            if (document.getElementById("nombreProducto").value == "") {
                 alert("Nombre del producto no ingresado");
                 return 0;
             }
@@ -108,7 +108,7 @@ $jsonNombres = json_encode($nombres);
                 alert("El nombre de este producto ya está registrado en la base de datos.");
                 return 0;
             }
-            if (form.precioProducto.value == "") {
+            if (document.getElementById("precioProducto").value == "") {
                 alert("Precio del producto no ingresado");
                 return 0;
             } else {
