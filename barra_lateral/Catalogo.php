@@ -17,167 +17,11 @@ $resultado = mysqli_query($conexion, $query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Catálogo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #E5E5E5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            box-sizing: border-box;
-        }
-
-        .menu-item {
-            padding: 15px 20px;
-            color: #000000;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .menu-item.activo {
-            background-color: #f6821f;
-        }
-
-        .menu-item:hover:not(.activo) {
-            background-color: #F9D864;
-        }
-
-        .menu-dropdown {
-            position: relative;
-        }
-
-        .submenu {
-            display: none;
-            flex-direction: column;
-            background-color: #f9f9f9;
-            border-left: 4px solid #F6821F;
-            margin-left: 20px;
-            margin-right: 20px;
-            margin-top: -5px;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .menu-dropdown:hover .submenu {
-            display: flex;
-        }
-
-        .submenu-item {
-            padding: 12px 20px;
-            color: #333333;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .submenu-item:hover {
-            color: #F6821F;
-            background-color: #E5E5E5;
-        }
-
-        /* ===== CATÁLOGO ===== */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .main-content h1 {
-            margin: 0 0 15px 0;
-            color: #000000;
-            font-size: 26px;
-        }
-
-        .catalogo-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .catalogo-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .catalogo-container::-webkit-scrollbar-track {
-            background: #E5E5E5;
-            border-radius: 4px;
-        }
-
-        .catalogo-container::-webkit-scrollbar-thumb {
-            background: #F6821F;
-            border-radius: 4px;
-        }
-
-        .productos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
-            padding-bottom: 20px;
-        }
-
-        .producto-card {
-            background-color: #FFFFFF;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .producto-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .producto-img-container {
-            width: 100%;
-            height: 160px;
-            overflow: hidden;
-            background-color: #f9f9f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .producto-img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .producto-info {
-            padding: 12px 15px;
-            border-top: 3px solid #F6821F;
-        }
-
-        .producto-nombre {
-            font-weight: bold;
-            font-size: 14px;
-            color: #000000;
-            margin-bottom: 6px;
-        }
-
-        .producto-precio {
-            font-weight: bold;
-            font-size: 16px;
-            color: #F6821F;
-        }
-
-        .producto-id {
-            font-size: 11px;
-            color: #999999;
-            margin-bottom: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="../estilos/estilogenerico.css">
 </head>
 
 <body>
-    <div
-        style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%; position: sticky; top: 20px; align-self: flex-start;">
+    <div class="sidebar">
         <div align="center">
             <a href="Dashboard.php">
                 <img src="../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo">
@@ -213,7 +57,7 @@ $resultado = mysqli_query($conexion, $query);
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-column">
         <h1>Catálogo de Productos</h1>
         <div class="catalogo-container">
             <div class="productos-grid">

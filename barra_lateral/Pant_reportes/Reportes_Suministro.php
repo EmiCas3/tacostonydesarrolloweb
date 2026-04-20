@@ -18,197 +18,72 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Suministros por Fecha</title>
+    <link rel="stylesheet" href="../../estilos/estilogenerico.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #E5E5E5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            box-sizing: border-box;
-        }
-
-        .menu-item {
-            padding: 15px 20px;
-            color: #000000;
+        .btn-detalle {
+            background-color: #073A79; /* Azul Corporativo */
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
             font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            transition: background-color 0.2s;
         }
-
-        .menu-item.activo { background-color: #f6821f; }
-        .menu-item:hover:not(.activo) { background-color: #F9D864; }
-
-        .main-content {
-            flex-grow: 1;
+        .btn-detalle:hover {
+            background-color: #0a4a94;
+        }
+        .detalle-panel {
+            display: none;
+            background-color: #F9F9F9;
+            padding: 20px;
+            border-bottom: 2px solid #D0D0D0;
+        }
+        .detalle-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .detalle-header {
+            background-color: #F6821F; /* Naranja Corporativo */
+            color: #000000;
+        }
+        .detalle-header th {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .detalle-fila td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #EEE;
+            font-size: 14px;
+            color: #333;
+        }
+        .detalle-fila:last-child td {
+            border-bottom: none;
+        }
+        .fila-contenedor {
+            border-bottom: 1px solid #D0D0D0;
+        }
+        .fila-contenedor:last-child {
+            border-bottom: none;
+        }
+        /* Ajuste de alineación para 4 columnas */
+        .tabla-header span, .fila span {
+            flex: 1;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .formulario-card {
-            background-color: #FFFFFF;
-            border-radius: 15px;
-            padding: 50px;
-            width: 100%;
-            max-width: 700px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-        }
-
-        .titulo-caja {
-            background: #f6821f;
-            color: #000000;
-            font-weight: bold;
-            font-size: 22px;
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .input-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .input-grupo label {
-            font-weight: bold;
-            color: #333333;
-            font-size: 14px;
-        }
-
-        .input-grupo input,
-        .input-grupo select {
-            background-color: #F0F0F0;
-            border: 1px solid #E0E0E0;
-            border-radius: 8px;
-            padding: 12px 15px;
-            font-size: 15px;
-            outline: none;
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-
-        .input-grupo input:focus,
-        .input-grupo select:focus { border-color: #f6821f; }
-
-        .btn-accion {
-            background: #f6821f;
-            color: #000000;
-            border: none;
-            padding: 15px 50px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-            text-decoration: none;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-
-        .btn-accion:hover { background-color: #DC7B3C; }
-
-        .tabla-contenedor {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
-            margin-top: 30px;
-        }
-
-        .tabla-header {
-            background-color: #f6821f;
-            color: #000;
-            font-weight: bold;
-            display: grid;
-            padding: 12px 20px;
-            grid-template-columns: 2fr 1fr 1fr;
-        }
-
-        .tabla-body {
-            background-color: #E6E6E6;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .tabla-body::-webkit-scrollbar { width: 6px; }
-
-        .tabla-body::-webkit-scrollbar-thumb { background-color: #A0A0A0; border-radius: 10px; }
-
-        .fila {
-            display: grid;
-            padding: 10px 20px;
-            font-weight: bold;
-            color: #333;
-            border-bottom: 1px solid #D0D0D0;
-            grid-template-columns: 2fr 1fr 1fr;
-        }
-
-        .fila:last-child { border-bottom: none; }
-
-        .sin-datos {
-            padding: 20px;
-            text-align: center;
-            color: #888;
-            font-style: italic;
-        }
-
-        .total-box {
-            background: #073A79;
-            color: #FFFFFF;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-        }
-
-        .menu-dropdown { position: relative; }
-
-        .submenu {
-            display: none;
-            flex-direction: column;
-            background-color: #f9f9f9;
-            border-left: 4px solid #F6821F;
-            margin-left: 20px;
-            margin-right: 20px;
-            margin-top: -5px;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .menu-dropdown:hover .submenu { display: flex; }
-
-        .submenu-item {
-            padding: 12px 20px;
-            color: #333333;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .submenu-item:hover {
-            color: #F6821F;
-            background-color: #E5E5E5;
-        }
     </style>
 </head>
 <body>
-    <div style="background-color: #FFFFFF; width: 250px; border-radius: 10px; padding-top: 20px; padding-bottom: 20px; margin-right: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, .5); height: 100%">
+    <div class="sidebar">
         <div align="center">
             <a href="../Dashboard.php"><img src="../../Imagenes/Tacos_tony_logo.png" width="200" alt="Logo"></a>
         </div>
@@ -228,9 +103,9 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
-            <div class="titulo-caja">SUMINISTROS POR FECHA</div>
+            <div class="titulo-caja">SUMINISTROS MENSUALES</div>
             <div class="form-grid">
                 <div class="input-grupo">
                     <label>Mes</label>
@@ -257,18 +132,19 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             $qSuministros = "SELECT
                                 tp.nombre AS Proveedor,
                                 tpg.fecha AS FechaDeSuministro,
-                                CONCAT('\$', FORMAT(ROUND(SUM(tpp.cantidad), 2), 2)) AS CantidadTotal,
-                                SUM(tpp.cantidad) AS cantidad_num
+                                CONCAT('$', FORMAT(ROUND(SUM(tpp.cantidad * tpp.costo), 2), 2)) AS CostoTotal,
+                                SUM(tpp.cantidad) AS cantidad_num,
+                                tpg.id AS id_suministro
                              FROM t_proovedores tp
                              JOIN t_proporcionar_general tpg ON tp.id = tpg.id_provedoor
                              JOIN t_proporcionar_particular tpp ON tpg.id = tpp.id_pg
                              WHERE tpg.fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'
-                             GROUP BY tp.nombre, tpg.fecha
+                             GROUP BY tp.nombre, tpg.fecha, tpg.id
                              ORDER BY tpg.fecha";
             $rSuministros = mysqli_query($link, $qSuministros);
 
             // Total de suministros en el periodo
-            $qTotal = "SELECT SUM(tpp.cantidad) AS total
+            $qTotal = "SELECT SUM(tpp.cantidad * tpp.costo) AS total
                        FROM t_proporcionar_general tpg
                        JOIN t_proporcionar_particular tpp ON tpg.id = tpp.id_pg
                        WHERE tpg.fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'";
@@ -281,16 +157,46 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header">
-                    <span>Proveedor</span><span>Fecha</span><span>Cantidad Total</span>
+                    <span>Proveedor</span><span>Fecha</span><span>Costo Total</span><span>Acción</span>
                 </div>
                 <div class="tabla-body">
                     <?php
                     if ($rSuministros && mysqli_num_rows($rSuministros) > 0) {
                         while ($row = mysqli_fetch_array($rSuministros)) {
+                            $id_sum = $row['id_suministro'];
+                            echo '<div class="fila-contenedor">';
                             echo '<div class="fila">';
                             echo '<span>' . htmlspecialchars($row['Proveedor']) . '</span>';
                             echo '<span>' . date('d/m/Y', strtotime($row['FechaDeSuministro'])) . '</span>';
-                            echo '<span>' . $row['CantidadTotal'] . '</span>';
+                            echo '<span>' . $row['CostoTotal'] . '</span>';
+                            echo '<span><button class="btn-detalle" onclick="toggleDetalle(' . $id_sum . ', this)">▼ Ver detalle</button></span>';
+                            echo '</div>';
+
+                            // Tarea 4: Sub-consulta de detalle (incluye cálculo de subtotal)
+                            $qDetalle = "SELECT tm.nombre AS Material, tpp.cantidad AS Cantidad, tpp.costo AS CostoU, (tpp.cantidad * tpp.costo) AS Subtotal
+                                         FROM t_proporcionar_particular tpp
+                                         JOIN t_materiales tm ON tpp.id_material = tm.id
+                                         WHERE tpp.id_pg = $id_sum
+                                         ORDER BY tm.nombre";
+                            $rDetalle = mysqli_query($link, $qDetalle);
+
+                            echo '<div id="detalle-' . $id_sum . '" class="detalle-panel">';
+                            echo '<table class="detalle-tabla">';
+                            echo '<tr class="detalle-header"><th>Material</th><th>Cantidad</th><th>Costo U.</th><th>Subtotal</th></tr>';
+                            if ($rDetalle && mysqli_num_rows($rDetalle) > 0) {
+                                while ($det = mysqli_fetch_array($rDetalle)) {
+                                    echo '<tr class="detalle-fila">';
+                                    echo '<td>' . htmlspecialchars($det['Material']) . '</td>';
+                                    echo '<td>' . number_format($det['Cantidad'], 2) . '</td>';
+                                    echo '<td>$' . number_format($det['CostoU'], 2) . '</td>';
+                                    echo '<td>$' . number_format($det['Subtotal'], 2) . '</td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo '<tr><td colspan="4" style="text-align:center;">No hay detalles disponibles</td></tr>';
+                            }
+                            echo '</table>';
+                            echo '</div>';
                             echo '</div>';
                         }
                     } else {
@@ -307,6 +213,17 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             var anio = document.getElementById('anio').value;
             if (!anio) { alert('Ingrese un año válido'); return; }
             window.location.href = 'Reportes_Suministro.php?mes=' + mes + '&anio=' + anio;
+        }
+
+        function toggleDetalle(id, btn) {
+            var panel = document.getElementById('detalle-' + id);
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                btn.innerHTML = '▼ Ver detalle';
+            } else {
+                panel.style.display = 'block';
+                btn.innerHTML = '▲ Ocultar';
+            }
         }
     </script>
 </body>
