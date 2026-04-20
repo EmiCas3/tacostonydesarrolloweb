@@ -41,7 +41,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">SUMINISTROS POR FECHA</div>
             <div class="form-grid">
@@ -93,14 +93,14 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                 Costo total: $<?php echo number_format($totalGeneral, 2); ?>
             </div>
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-suministro">
                     <span>Proveedor</span><span>Fecha</span><span>Cantidad Total</span>
                 </div>
                 <div class="tabla-body">
                     <?php
                     if ($rSuministros && mysqli_num_rows($rSuministros) > 0) {
                         while ($row = mysqli_fetch_array($rSuministros)) {
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-suministro">';
                             echo '<span>' . htmlspecialchars($row['Proveedor']) . '</span>';
                             echo '<span>' . date('d/m/Y', strtotime($row['FechaDeSuministro'])) . '</span>';
                             echo '<span>' . $row['CantidadTotal'] . '</span>';

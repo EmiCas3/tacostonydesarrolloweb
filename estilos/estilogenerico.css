@@ -375,6 +375,16 @@ h2 {
     flex: 1;
 }
 
+/* Utilidades Grid Específicas para Tablas de Reportes */
+.tabla-header.grid-ganancia, .fila.grid-ganancia { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; }
+.tabla-header.grid-corte, .fila.grid-corte { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
+.tabla-header.grid-desmensual, .fila.grid-desmensual { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; }
+.tabla-header.grid-materiales, .fila.grid-materiales { display: grid; grid-template-columns: 2fr 1fr; }
+.tabla-header.grid-rotacion, .fila.grid-rotacion { display: grid; grid-template-columns: 2fr 1fr; }
+.tabla-header.grid-semanal, .fila.grid-semanal { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.tabla-header.grid-ingreso, .fila.grid-ingreso { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.tabla-header.grid-suministro, .fila.grid-suministro { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+
 .col-id {
     width: 15%;
 }

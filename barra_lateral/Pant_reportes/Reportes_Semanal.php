@@ -44,7 +44,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">VENTAS POR SEMANA</div>
             <div class="form-grid">
@@ -103,7 +103,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                 Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>
             </div>
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-semanal">
                     <span>Día</span><span>Productos Vendidos</span><span>Total Ventas</span>
                 </div>
                 <div class="tabla-body">
@@ -111,7 +111,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                     if ($rSemana && mysqli_num_rows($rSemana) > 0) {
                         while ($row = mysqli_fetch_array($rSemana)) {
                             $dia_nombre = isset($dias_es[$row['dia_semana']]) ? $dias_es[$row['dia_semana']] : $row['dia_semana'];
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-semanal">';
                             echo '<span>' . $dia_nombre . '</span>';
                             echo '<span>' . $row['total_productos_vendidos'] . '</span>';
                             echo '<span>' . $row['total_ventas'] . '</span>';

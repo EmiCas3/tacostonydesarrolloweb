@@ -41,7 +41,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $ultimo_dia);
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="reporte-card">
             <div class="titulo-caja">DESCRIPCIÓN DE VENTAS MENSUAL</div>
 
@@ -200,7 +200,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $ultimo_dia);
 
             <div class="subtitulo">Detalle de Ventas por Día</div>
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-desmensual">
                     <span>Día</span>
                     <span>Folios</span>
                     <span>Productos</span>
@@ -223,7 +223,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $ultimo_dia);
 
                     if($r && mysqli_num_rows($r) > 0){
                         while($row = mysqli_fetch_array($r)){
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-desmensual">';
                             echo '<span>' . $row['dia'] . '</span>';
                             echo '<span>' . $row['folios'] . '</span>';
                             echo '<span>' . number_format($row['productos'], 0) . '</span>';

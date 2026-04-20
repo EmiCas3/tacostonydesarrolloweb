@@ -41,7 +41,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="reporte-card">
             <div class="titulo-caja">CORTE DIARIO</div>
 
@@ -212,7 +212,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 
             <div class="subtitulo">Detalle de Ventas</div>
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-corte">
                     <span>Folio</span>
                     <span>Empleado</span>
                     <span>Hora</span>
@@ -232,7 +232,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 
                     if($r && mysqli_num_rows($r)>0){
                         while($row=mysqli_fetch_array($r)){
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-corte">';
                             echo '<span>#'.$row['id'].'</span>';
                             echo '<span>'.htmlspecialchars($row['nombre']).'</span>';
                             echo '<span>'.$row['hora'].'</span>';

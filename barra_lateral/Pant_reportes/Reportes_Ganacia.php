@@ -34,7 +34,7 @@ $link = Conectarse();
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">GANANCIA POR PRODUCTO</div>
 
@@ -74,7 +74,7 @@ $link = Conectarse();
             ?>
 
             <div class="tabla-contenedor">
-                <div class="tabla-header">
+                <div class="tabla-header grid-ganancia">
                     <span>Producto</span>
                     <span>Precio Venta</span>
                     <span>Costo Prod.</span>
@@ -94,7 +94,7 @@ $link = Conectarse();
                                 $clase = 'margen-negativo';
                             }
 
-                            echo '<div class="fila">';
+                            echo '<div class="fila grid-ganancia">';
                             echo '<span>' . htmlspecialchars($row['producto']) . '</span>';
                             echo '<span>$' . number_format($row['precio_venta'], 2) . '</span>';
                             echo '<span>' . $row['costo_total_produccion'] . '</span>';
