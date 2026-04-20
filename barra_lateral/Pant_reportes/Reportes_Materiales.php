@@ -64,11 +64,8 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     <input type="number" id="anio" value="<?php echo $anio_sel; ?>" min="2020" max="2099">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
-                <?php echo "<br>"; ?>
-                <?php echo "<br>"; ?>
-
             </div>
 
             <?php
