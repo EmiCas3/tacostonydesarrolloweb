@@ -12,67 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="./Imagenes/TTlogomini.png">
     <title>Login - Tacos Tony</title>
-    <style>
-        body {
-            background-color: #e5e5e5;
-            font-family: Arial, sans-serif;
-            display: flex;
-            margin: 0;
-        }
-
-        .login-card {
-            background-color: #FFFFFF;
-            padding: 50px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 320px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            background-color: #e5e5e5;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-
-        .input-group input::placeholder {
-            color: #7a7676;
-        }
-
-        .input-group input:focus {
-            border-color: #F6821F;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 15px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .button {
-            width: 100%;
-            padding: 15px;
-            background-color: #F6821F;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #c9793c;
-        }
-    </style>
+    <link rel="stylesheet" href="estilos/estilogenerico.css">
 </head>
 
 <body style="height: 100vh; justify-content: center; align-items: center">
