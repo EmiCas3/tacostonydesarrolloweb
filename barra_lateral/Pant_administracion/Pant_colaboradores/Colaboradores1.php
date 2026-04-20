@@ -67,34 +67,33 @@ $jsonCorreos = json_encode($correos);
                 INFORMACIÓN DEL COLABORADOR
             </div>
 
-            <form id="colaboradores1form" method="post" action="#">
+            <form id="colaboradores1form" method="post" action="guardar_colaborador.php">
                 <div class="form-grid">
 
                     <div class="input-grupo">
                         <label>Nombre Empleado</label>
-                        <input type="text" id="nombreEmpleado" placeholder="Ingrese el nombre">
+                        <input type="text" id="nombreEmpleado" name="nombre" placeholder="Ingrese el nombre">
                     </div>
 
                     <div class="input-grupo">
                         <label>Correo Electrónico</label>
-                        <input type="email" id="correoEmpleado" placeholder="Ingrese el correo">
+                        <input type="email" id="correoEmpleado" name="correo" placeholder="Ingrese el correo">
                     </div>
 
                     <div class="input-grupo">
                         <label>Salario</label>
-                        <input type="number" id="salarioEmpleado" placeholder="Ingrese el salario" step="0.01">
+                        <input type="number" id="salarioEmpleado" name="salario" placeholder="Ingrese el salario" step="0.01">
                     </div>
 
                     <div class="input-grupo">
                         <label>Contraseña</label>
-                        <input type="password" id="contrasenaEmpleado" placeholder="Ingrese la contraseña">
+                        <input type="password" id="contrasenaEmpleado" name="contrasena" placeholder="Ingrese la contraseña">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
                     </div>
                 </div>
-                                <button type="submit" id="btnSubmitColab" style="display:none;"></button>
-
+                <button type="submit" id="btnSubmitColab" style="display:none;"></button>
             </form>
 
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
@@ -125,7 +124,6 @@ $jsonCorreos = json_encode($correos);
                 return 0;
             } else {
                 document.getElementById("btnSubmitColab").click();
-
             }
         }
     </script>
