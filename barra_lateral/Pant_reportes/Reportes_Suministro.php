@@ -132,7 +132,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             $qSuministros = "SELECT
                                 tp.nombre AS Proveedor,
                                 tpg.fecha AS FechaDeSuministro,
-                                CONCAT('$', FORMAT(ROUND(SUM(tpp.costo), 2), 2)) AS CostoTotal,
+                                CONCAT('$', FORMAT(ROUND(SUM(tpp.cantidad * tpp.costo), 2), 2)) AS CostoTotal,
                                 SUM(tpp.cantidad) AS cantidad_num,
                                 tpg.id AS id_suministro
                              FROM t_proovedores tp
@@ -144,7 +144,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             $rSuministros = mysqli_query($link, $qSuministros);
 
             // Total de suministros en el periodo
-            $qTotal = "SELECT SUM(tpp.costo) AS total
+            $qTotal = "SELECT SUM(tpp.cantidad * tpp.costo) AS total
                        FROM t_proporcionar_general tpg
                        JOIN t_proporcionar_particular tpp ON tpg.id = tpp.id_pg
                        WHERE tpg.fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'";
@@ -172,8 +172,8 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                             echo '<span><button class="btn-detalle" onclick="toggleDetalle(' . $id_sum . ', this)">▼ Ver detalle</button></span>';
                             echo '</div>';
 
-                            // Tarea 4: Sub-consulta de detalle
-                            $qDetalle = "SELECT tm.nombre AS Material, tpp.cantidad AS Cantidad, tpp.costo AS Costo
+                            // Tarea 4: Sub-consulta de detalle (incluye cálculo de subtotal)
+                            $qDetalle = "SELECT tm.nombre AS Material, tpp.cantidad AS Cantidad, tpp.costo AS CostoU, (tpp.cantidad * tpp.costo) AS Subtotal
                                          FROM t_proporcionar_particular tpp
                                          JOIN t_materiales tm ON tpp.id_material = tm.id
                                          WHERE tpp.id_pg = $id_sum
@@ -182,17 +182,18 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
 
                             echo '<div id="detalle-' . $id_sum . '" class="detalle-panel">';
                             echo '<table class="detalle-tabla">';
-                            echo '<tr class="detalle-header"><th>Material</th><th>Cantidad</th><th>Costo</th></tr>';
+                            echo '<tr class="detalle-header"><th>Material</th><th>Cantidad</th><th>Costo U.</th><th>Subtotal</th></tr>';
                             if ($rDetalle && mysqli_num_rows($rDetalle) > 0) {
                                 while ($det = mysqli_fetch_array($rDetalle)) {
                                     echo '<tr class="detalle-fila">';
                                     echo '<td>' . htmlspecialchars($det['Material']) . '</td>';
                                     echo '<td>' . number_format($det['Cantidad'], 2) . '</td>';
-                                    echo '<td>$' . number_format($det['Costo'], 2) . '</td>';
+                                    echo '<td>$' . number_format($det['CostoU'], 2) . '</td>';
+                                    echo '<td>$' . number_format($det['Subtotal'], 2) . '</td>';
                                     echo '</tr>';
                                 }
                             } else {
-                                echo '<tr><td colspan="3" style="text-align:center;">No hay detalles disponibles</td></tr>';
+                                echo '<tr><td colspan="4" style="text-align:center;">No hay detalles disponibles</td></tr>';
                             }
                             echo '</table>';
                             echo '</div>';
