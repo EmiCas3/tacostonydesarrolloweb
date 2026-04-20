@@ -129,9 +129,52 @@
         };
 
         function confirmarEntrada() {
-            sessionStorage.removeItem("productosEntrada");
-            alert("Entrada registrada con éxito.");
-            window.location.href = "../../Movimientos.php";
+            var storedData = sessionStorage.getItem("productosEntrada");
+            var idProveedor = sessionStorage.getItem("idProveedor");
+            var fechaEntrada = sessionStorage.getItem("fechaEntrada");
+
+            if (!storedData || !idProveedor || !fechaEntrada) {
+                alert("Error: Faltan datos para registrar la entrada.");
+                return;
+            }
+
+            var productos = JSON.parse(storedData);
+
+            // Preparar los datos para enviar al handler
+            var datos = {
+                id_proveedor: parseInt(idProveedor),
+                fecha: fechaEntrada,
+                materiales: productos.map(function(p) {
+                    return {
+                        id: parseInt(p.id),
+                        cantidad: parseFloat(p.cantidad),
+                        precio: parseFloat(p.precio)
+                    };
+                })
+            };
+
+            // Enviar datos al handler via AJAX
+            fetch("handler_entrada.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    // Limpiar sessionStorage
+                    sessionStorage.removeItem("productosEntrada");
+                    sessionStorage.removeItem("idProveedor");
+                    sessionStorage.removeItem("fechaEntrada");
+                    alert("Entrada registrada con éxito.");
+                    window.location.href = "../../Movimientos.php";
+                } else {
+                    alert("Error al registrar la entrada: " + result.message);
+                }
+            })
+            .catch(function(error) {
+                alert("Error de conexión: " + error.message);
+            });
         }
     </script>
 </body>

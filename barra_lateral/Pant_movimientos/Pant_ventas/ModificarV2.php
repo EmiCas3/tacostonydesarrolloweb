@@ -114,7 +114,7 @@ if ($id_venta > 0) {
             </div>
             <div class="botones-bottom">
                 <input type="button" value="ATRÁS" onClick="history.go(-1)" class="btn-secundario">
-                <a href="../../Movimientos.php" class="btn-accion">CONFIRMAR</a>
+                <a href="../../Movimientos.php" class="btn-accion" onclick="alert('Cambios guardados con éxito');">CONFIRMAR</a>
             </div>
 
         </div>

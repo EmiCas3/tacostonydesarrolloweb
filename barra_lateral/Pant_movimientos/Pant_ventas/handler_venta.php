@@ -1,0 +1,157 @@
+<?php
+/**
+ * handler_venta.php
+ * Recibe datos JSON por POST e inserta la venta en la base de datos.
+ * - INSERT en t_vender_general (cabecera)
+ * - INSERT en t_vender_particular (detalle por producto; el trigger calcula subtotal)
+ * - INSERT en t_necesitar_general (cabecera consumo de materiales por producto)
+ * - INSERT en t_necesitar_particular (detalle materiales consumidos)
+ * - UPDATE t_materiales.existencias -= cantidad (disminuye stock)
+ * Todo dentro de una transacción MySQL.
+ */
+
+include("../../../conex.php");
+include("../../../seguridad.php");
+header('Content-Type: application/json; charset=utf-8');
+
+// Solo aceptar POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Método no permitido.']);
+    exit;
+}
+
+// Leer cuerpo JSON
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    echo json_encode(['success' => false, 'message' => 'Datos inválidos.']);
+    exit;
+}
+
+$id_cliente = isset($input['id_cliente']) ? intval($input['id_cliente']) : 0;
+$fecha = isset($input['fecha']) ? trim($input['fecha']) : '';
+$servicio_domicilio = isset($input['servicio_domicilio']) ? strtoupper(trim($input['servicio_domicilio'])) : 'NO';
+$id_empleado = isset($input['id_empleado']) ? intval($input['id_empleado']) : 0;
+$productos = isset($input['productos']) ? $input['productos'] : [];
+
+// Validaciones básicas
+if ($id_cliente <= 0) {
+    echo json_encode(['success' => false, 'message' => 'ID de cliente inválido.']);
+    exit;
+}
+if (empty($fecha)) {
+    echo json_encode(['success' => false, 'message' => 'Fecha no proporcionada.']);
+    exit;
+}
+if ($id_empleado <= 0) {
+    echo json_encode(['success' => false, 'message' => 'ID de empleado inválido.']);
+    exit;
+}
+if (empty($productos) || !is_array($productos)) {
+    echo json_encode(['success' => false, 'message' => 'No hay productos para registrar.']);
+    exit;
+}
+
+$link = Conectarse();
+if (!$link) {
+    echo json_encode(['success' => false, 'message' => 'Error de conexión a la base de datos.']);
+    exit;
+}
+
+// Iniciar transacción
+mysqli_begin_transaction($link);
+
+try {
+    // 1. Insertar cabecera en t_vender_general
+    $fecha_esc = mysqli_real_escape_string($link, $fecha);
+    $servicio_esc = mysqli_real_escape_string($link, $servicio_domicilio);
+    
+    $query_vg = "INSERT INTO t_vender_general (id_cliente, fecha, servicio_a_domicilio, id_empleado) 
+                 VALUES ($id_cliente, '$fecha_esc', '$servicio_esc', $id_empleado)";
+    
+    if (!mysqli_query($link, $query_vg)) {
+        throw new Exception('Error al insertar la cabecera de venta: ' . mysqli_error($link));
+    }
+    
+    $id_vg = mysqli_insert_id($link);
+    
+    // 2. Por cada producto vendido
+    foreach ($productos as $prod) {
+        $id_producto = intval($prod['id']);
+        $cantidad_vendida = floatval($prod['cantidad']);
+        
+        if ($id_producto <= 0 || $cantidad_vendida <= 0) {
+            throw new Exception('Datos de producto inválidos (id: ' . $id_producto . ', cantidad: ' . $cantidad_vendida . ').');
+        }
+        
+        // 2a. Insertar en t_vender_particular (el trigger calcula el subtotal automáticamente)
+        $query_vp = "INSERT INTO t_vender_particular (id_vg, id_producto, cantidad) 
+                     VALUES ($id_vg, $id_producto, $cantidad_vendida)";
+        
+        if (!mysqli_query($link, $query_vp)) {
+            throw new Exception('Error al insertar detalle de producto: ' . mysqli_error($link));
+        }
+        
+        // 2b. Insertar cabecera en t_necesitar_general para este producto
+        $query_ng = "INSERT INTO t_necesitar_general (id_producto, fecha) VALUES ($id_producto, '$fecha_esc')";
+        
+        if (!mysqli_query($link, $query_ng)) {
+            throw new Exception('Error al insertar necesitar general: ' . mysqli_error($link));
+        }
+        
+        $id_ng = mysqli_insert_id($link);
+        
+        // 2c. Buscar la última receta de materiales para este producto
+        //     (el registro más reciente en t_necesitar_particular via t_necesitar_general)
+        $query_receta = "SELECT np.id_material, np.cantidad 
+                         FROM t_necesitar_particular np 
+                         INNER JOIN t_necesitar_general ng ON np.id_ng = ng.id_ng 
+                         WHERE ng.id_producto = $id_producto 
+                         AND ng.id_ng = (
+                             SELECT MAX(ng2.id_ng) 
+                             FROM t_necesitar_general ng2 
+                             WHERE ng2.id_producto = $id_producto 
+                             AND ng2.id_ng != $id_ng
+                         )";
+        
+        $result_receta = mysqli_query($link, $query_receta);
+        
+        if (!$result_receta) {
+            throw new Exception('Error al buscar receta de materiales: ' . mysqli_error($link));
+        }
+        
+        // 2d. Insertar los materiales necesarios y descontar stock
+        while ($receta = mysqli_fetch_assoc($result_receta)) {
+            $id_material = intval($receta['id_material']);
+            // La cantidad de materiales se multiplica por la cantidad vendida del producto
+            $cantidad_material = floatval($receta['cantidad']) * $cantidad_vendida;
+            
+            // Insertar en t_necesitar_particular
+            $query_np = "INSERT INTO t_necesitar_particular (id_ng, id_material, cantidad) 
+                         VALUES ($id_ng, $id_material, $cantidad_material)";
+            
+            if (!mysqli_query($link, $query_np)) {
+                throw new Exception('Error al insertar necesitar particular: ' . mysqli_error($link));
+            }
+            
+            // Disminuir existencias en t_materiales
+            $query_stock = "UPDATE t_materiales SET existencias = existencias - $cantidad_material WHERE id = $id_material";
+            
+            if (!mysqli_query($link, $query_stock)) {
+                throw new Exception('Error al actualizar el stock del material: ' . mysqli_error($link));
+            }
+        }
+    }
+    
+    // Confirmar transacción
+    mysqli_commit($link);
+    echo json_encode(['success' => true, 'message' => 'Venta registrada correctamente.', 'id_venta' => $id_vg]);
+    
+} catch (Exception $e) {
+    // Revertir transacción en caso de error
+    mysqli_rollback($link);
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+}
+
+mysqli_close($link);
+?>

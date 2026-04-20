@@ -119,6 +119,9 @@ $link = Conectarse();
                 alert("ID del proveedor no ingresado");
                 return;
             } else {
+                // Guardar datos del proveedor y fecha en sessionStorage para Entrada3
+                sessionStorage.setItem('idProveedor', document.getElementById('idProveedor').value);
+                sessionStorage.setItem('fechaEntrada', document.getElementById('fechaEntrada').value);
                 window.location.href = "Entrada2.php";
             }
         }
