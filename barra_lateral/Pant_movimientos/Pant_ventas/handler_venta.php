@@ -4,8 +4,7 @@
  * Recibe datos JSON por POST e inserta la venta en la base de datos.
  * - INSERT en t_vender_general (cabecera)
  * - INSERT en t_vender_particular (detalle por producto; el trigger calcula subtotal)
- * - INSERT en t_necesitar_general (cabecera consumo de materiales por producto)
- * - INSERT en t_necesitar_particular (detalle materiales consumidos)
+ * - Consulta la receta de materiales del producto
  * - UPDATE t_materiales.existencias -= cantidad (disminuye stock)
  * Todo dentro de una transacción MySQL.
  */
@@ -92,16 +91,7 @@ try {
             throw new Exception('Error al insertar detalle de producto: ' . mysqli_error($link));
         }
         
-        // 2b. Insertar cabecera en t_necesitar_general para este producto
-        $query_ng = "INSERT INTO t_necesitar_general (id_producto, fecha) VALUES ($id_producto, '$fecha_esc')";
-        
-        if (!mysqli_query($link, $query_ng)) {
-            throw new Exception('Error al insertar necesitar general: ' . mysqli_error($link));
-        }
-        
-        $id_ng = mysqli_insert_id($link);
-        
-        // 2c. Buscar la última receta de materiales para este producto
+        // 2b. Buscar la última receta de materiales para este producto
         //     (el registro más reciente en t_necesitar_particular via t_necesitar_general)
         $query_receta = "SELECT np.id_material, np.cantidad 
                          FROM t_necesitar_particular np 
@@ -110,8 +100,7 @@ try {
                          AND ng.id_ng = (
                              SELECT MAX(ng2.id_ng) 
                              FROM t_necesitar_general ng2 
-                             WHERE ng2.id_producto = $id_producto 
-                             AND ng2.id_ng != $id_ng
+                             WHERE ng2.id_producto = $id_producto
                          )";
         
         $result_receta = mysqli_query($link, $query_receta);
@@ -120,19 +109,11 @@ try {
             throw new Exception('Error al buscar receta de materiales: ' . mysqli_error($link));
         }
         
-        // 2d. Insertar los materiales necesarios y descontar stock
+        // 2c. Descontar stock basado en la receta
         while ($receta = mysqli_fetch_assoc($result_receta)) {
             $id_material = intval($receta['id_material']);
             // La cantidad de materiales se multiplica por la cantidad vendida del producto
             $cantidad_material = floatval($receta['cantidad']) * $cantidad_vendida;
-            
-            // Insertar en t_necesitar_particular
-            $query_np = "INSERT INTO t_necesitar_particular (id_ng, id_material, cantidad) 
-                         VALUES ($id_ng, $id_material, $cantidad_material)";
-            
-            if (!mysqli_query($link, $query_np)) {
-                throw new Exception('Error al insertar necesitar particular: ' . mysqli_error($link));
-            }
             
             // Disminuir existencias en t_materiales
             $query_stock = "UPDATE t_materiales SET existencias = existencias - $cantidad_material WHERE id = $id_material";

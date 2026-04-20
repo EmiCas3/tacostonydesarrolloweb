@@ -2,6 +2,7 @@
 include("../../../conex.php");
 $link = Conectarse();
 ?>
+<!--Si la venta es a dimicilio, disminuir desechables en la tabla de materiales-->
 <!DOCTYPE html>
 <html lang="es">
 
