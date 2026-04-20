@@ -69,24 +69,25 @@ $jsonCorreos = json_encode($correos);
                 DATOS DEL PROVEEDOR
             </div>
 
-            <form id="proveedorForm" method="post" action="#">
+            <form id="proveedorForm" method="post" action="guardar_proveedor.php">
                 <div class="form-grid">
                     <div class="input-grupo">
                         <label>Nombre</label>
-                        <input type="text" id="nombreProveedor" placeholder="Ingrese el nombre">
+                        <input type="text" id="nombreProveedor" name="nombre" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
                         <label>Número de Teléfono</label>
-                        <input type="number" id="telefono" placeholder="Ingrese el número">
+                        <input type="text" id="telefono" name="numero_telefono" placeholder="Ingrese el número">
                     </div>
                     <div class="input-grupo">
                         <label>Correo Electrónico</label>
-                        <input type="text" id="correo" placeholder="Ingrese el correo">
+                        <input type="text" id="correo" name="correo" placeholder="Ingrese el correo">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
                     </div>
                 </div>
+                <button type="submit" id="btnSubmitProv" style="display:none;"></button>
             </form>
 
             <div class="botones-bottom">
@@ -122,7 +123,7 @@ $jsonCorreos = json_encode($correos);
             }
 
             alert("Proveedor registrado con éxito");
-            window.location.href = "../../Administracion.php";
+            document.getElementById("btnSubmitProv").click();
         }
     </script>
 </body>
