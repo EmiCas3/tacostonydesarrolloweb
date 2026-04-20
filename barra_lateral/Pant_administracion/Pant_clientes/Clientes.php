@@ -113,10 +113,10 @@ $jsonCorreos = json_encode($correos);
                 </div>
             </form>
 
+
             <div class="botones-bottom">
                 <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
-                <button type="submit" id="btnSubmitCliente" form="clienteForm" style="display:none;"></button>
             </div>
 
         </div>
@@ -146,7 +146,6 @@ $jsonCorreos = json_encode($correos);
                 alert("El correo electrónico ya está registrado en la base de datos."); return;
             }
             document.getElementById("btnSubmitCliente").click();
-
         }
     </script>
 </body>
