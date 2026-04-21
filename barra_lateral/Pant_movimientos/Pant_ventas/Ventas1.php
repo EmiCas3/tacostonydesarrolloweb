@@ -2,7 +2,7 @@
 include("../../../conex.php");
 $link = Conectarse();
 ?>
-<!--Si la venta es a dimicilio, disminuir desechables en la tabla de materiales-->
+<!--Si la venta es a domicilio, disminuir desechables en la tabla de materiales-->
 <!DOCTYPE html>
 <html lang="es">
 
@@ -127,7 +127,7 @@ $link = Conectarse();
                 </div>
             </form>
             <div class="botones-bottom" style="justify-content: space-between; width: 100%;">
-                <a class="btn-accion" href="../../Movimientos.php">CANCELAR</a>
+                <a class="btn-accion" href="../../Movimientos.php" onclick="sessionStorage.removeItem('productosVenta'); sessionStorage.removeItem('ventaIdCliente'); sessionStorage.removeItem('ventaFecha'); sessionStorage.removeItem('ventaServicioDomicilio'); sessionStorage.removeItem('ventaIdEmpleado');">CANCELAR</a>
                 <a class="btn-accion" onclick="valida_enviar()">CONTINUAR</a>
             </div>
 

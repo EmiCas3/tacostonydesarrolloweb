@@ -57,6 +57,71 @@ if (!$link) {
     exit;
 }
 
+// === VALIDACIÓN DE MATERIALES DISPONIBLES ===
+// Acumular todos los materiales necesarios para todos los productos de la venta
+$materiales_requeridos = []; // id_material => cantidad_total_necesaria
+
+foreach ($productos as $prod) {
+    $id_producto = intval($prod['id']);
+    $cantidad_vendida = floatval($prod['cantidad']);
+    
+    if ($id_producto <= 0 || $cantidad_vendida <= 0) {
+        continue; // Se validará después en la transacción
+    }
+    
+    // Buscar la receta más reciente para este producto
+    $query_receta_check = "SELECT np.id_material, np.cantidad 
+                           FROM t_necesitar_particular np 
+                           INNER JOIN t_necesitar_general ng ON np.id_ng = ng.id_ng 
+                           WHERE ng.id_producto = $id_producto 
+                           AND ng.id_ng = (
+                               SELECT MAX(ng2.id_ng) 
+                               FROM t_necesitar_general ng2 
+                               WHERE ng2.id_producto = $id_producto
+                           )";
+    
+    $result_receta_check = mysqli_query($link, $query_receta_check);
+    
+    if ($result_receta_check) {
+        while ($receta = mysqli_fetch_assoc($result_receta_check)) {
+            $id_mat = intval($receta['id_material']);
+            $cant_mat = floatval($receta['cantidad']) * $cantidad_vendida;
+            
+            if (isset($materiales_requeridos[$id_mat])) {
+                $materiales_requeridos[$id_mat] += $cant_mat;
+            } else {
+                $materiales_requeridos[$id_mat] = $cant_mat;
+            }
+        }
+    }
+}
+
+// Verificar disponibilidad de cada material
+$faltantes = [];
+foreach ($materiales_requeridos as $id_mat => $cant_necesaria) {
+    $query_stock_check = "SELECT nombre, existencias FROM t_materiales WHERE id = $id_mat";
+    $result_stock_check = mysqli_query($link, $query_stock_check);
+    
+    if ($result_stock_check && $row_stock = mysqli_fetch_assoc($result_stock_check)) {
+        $existencias = floatval($row_stock['existencias']);
+        if ($existencias < $cant_necesaria) {
+            $faltante = $cant_necesaria - $existencias;
+            $faltantes[] = $row_stock['nombre'] . ' (necesario: ' . number_format($cant_necesaria, 2) . ', disponible: ' . number_format($existencias, 2) . ', faltante: ' . number_format($faltante, 2) . ')';
+        }
+    } else {
+        $faltantes[] = 'Material ID ' . $id_mat . ' no encontrado en inventario';
+    }
+}
+
+if (!empty($faltantes)) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'No hay suficientes materiales para realizar la venta. Faltantes: ' . implode('; ', $faltantes)
+    ]);
+    mysqli_close($link);
+    exit;
+}
+
 // Iniciar transacción
 mysqli_begin_transaction($link);
 

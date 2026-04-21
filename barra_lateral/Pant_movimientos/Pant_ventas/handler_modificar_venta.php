@@ -52,6 +52,89 @@ if (!$link) {
     exit;
 }
 
+// === VALIDACIÓN DE MATERIALES DISPONIBLES ===
+// Calcular materiales que se devolverían si hay producto anterior
+$materiales_devueltos = []; // id_material => cantidad a devolver
+
+if ($id_producto_anterior > 0) {
+    // Obtener cantidad anterior vendida
+    $q_cant_ant = "SELECT cantidad FROM t_vender_particular WHERE id_vg = $id_venta AND id_producto = $id_producto_anterior";
+    $r_cant_ant = mysqli_query($link, $q_cant_ant);
+    $cantidad_anterior_check = 0;
+    if ($r_cant_ant && $row_ca = mysqli_fetch_assoc($r_cant_ant)) {
+        $cantidad_anterior_check = floatval($row_ca['cantidad']);
+    }
+    
+    // Obtener receta del producto anterior
+    $q_receta_ant = "SELECT np.id_material, np.cantidad 
+                     FROM t_necesitar_particular np 
+                     INNER JOIN t_necesitar_general ng ON np.id_ng = ng.id_ng 
+                     WHERE ng.id_producto = $id_producto_anterior 
+                     AND ng.id_ng = (
+                         SELECT MAX(ng2.id_ng) 
+                         FROM t_necesitar_general ng2 
+                         WHERE ng2.id_producto = $id_producto_anterior
+                     )";
+    $r_receta_ant = mysqli_query($link, $q_receta_ant);
+    if ($r_receta_ant) {
+        while ($rec = mysqli_fetch_assoc($r_receta_ant)) {
+            $id_mat = intval($rec['id_material']);
+            // Nota: las cantidades en receta son por unidad, multiplicar por cantidad vendida anterior
+            $materiales_devueltos[$id_mat] = floatval($rec['cantidad']) * $cantidad_anterior_check;
+        }
+    }
+}
+
+// Calcular materiales necesarios para el nuevo producto
+$materiales_necesarios = []; // id_material => cantidad necesaria
+$q_receta_nueva = "SELECT np.id_material, np.cantidad 
+                   FROM t_necesitar_particular np 
+                   INNER JOIN t_necesitar_general ng ON np.id_ng = ng.id_ng 
+                   WHERE ng.id_producto = $id_producto 
+                   AND ng.id_ng = (
+                       SELECT MAX(ng2.id_ng) 
+                       FROM t_necesitar_general ng2 
+                       WHERE ng2.id_producto = $id_producto
+                   )";
+$r_receta_nueva = mysqli_query($link, $q_receta_nueva);
+if ($r_receta_nueva) {
+    while ($rec = mysqli_fetch_assoc($r_receta_nueva)) {
+        $id_mat = intval($rec['id_material']);
+        $materiales_necesarios[$id_mat] = floatval($rec['cantidad']) * $cantidad;
+    }
+}
+
+// Verificar disponibilidad considerando la devolución
+$faltantes = [];
+foreach ($materiales_necesarios as $id_mat => $cant_necesaria) {
+    $devuelto = isset($materiales_devueltos[$id_mat]) ? $materiales_devueltos[$id_mat] : 0;
+    $neto_necesario = $cant_necesaria - $devuelto; // Lo que realmente se necesita extra
+    
+    if ($neto_necesario > 0) {
+        $q_stock = "SELECT nombre, existencias FROM t_materiales WHERE id = $id_mat";
+        $r_stock = mysqli_query($link, $q_stock);
+        
+        if ($r_stock && $row_s = mysqli_fetch_assoc($r_stock)) {
+            $existencias = floatval($row_s['existencias']);
+            if ($existencias < $neto_necesario) {
+                $faltante_cant = $neto_necesario - $existencias;
+                $faltantes[] = $row_s['nombre'] . ' (necesario: ' . number_format($neto_necesario, 2) . ', disponible: ' . number_format($existencias, 2) . ', faltante: ' . number_format($faltante_cant, 2) . ')';
+            }
+        } else {
+            $faltantes[] = 'Material ID ' . $id_mat . ' no encontrado en inventario';
+        }
+    }
+}
+
+if (!empty($faltantes)) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'No hay suficientes materiales para realizar la modificación. Faltantes: ' . implode('; ', $faltantes)
+    ]);
+    mysqli_close($link);
+    exit;
+}
+
 mysqli_begin_transaction($link);
 
 try {
