@@ -189,6 +189,7 @@ h2 {
     width: 50%;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     padding: 15px;
+    min-height: 280px;
 }
 
 .encabezado-caja {
@@ -216,7 +217,7 @@ h2 {
 }
 
 .inventory-scroll {
-    max-height: 90px;
+    max-height: 220px;
     overflow-y: auto;
 }
 

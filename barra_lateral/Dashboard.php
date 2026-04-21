@@ -91,15 +91,14 @@ $link = Conectarse();
                 <div class="inventory-scroll">
                     <table class="inventory">
                         <?php
-                        $queryTiempo = "SELECT m.nombre, 
+                        $queryTiempo = "SELECT m.nombre,
                                             DATEDIFF(NOW(), MAX(ng.fecha)) AS dias_guardado
                                         FROM t_materiales m
                                         JOIN t_necesitar_particular np ON np.id_material = m.id
                                         JOIN t_necesitar_general ng ON ng.id_ng = np.id_ng
                                         GROUP BY m.id, m.nombre
                                         ORDER BY dias_guardado DESC
-                                        LIMIT 5";
-                        $resTiempo = mysqli_query($link, $queryTiempo);
+                                        LIMIT 10";                        $resTiempo = mysqli_query($link, $queryTiempo);
                         if ($resTiempo && mysqli_num_rows($resTiempo) > 0) {
                             while ($rowT = mysqli_fetch_array($resTiempo)) {
                                 echo '<tr>';

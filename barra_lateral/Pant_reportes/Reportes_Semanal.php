@@ -10,8 +10,8 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
 } else {
     // Lunes de esta semana
     $fecha_inicio = date('Y-m-d', strtotime('monday this week'));
-    // Domingo de esta semana
-    $fecha_fin    = date('Y-m-d', strtotime('sunday this week'));
+    // Domingo de esta semana (+6 días desde el lunes)
+    $fecha_fin    = date('Y-m-d', strtotime('monday this week +6 days'));
 }
 ?>
 <!DOCTYPE html>
@@ -51,11 +51,13 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             <div class="form-grid">
                 <div class="input-grupo">
                     <label>Fecha Inicio</label>
-                    <input type="date" id="fecha_inicio" value="<?php echo $fecha_inicio; ?>">
+                    <input type="date" id="fecha_inicio" value="<?php echo $fecha_inicio; ?>"
+                           onchange="calcularFechaFin()">
                 </div>
                 <div class="input-grupo">
-                    <label>Fecha Fin</label>
-                    <input type="date" id="fecha_fin" value="<?php echo $fecha_fin; ?>">
+                    <label>Fecha Fin <small style="color:#888; font-weight:normal;">(calculada automáticamente)</small></label>
+                    <input type="date" id="fecha_fin" value="<?php echo $fecha_fin; ?>" readonly
+                           style="background-color:#f0f0f0; cursor:not-allowed; color:#555;">
                 </div>
             </div>
             <div style="display: flex; justify-content: flex-end;">
@@ -127,13 +129,39 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
         </div>
     </div>
     <script>
+        function calcularFechaFin() {
+            var fi = document.getElementById('fecha_inicio').value;
+            if (!fi) return;
+            var inicio = new Date(fi + 'T00:00:00'); // forzar hora local, evitar offset UTC
+            var fin = new Date(inicio);
+            fin.setDate(fin.getDate() + 6); // +6 días = rango de 7 días inclusive
+            var anio = fin.getFullYear();
+            var mes  = String(fin.getMonth() + 1).padStart(2, '0');
+            var dia  = String(fin.getDate()).padStart(2, '0');
+            document.getElementById('fecha_fin').value = anio + '-' + mes + '-' + dia;
+        }
+
         function filtrar() {
             var fi = document.getElementById('fecha_inicio').value;
             var ff = document.getElementById('fecha_fin').value;
-            if (!fi || !ff) { alert('Seleccione ambas fechas'); return; }
-            if (fi > ff) { alert('La fecha de inicio debe ser anterior a la fecha fin'); return; }
+            if (!fi) { alert('Seleccione una fecha de inicio'); return; }
             window.location.href = 'Reportes_Semanal.php?fecha_inicio=' + fi + '&fecha_fin=' + ff;
         }
+
+        // Al cargar la página, si hay fecha_inicio pero no se ha calculado aún, recalcular
+        window.addEventListener('DOMContentLoaded', function() {
+            var fi = document.getElementById('fecha_inicio').value;
+            var ff = document.getElementById('fecha_fin').value;
+            // Solo recalcular si la diferencia no es exactamente 6 días
+            if (fi && ff) {
+                var inicio = new Date(fi + 'T00:00:00');
+                var finActual = new Date(ff + 'T00:00:00');
+                var diff = Math.round((finActual - inicio) / (1000 * 60 * 60 * 24));
+                if (diff !== 6) {
+                    calcularFechaFin();
+                }
+            }
+        });
     </script>
 </body>
 </html>
