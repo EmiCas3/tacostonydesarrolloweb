@@ -61,20 +61,16 @@ $link = Conectarse();
             <form id="entrada1form" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>Nombre Proveedor</label>
+                        <label>Proveedor</label>
                         <select id="nombreProveedor">
                             <option value="">-- Seleccione --</option>
                             <?php
-                            $result = mysqli_query($link, "SELECT id, nombre FROM t_proovedores ORDER BY nombre") or die(mysqli_error($link));
+                            $result = mysqli_query($link, "SELECT id, nombre FROM t_proovedores ORDER BY id") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
-                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                                echo '<option value="'.$row['id'].'">'.$row['id'].' - '.$row['nombre'].'</option>';
                             }
                             ?>
                         </select>
-                    </div>
-                    <div class="input-grupo">
-                        <label>ID Proveedor</label>
-                        <input type="number" id="idProveedor" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -105,22 +101,13 @@ $link = Conectarse();
     </div>
 
     <script>
-        // Auto-llenar ID al seleccionar un proveedor
-        document.getElementById('nombreProveedor').addEventListener('change', function() {
-            document.getElementById('idProveedor').value = this.value;
-        });
-
         function validarEntrada() {
             if (document.getElementById('nombreProveedor').value == "") {
-                alert("Nombre del proveedor no ingresado");
-                return;
-            }
-            if (document.getElementById('idProveedor').value == "") {
-                alert("ID del proveedor no ingresado");
+                alert("Proveedor no seleccionado");
                 return;
             } else {
                 // Guardar datos del proveedor y fecha en sessionStorage para Entrada3
-                sessionStorage.setItem('idProveedor', document.getElementById('idProveedor').value);
+                sessionStorage.setItem('idProveedor', document.getElementById('nombreProveedor').value);
                 sessionStorage.setItem('fechaEntrada', document.getElementById('fechaEntrada').value);
                 window.location.href = "Entrada2.php";
             }

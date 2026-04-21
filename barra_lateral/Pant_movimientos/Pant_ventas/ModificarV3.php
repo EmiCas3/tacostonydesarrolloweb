@@ -75,22 +75,17 @@ if ($id_venta > 0 && $id_producto_modificar > 0) {
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Producto</label>
+                        <label>Producto</label>
                         <select id="nombreProducto">
                             <option value="">-- Seleccione --</option>
                             <?php
-                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY nombre") or die(mysqli_error($link));
+                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY id") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
                                 $selected = ($id_producto_modificar == $row['id']) ? 'selected' : '';
-                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'" '.$selected.'>'.$row['nombre'].'</option>';
+                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'" '.$selected.'>'.$row['id'].' - '.$row['nombre'].'</option>';
                             }
                             ?>
                         </select>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Producto</label>
-                        <input type="number" id="idProducto" value="<?php echo $id_producto_modificar > 0 ? $id_producto_modificar : ''; ?>" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -114,9 +109,8 @@ if ($id_venta > 0 && $id_producto_modificar > 0) {
     </div>
 
     <script>
-        // Auto-llenar ID al seleccionar un producto y recalcular
+        // Auto-recalcular al seleccionar un producto
         document.getElementById('nombreProducto').addEventListener('change', function() {
-            document.getElementById('idProducto').value = this.value;
             calcularSubtotal();
         });
 
@@ -142,10 +136,7 @@ if ($id_venta > 0 && $id_producto_modificar > 0) {
         function valida_enviar() {
             var form = document.getElementById("venta2form");
             if (form.nombreProducto.value == "") {
-                alert("Nombre de producto no ingresado");
-                return 0;
-            } if (form.idProducto.value == "") {
-                alert("ID de producto no ingresado");
+                alert("Producto no seleccionado");
                 return 0;
             } if (form.cantidad.value == "") {
                 alert("Cantidad no ingresada");
@@ -158,7 +149,7 @@ if ($id_venta > 0 && $id_producto_modificar > 0) {
             // Preparar datos para el handler
             var datos = {
                 id_venta: <?php echo $id_venta; ?>,
-                id_producto: parseInt(form.idProducto.value),
+                id_producto: parseInt(form.nombreProducto.value),
                 cantidad: parseFloat(form.cantidad.value),
                 id_producto_anterior: <?php echo $id_producto_modificar; ?>
             };

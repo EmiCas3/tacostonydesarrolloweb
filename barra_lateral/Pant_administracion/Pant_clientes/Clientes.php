@@ -3,15 +3,20 @@ include("../../../conex.php");
 $link = Conectarse();
 $telefonos = [];
 $correos = [];
-$res = mysqli_query($link, "SELECT numero_telefono, correo FROM t_clientes");
+$rfcs = [];
+$res = mysqli_query($link, "SELECT numero_telefono, correo, rfc FROM t_clientes");
 if ($res) {
     while($row = mysqli_fetch_array($res)) {
         $telefonos[] = $row['numero_telefono'];
         $correos[] = $row['correo'];
+        if ($row['rfc'] !== null && $row['rfc'] !== '') {
+            $rfcs[] = strtoupper($row['rfc']);
+        }
     }
 }
 $jsonTelefonos = json_encode($telefonos);
 $jsonCorreos = json_encode($correos);
+$jsonRfcs = json_encode($rfcs);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -126,6 +131,7 @@ $jsonCorreos = json_encode($correos);
         function valida_enviar() {
             var telefonosDB = <?php echo $jsonTelefonos; ?>;
             var correosDB = <?php echo $jsonCorreos; ?>;
+            var rfcsDB = <?php echo $jsonRfcs; ?>;
 
             if (document.getElementById("nombreCliente").value == "") {
                 alert("Nombre del cliente no ingresado"); return;
@@ -144,6 +150,12 @@ $jsonCorreos = json_encode($correos);
             }
             if (correosDB.includes(document.getElementById("correo").value)) {
                 alert("El correo electrónico ya está registrado en la base de datos."); return;
+            }
+            if (document.getElementById("rfc").value !== "") {
+                var inputRfc = document.getElementById("rfc").value.toUpperCase();
+                if (rfcsDB.includes(inputRfc)) {
+                    alert("El RFC ya está registrado en la base de datos."); return;
+                }
             }
             document.getElementById("btnSubmitCliente").click();
         }

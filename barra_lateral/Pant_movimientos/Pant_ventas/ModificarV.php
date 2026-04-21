@@ -1,7 +1,10 @@
 <?php include("../../../seguridad.php");
 include("../../../conex.php");
 $link = Conectarse();
+// Establecer zona horaria de México para que CURDATE() sea correcta
+mysqli_query($link, "SET time_zone = '-06:00'");
 ?>
+<!--Si la venta es a domicilio, disminuir desechables en la tabla de materiales-->
 <!DOCTYPE html>
 <html lang="es">
 
@@ -67,12 +70,13 @@ $link = Conectarse();
                                          FROM t_vender_general v 
                                          INNER JOIN t_clientes c ON v.id_cliente = c.id
                                          INNER JOIN t_empleados e ON v.id_empleado = e.id
-                                         WHERE DATE(v.fecha) = CURDATE()
+                                         WHERE v.fecha >= CURDATE() AND v.fecha < CURDATE() + INTERVAL 1 DAY
                                          ORDER BY v.id ASC";
                         $result_ventas = mysqli_query($link, $query_ventas) or die(mysqli_error($link));
                         while($row_v = mysqli_fetch_array($result_ventas)){
                             echo '<option value="'.$row_v['id'].'" 
                                   data-idcliente="'.$row_v['id_cliente'].'"
+                                  data-nombrecliente="'.htmlspecialchars($row_v['cliente_nombre']).'"
                                   data-fecha="'.date('Y-m-d', strtotime($row_v['fecha'])).'"
                                   data-domicilio="'.strtolower($row_v['servicio_a_domicilio']).'"
                                   data-idempleado="'.$row_v['id_empleado'].'"
@@ -85,21 +89,8 @@ $link = Conectarse();
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
-                        <select id="nombreCliente" disabled>
-                            <option value="">-- Seleccione --</option>
-                            <?php
-                            $result = mysqli_query($link, "SELECT id, nombre FROM t_clientes ORDER BY nombre") or die(mysqli_error($link));
-                            while($row = mysqli_fetch_array($result)){
-                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Cliente</label>
-                        <input type="number" id="idCliente" placeholder="Se llena automáticamente" readonly>
+                        <label>Cliente</label>
+                        <input type="text" id="nombreCliente" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -128,13 +119,8 @@ $link = Conectarse();
                         </select>
                     </div>
                     <div class="input-grupo">
-                        <label>Nombre Empleado</label>
+                        <label>Empleado</label>
                         <input type="text" id="nombreEmpleado" placeholder="Se llena automáticamente" readonly>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Empleado</label>
-                        <input type="number" id="idEmpleado" placeholder="Se llena automáticamente" readonly>
                     </div>
                 </div>
             </form>
@@ -151,18 +137,14 @@ $link = Conectarse();
         document.getElementById('idVenta').addEventListener('change', function() {
             var selectedOption = this.options[this.selectedIndex];
             if (this.value !== "") {
-                document.getElementById('nombreCliente').value = selectedOption.getAttribute('data-idcliente');
-                document.getElementById('idCliente').value = selectedOption.getAttribute('data-idcliente');
+                document.getElementById('nombreCliente').value = selectedOption.getAttribute('data-idcliente') + ' - ' + selectedOption.getAttribute('data-nombrecliente');
                 document.getElementById('fechaDia').value = selectedOption.getAttribute('data-fecha');
                 document.getElementById('servicioDomicilio').value = selectedOption.getAttribute('data-domicilio');
-                document.getElementById('nombreEmpleado').value = selectedOption.getAttribute('data-nombreempleado');
-                document.getElementById('idEmpleado').value = selectedOption.getAttribute('data-idempleado');
+                document.getElementById('nombreEmpleado').value = selectedOption.getAttribute('data-idempleado') + ' - ' + selectedOption.getAttribute('data-nombreempleado');
             } else {
                 document.getElementById('nombreCliente').value = "";
-                document.getElementById('idCliente').value = "";
                 document.getElementById('servicioDomicilio').value = "no";
                 document.getElementById('nombreEmpleado').value = "";
-                document.getElementById('idEmpleado').value = "";
             }
         });
 

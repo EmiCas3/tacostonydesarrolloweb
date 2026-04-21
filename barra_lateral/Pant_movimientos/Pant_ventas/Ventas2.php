@@ -61,21 +61,16 @@ $link = Conectarse();
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Producto</label>
+                        <label>Producto</label>
                         <select id="nombreProducto">
                             <option value="">-- Seleccione --</option>
                             <?php
-                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY nombre") or die(mysqli_error($link));
+                            $result = mysqli_query($link, "SELECT id, nombre, precio FROM t_productos ORDER BY id") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
-                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'">'.$row['nombre'].'</option>';
+                                echo '<option value="'.$row['id'].'" data-precio="'.$row['precio'].'">'.$row['id'].' - '.$row['nombre'].'</option>';
                             }
                             ?>
                         </select>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Producto</label>
-                        <input type="number" id="idProducto" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -114,9 +109,8 @@ $link = Conectarse();
         // Arreglo para almacenar en sesion los productos de la venta actual
         var productosVenta = JSON.parse(sessionStorage.getItem('productosVenta') || "[]");
 
-        // Auto-llenar ID al seleccionar un producto y recalcular
+        // Auto-recalcular al seleccionar un producto
         document.getElementById('nombreProducto').addEventListener('change', function() {
-            document.getElementById('idProducto').value = this.value;
             calcularSubtotal();
         });
 
@@ -153,7 +147,7 @@ $link = Conectarse();
             var selectedOption = select.options[select.selectedIndex];
             productosVenta.push({
                 nombre: selectedOption.text,
-                id: document.getElementById('idProducto').value,
+                id: select.value,
                 cantidad: document.getElementById('cantidad').value,
                 subtotal: document.getElementById('subtotal').value
             });
@@ -162,7 +156,6 @@ $link = Conectarse();
             alert("Producto agregado.");
             
             document.getElementById('venta2form').reset();
-            document.getElementById('idProducto').value = '';
         }
 
         function valida_enviar() {
@@ -173,7 +166,7 @@ $link = Conectarse();
                 var selectedOption = select.options[select.selectedIndex];
                 productosVenta.push({
                     nombre: selectedOption.text,
-                    id: document.getElementById('idProducto').value,
+                    id: select.value,
                     cantidad: document.getElementById('cantidad').value,
                     subtotal: document.getElementById('subtotal').value
                 });

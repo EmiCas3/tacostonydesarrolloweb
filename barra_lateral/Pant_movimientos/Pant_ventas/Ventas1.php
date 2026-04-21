@@ -62,14 +62,14 @@ $link = Conectarse();
                 <div class="form-grid">
 
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
+                        <label>Cliente</label>
                         <select id="nombreCliente">
                             <option value="">-- Seleccione --</option>
                             <?php
                             $clientesData = [];
-                            $result = mysqli_query($link, "SELECT id, nombre, codigo_postal, calle, colonia, estado FROM t_clientes ORDER BY nombre") or die(mysqli_error($link));
+                            $result = mysqli_query($link, "SELECT id, nombre, codigo_postal, calle, colonia, estado FROM t_clientes ORDER BY id") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
-                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                                echo '<option value="'.$row['id'].'">'.$row['id'].' - '.$row['nombre'].'</option>';
                                 $clientesData[$row['id']] = [
                                     'cp' => $row['codigo_postal'],
                                     'calle' => $row['calle'],
@@ -80,11 +80,6 @@ $link = Conectarse();
                             $jsonClientes = json_encode($clientesData);
                             ?>
                         </select>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Cliente</label>
-                        <input type="number" id="idCliente" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -113,13 +108,9 @@ $link = Conectarse();
                         </select>
                     </div>
                     <div class="input-grupo">
-                        <label>Nombre Empleado</label>
-                        <input type="text" id="nombreEmpleado" value="<?php echo isset($_SESSION['nombre_empleado']) ? $_SESSION['nombre_empleado'] : ''; ?>" readonly>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Empleado</label>
-                        <input type="number" id="idEmpleado" value="<?php echo isset($_SESSION['id_empleado']) ? $_SESSION['id_empleado'] : ''; ?>" readonly>
+                        <label>Empleado</label>
+                        <input type="text" id="nombreEmpleado" value="<?php echo isset($_SESSION['id_empleado']) && isset($_SESSION['nombre_empleado']) ? $_SESSION['id_empleado'].' - '.$_SESSION['nombre_empleado'] : ''; ?>" readonly>
+                        <input type="hidden" id="idEmpleado" value="<?php echo isset($_SESSION['id_empleado']) ? $_SESSION['id_empleado'] : ''; ?>">
                     </div>
                     <div class="input-grupo">
                         <label style="color: #073A79;">Todos los campos son obligatorios</label>
@@ -137,26 +128,15 @@ $link = Conectarse();
     <script>
         var clientesData = <?php echo isset($jsonClientes) ? $jsonClientes : '{}'; ?>;
 
-        // Auto-llenar ID al seleccionar un cliente
-        document.getElementById('nombreCliente').addEventListener('change', function() {
-            document.getElementById('idCliente').value = this.value;
-        });
-
         function valida_enviar() {
-            var idCli = document.getElementById('idCliente').value;
+            var idCli = document.getElementById('nombreCliente').value;
             var servDom = document.getElementById('servicioDomicilio').value;
 
-            if (document.getElementById('nombreCliente').value == "") {
-                alert("Nombre del cliente no ingresado");
-                return 0;
-            } if (idCli == "") {
-                alert("ID del cliente no ingresado");
+            if (idCli == "") {
+                alert("Cliente no seleccionado");
                 return 0;
             } if (document.getElementById('nombreEmpleado').value == "") {
-                alert("Nombre del empleado no ingresado");
-                return 0;
-            } if (document.getElementById('idEmpleado').value == "") {
-                alert("ID del empleado no ingresado");
+                alert("Empleado no asignado");
                 return 0;
             }
 
@@ -169,7 +149,7 @@ $link = Conectarse();
             }
 
             // Guardar datos generales de la venta en sessionStorage para Ventas3
-            sessionStorage.setItem('ventaIdCliente', document.getElementById('idCliente').value);
+            sessionStorage.setItem('ventaIdCliente', document.getElementById('nombreCliente').value);
             sessionStorage.setItem('ventaFecha', document.getElementById('fechaDia').value);
             sessionStorage.setItem('ventaServicioDomicilio', document.getElementById('servicioDomicilio').value);
             sessionStorage.setItem('ventaIdEmpleado', document.getElementById('idEmpleado').value);

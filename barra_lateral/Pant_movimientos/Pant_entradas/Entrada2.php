@@ -61,21 +61,16 @@ $link = Conectarse();
             <form id="entrada2form" method="post" action="#">
                 <div class="form-grid">
                     <div class="input-grupo">
-                        <label>Nombre Material</label>
+                        <label>Material</label>
                         <select id="nombreMaterial">
                             <option value="">-- Seleccione --</option>
                             <?php
-                            $result = mysqli_query($link, "SELECT id, nombre FROM t_materiales ORDER BY nombre") or die(mysqli_error($link));
+                            $result = mysqli_query($link, "SELECT id, nombre FROM t_materiales ORDER BY id") or die(mysqli_error($link));
                             while($row = mysqli_fetch_array($result)){
-                                echo '<option value="'.$row['id'].'">'.$row['nombre'].'</option>';
+                                echo '<option value="'.$row['id'].'">'.$row['id'].' - '.$row['nombre'].'</option>';
                             }
                             ?>
                         </select>
-                    </div>
-
-                    <div class="input-grupo">
-                        <label>ID Material</label>
-                        <input type="number" id="idMaterial" placeholder="Se llena automáticamente" readonly>
                     </div>
 
                     <div class="input-grupo">
@@ -109,11 +104,6 @@ $link = Conectarse();
         // Arreglo para almacenar en sesión los productos de la entrada actual
         var productosEntrada = JSON.parse(sessionStorage.getItem('productosEntrada') || "[]");
 
-        // Auto-llenar ID al seleccionar un material
-        document.getElementById('nombreMaterial').addEventListener('change', function() {
-            document.getElementById('idMaterial').value = this.value;
-        });
-
         function agregarEntrada() {
             var select = document.getElementById('nombreMaterial');
             if (select.value == "") {
@@ -131,7 +121,7 @@ $link = Conectarse();
             var selectedOption = select.options[select.selectedIndex];
             productosEntrada.push({
                 nombre: selectedOption.text,
-                id: document.getElementById('idMaterial').value,
+                id: select.value,
                 cantidad: cantidad,
                 precio: precio,
                 subtotal: (parseFloat(cantidad) * parseFloat(precio)).toFixed(2)
@@ -141,7 +131,6 @@ $link = Conectarse();
             alert("Material agregado.");
             
             document.getElementById('entrada2form').reset();
-            document.getElementById('idMaterial').value = '';
         }
 
         function validarEntrada() {
@@ -154,7 +143,7 @@ $link = Conectarse();
                 var selectedOption = select.options[select.selectedIndex];
                 productosEntrada.push({
                     nombre: selectedOption.text,
-                    id: document.getElementById('idMaterial').value,
+                    id: select.value,
                     cantidad: cantidad,
                     precio: precio,
                     subtotal: (parseFloat(cantidad) * parseFloat(precio)).toFixed(2)
