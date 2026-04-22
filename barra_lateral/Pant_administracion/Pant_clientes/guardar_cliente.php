@@ -37,7 +37,7 @@ $correo_esc          = mysqli_real_escape_string($link, $correo);
 $calle_esc           = mysqli_real_escape_string($link, $calle);
 $colonia_esc         = mysqli_real_escape_string($link, $colonia);
 $estado_esc          = mysqli_real_escape_string($link, $estado);
-// Verificar duplicado 
+
 $checkTel = mysqli_query($link, "SELECT id FROM t_clientes WHERE numero_telefono = '$numero_telefono_esc'");
 if ($checkTel && mysqli_num_rows($checkTel) > 0) {
     mysqli_close($link);
@@ -60,7 +60,6 @@ if ($rfc_esc !== '') {
         exit;
     }
 }
-
 $rfcVal          = $rfc_esc          !== '' ? "'$rfc_esc'"          : 'NULL';
 $razonSocialVal  = $razon_social_esc !== '' ? "'$razon_social_esc'" : 'NULL';
 $cpVal           = $codigo_postal_esc!== '' ? "'$codigo_postal_esc'": 'NULL';

@@ -119,10 +119,11 @@ $jsonRfcs = json_encode($rfcs);
                 <button type="submit" id="btnSubmitCliente" style="display:none;"></button>
             </form>
 
-            <div class="botones-bottom">
-                <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
-                <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
-            </div>
+ <div class="botones-bottom">
+    <a class="btn-secundario" href="../../Administracion.php">CANCELAR</a>
+    <a class="btn-accion" href="editar_cliente.php">EDITAR CLIENTES</a>
+    <a class="btn-accion" onclick="valida_enviar()">CONFIRMAR</a>
+</div>
 
         </div>
     </div>
