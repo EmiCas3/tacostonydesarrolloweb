@@ -6,18 +6,32 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: editar_cliente.php");
     exit;
 }
-$id             = isset($_POST['id'])           ? (int)trim($_POST['id'])           : 0;
-$rfc            = isset($_POST['rfc'])           ? trim($_POST['rfc'])               : '';
-$razon_social   = isset($_POST['razon_social'])  ? trim($_POST['razon_social'])       : '';
-$codigo_postal  = isset($_POST['codigo_postal']) ? trim($_POST['codigo_postal'])      : '';
-$calle          = isset($_POST['calle'])         ? trim($_POST['calle'])              : '';
-$colonia        = isset($_POST['colonia'])       ? trim($_POST['colonia'])            : '';
-$estado         = isset($_POST['estado'])        ? trim($_POST['estado'])             : '';
+$id              = isset($_POST['id'])              ? (int)trim($_POST['id'])              : 0;
+$nombre          = isset($_POST['nombre'])          ? trim($_POST['nombre'])               : '';
+$correo          = isset($_POST['correo'])          ? trim($_POST['correo'])               : '';
+$numero_telefono = isset($_POST['numero_telefono']) ? trim($_POST['numero_telefono'])      : '';
+$rfc             = isset($_POST['rfc'])             ? trim($_POST['rfc'])                  : '';
+$razon_social    = isset($_POST['razon_social'])    ? trim($_POST['razon_social'])         : '';
+$codigo_postal   = isset($_POST['codigo_postal'])   ? trim($_POST['codigo_postal'])        : '';
+$calle           = isset($_POST['calle'])           ? trim($_POST['calle'])                : '';
+$colonia         = isset($_POST['colonia'])         ? trim($_POST['colonia'])              : '';
+$estado          = isset($_POST['estado'])          ? trim($_POST['estado'])               : '';
 
 if ($id <= 0) {
     echo "<script>alert('Error: cliente no válido.'); window.location.href='editar_cliente.php';</script>";
     exit;
 }
+
+// Required fields validation
+if ($nombre === '' || $numero_telefono === '' || $correo === '') {
+    echo "<script>alert('Error: campos obligatorios incompletos (nombre, teléfono y correo).'); window.location.href='editar_cliente.php';</script>";
+    exit;
+}
+if (strlen($numero_telefono) != 10 || !ctype_digit($numero_telefono)) {
+    echo "<script>alert('Número de teléfono no válido (debe tener 10 dígitos).'); window.location.href='editar_cliente.php';</script>";
+    exit;
+}
+
 $link = Conectarse();
 if (!$link) {
     echo "<script>alert('Error: no se pudo conectar a la base de datos.'); window.location.href='editar_cliente.php';</script>";
@@ -29,6 +43,28 @@ if (!$check || mysqli_num_rows($check) === 0) {
     echo "<script>alert('Error: cliente no encontrado.'); window.location.href='editar_cliente.php';</script>";
     exit;
 }
+
+$nombre_esc          = mysqli_real_escape_string($link, $nombre);
+$correo_esc          = mysqli_real_escape_string($link, $correo);
+$numero_telefono_esc = mysqli_real_escape_string($link, $numero_telefono);
+
+// Duplicate phone check (exclude current client)
+$checkTel = mysqli_query($link, "SELECT id FROM t_clientes WHERE numero_telefono = '$numero_telefono_esc' AND id != $id");
+if ($checkTel && mysqli_num_rows($checkTel) > 0) {
+    mysqli_close($link);
+    echo "<script>alert('El número de teléfono ya está registrado en otro cliente.'); window.location.href='editar_cliente.php';</script>";
+    exit;
+}
+
+// Duplicate email check (exclude current client)
+$checkCor = mysqli_query($link, "SELECT id FROM t_clientes WHERE LOWER(correo) = LOWER('$correo_esc') AND id != $id");
+if ($checkCor && mysqli_num_rows($checkCor) > 0) {
+    mysqli_close($link);
+    echo "<script>alert('El correo electrónico ya está registrado en otro cliente.'); window.location.href='editar_cliente.php';</script>";
+    exit;
+}
+
+// Duplicate RFC check (exclude current client)
 if ($rfc !== '') {
     $rfc_esc = mysqli_real_escape_string($link, $rfc);
     $checkRfc = mysqli_query($link, "SELECT id FROM t_clientes WHERE UPPER(rfc) = UPPER('$rfc_esc') AND id != $id");
@@ -40,6 +76,7 @@ if ($rfc !== '') {
 } else {
     $rfc_esc = '';
 }
+
 $razon_social_esc  = mysqli_real_escape_string($link, $razon_social);
 $codigo_postal_esc = mysqli_real_escape_string($link, $codigo_postal);
 $calle_esc         = mysqli_real_escape_string($link, $calle);
@@ -54,12 +91,15 @@ $colVal   = $colonia_esc      !== '' ? "'$colonia_esc'"      : 'NULL';
 $estVal   = $estado_esc       !== '' ? "'$estado_esc'"       : 'NULL';
 
 $query = "UPDATE t_clientes SET
-    rfc           = $rfcVal,
-    razon_social  = $rsVal,
-    codigo_postal = $cpVal,
-    calle         = $calleVal,
-    colonia       = $colVal,
-    estado        = $estVal
+    nombre         = '$nombre_esc',
+    correo         = '$correo_esc',
+    numero_telefono= '$numero_telefono_esc',
+    rfc            = $rfcVal,
+    razon_social   = $rsVal,
+    codigo_postal  = $cpVal,
+    calle          = $calleVal,
+    colonia        = $colVal,
+    estado         = $estVal
   WHERE id = $id";
 
 $result = mysqli_query($link, $query);

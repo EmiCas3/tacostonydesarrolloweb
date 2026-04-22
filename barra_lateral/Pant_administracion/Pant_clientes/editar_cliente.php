@@ -4,13 +4,24 @@ $link = Conectarse();
 
 // Fetch all clients for the list
 $clientes = [];
+$telefonos = [];
+$correos = [];
+$rfcs = [];
 $res = mysqli_query($link, "SELECT id, nombre, correo, numero_telefono, rfc, razon_social, codigo_postal, calle, colonia, estado FROM t_clientes ORDER BY nombre ASC");
 if ($res) {
     while ($row = mysqli_fetch_assoc($res)) {
         $clientes[] = $row;
+        $telefonos[$row['id']] = $row['numero_telefono'];
+        $correos[$row['id']]   = strtolower($row['correo']);
+        if ($row['rfc'] !== null && $row['rfc'] !== '') {
+            $rfcs[$row['id']] = strtoupper($row['rfc']);
+        }
     }
 }
 mysqli_close($link);
+$jsonTelefonos = json_encode($telefonos);
+$jsonCorreos   = json_encode($correos);
+$jsonRfcs      = json_encode($rfcs);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -124,12 +135,7 @@ mysqli_close($link);
         }
         .ec-modal-close:hover { color: #f6821f; }
 
-        /* Greyed-out read-only fields */
-        .input-grupo input[readonly] {
-            background-color: #f0f0f0;
-            color: #888;
-            cursor: not-allowed;
-        }
+
 
         .ec-modal-botones {
             display: flex;
@@ -240,18 +246,18 @@ mysqli_close($link);
                 <input type="hidden" name="id" id="modal_id">
 
                 <div class="form-grid">
-                    <!-- Read-only: the 3 obligatory fields -->
+                    <!-- Editable obligatory fields -->
                     <div class="input-grupo">
-                        <label>Nombre Cliente</label>
-                        <input type="text" id="modal_nombre" readonly>
+                        <label>Nombre Cliente <span style="color: #073A79;">*</span></label>
+                        <input type="text" id="modal_nombre" name="nombre" placeholder="Ingrese el nombre">
                     </div>
                     <div class="input-grupo">
-                        <label>Correo Electrónico</label>
-                        <input type="text" id="modal_correo" readonly>
+                        <label>Correo Electrónico <span style="color: #073A79;">*</span></label>
+                        <input type="text" id="modal_correo" name="correo" placeholder="Ingrese el correo">
                     </div>
                     <div class="input-grupo">
-                        <label>Número de Teléfono</label>
-                        <input type="text" id="modal_telefono" readonly>
+                        <label>Número de Teléfono <span style="color: #073A79;">*</span></label>
+                        <input type="text" id="modal_telefono" name="numero_telefono" placeholder="Ingrese el número">
                     </div>
 
                     <!-- Editable optional fields -->
@@ -329,7 +335,53 @@ mysqli_close($link);
             if (e.target === document.getElementById('modalOverlay')) cerrarModal();
         }
 
+        var telefonosDB = <?php echo $jsonTelefonos; ?>;
+        var correosDB   = <?php echo $jsonCorreos; ?>;
+        var rfcsDB      = <?php echo $jsonRfcs; ?>;
+
         function guardarCambios() {
+            var currentId = document.getElementById('modal_id').value;
+
+            // Required fields
+            if (document.getElementById('modal_nombre').value.trim() === '') {
+                alert('Nombre del cliente no ingresado'); return;
+            }
+            if (document.getElementById('modal_telefono').value.trim() === '') {
+                alert('Número de Teléfono no ingresado'); return;
+            }
+            var tel = document.getElementById('modal_telefono').value.trim();
+            if (tel.length !== 10 || !/^\d{10}$/.test(tel)) {
+                alert('Número de Teléfono no es válido (debe tener 10 dígitos numéricos)'); return;
+            }
+            if (document.getElementById('modal_correo').value.trim() === '') {
+                alert('Correo Electrónico no ingresado'); return;
+            }
+
+            // Duplicate phone check (exclude current client)
+            for (var id in telefonosDB) {
+                if (id !== currentId && telefonosDB[id] === tel) {
+                    alert('El número de teléfono ya está registrado en otro cliente.'); return;
+                }
+            }
+
+            // Duplicate email check (exclude current client)
+            var correoVal = document.getElementById('modal_correo').value.trim().toLowerCase();
+            for (var id in correosDB) {
+                if (id !== currentId && correosDB[id] === correoVal) {
+                    alert('El correo electrónico ya está registrado en otro cliente.'); return;
+                }
+            }
+
+            // Duplicate RFC check (exclude current client)
+            var rfcVal = document.getElementById('modal_rfc').value.trim().toUpperCase();
+            if (rfcVal !== '') {
+                for (var id in rfcsDB) {
+                    if (id !== currentId && rfcsDB[id] === rfcVal) {
+                        alert('El RFC ya está registrado en otro cliente.'); return;
+                    }
+                }
+            }
+
             document.getElementById('formEditar').submit();
         }
     </script>
