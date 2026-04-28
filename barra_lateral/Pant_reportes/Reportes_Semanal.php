@@ -102,8 +102,8 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             ?>
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <span class="reporte-nombre">Reporte: Ventas por Semana</span>
-                <span class="reporte-fecha"><?php echo date('d') . ' de ' . ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][intval(date('m'))] . ' de ' . date('Y'); ?></span>
+                <span class="reporte-nombre"><?php echo 'Ventas del ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)); ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
             <div class="total-box">
                 Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>
@@ -131,12 +131,6 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             </div>
             </div>
 
-            <div class="contenedor-btn-pdf">
-                <button class="btn-descargar-pdf" onclick="descargarPDF()">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h3.66V9h3.84L12 2z" transform="rotate(180 12 12)"/></svg>
-                    Descargar PDF
-                </button>
-            </div>
         </div>
     </div>
     <script>

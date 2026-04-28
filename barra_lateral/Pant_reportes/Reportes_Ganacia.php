@@ -76,8 +76,8 @@ $link = Conectarse();
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <span class="reporte-nombre">Reporte: Ganancia por Producto</span>
-                <span class="reporte-fecha"><?php echo date('d') . ' de ' . ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][intval(date('m'))] . ' de ' . date('Y'); ?></span>
+                <span class="reporte-nombre"><?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ganancia por Producto — ' . date('d') . ' de ' . $meses_es[intval(date('m'))] . ' de ' . date('Y'); ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-ganancia">
@@ -116,12 +116,6 @@ $link = Conectarse();
             </div>
             </div>
 
-            <div class="contenedor-btn-pdf">
-                <button class="btn-descargar-pdf" onclick="descargarPDF()">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h3.66V9h3.84L12 2z" transform="rotate(180 12 12)"/></svg>
-                    Descargar PDF
-                </button>
-            </div>
         </div>
     </div>
     <script>
