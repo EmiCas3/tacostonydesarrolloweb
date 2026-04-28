@@ -1405,6 +1405,140 @@ h2 {
     cursor: not-allowed;
 }
 
+/* ===== 10. CATÁLOGO ===== */
+.catalogo-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.catalogo-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.catalogo-container::-webkit-scrollbar-track {
+    background: #E5E5E5;
+    border-radius: 4px;
+}
+
+.catalogo-container::-webkit-scrollbar-thumb {
+    background: #F6821F;
+    border-radius: 4px;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding-bottom: 10px;
+    align-content: start;
+}
+
+.producto-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: start;
+}
+
+.producto-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.producto-img-container {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.producto-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producto-info {
+    padding: 12px 15px;
+    border-top: 3px solid #F6821F;
+}
+
+.producto-nombre {
+    font-weight: bold;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 6px;
+}
+
+.producto-precio {
+    font-weight: bold;
+    font-size: 16px;
+    color: #F6821F;
+}
+
+.producto-id {
+    font-size: 11px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.main-content-column h1 {
+    margin: 0 0 15px 0;
+    color: #000000;
+    font-size: 26px;
+}
+
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0 20px 0;
+}
+
+.paginacion a,
+.paginacion span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+
+.paginacion a.flecha {
+    background: #F6821F;
+    color: #fff;
+}
+
+.paginacion a.flecha:hover {
+    background: #d4701a;
+}
+
+.paginacion .flecha.disabled {
+    background: #ddd;
+    color: #aaa;
+    pointer-events: none;
+}
+
+.paginacion .pagina-info {
+    font-size: 15px;
+    color: #555;
+    width: auto;
+}
+
 /* ===== 17. MEDIA QUERIES ===== */
 @media (max-width: 900px) {
     .resumen-grid {
