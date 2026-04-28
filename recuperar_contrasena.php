@@ -1,4 +1,6 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -17,7 +19,7 @@ include(__DIR__ . "/conex.php");
 $link = Conectarse();
 
 if (!$link) {
-    echo json_encode(['ok' => false, 'error' => 'Error de conexión a la base de datos.']);
+    echo json_encode(['ok' => false, 'error' => 'MySQL error: ' . mysqli_connect_error() . ' | errno: ' . mysqli_connect_errno()]);
     exit;
 }
 
@@ -58,11 +60,13 @@ $cuerpo .= "    $nueva\n\n";
 $cuerpo .= "Por favor inicia sesión con esta contraseña y cámbiala desde Configuración > Editar Perfil.\n\n";
 $cuerpo .= "— Sistema Tacos Tony";
 
-$headers = "From: no-reply@tacostony.com\r\nContent-Type: text/plain; charset=UTF-8";
+$headers  = "From: no-reply@tacostony.com\r\n";
+$headers .= "Reply-To: no-reply@tacostony.com\r\n";
+$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+$headers .= "Content-Type: text/plain; charset=UTF-8";
 
 mail($correo, $asunto, $cuerpo, $headers);
 
-// Always return ok=true if we got this far (password was reset)
 echo json_encode(['ok' => true]);
 
 mysqli_close($link);
