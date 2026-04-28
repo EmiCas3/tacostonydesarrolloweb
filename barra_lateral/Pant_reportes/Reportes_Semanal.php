@@ -102,8 +102,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             ?>
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <span class="reporte-nombre"><?php echo 'Ventas del ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)); ?></span>
-                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
+                <?php echo 'Ventas del ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)); ?>
             </div>
             <div class="total-box">
                 Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>
@@ -129,6 +128,10 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                     ?>
                 </div>
             </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
 
         </div>

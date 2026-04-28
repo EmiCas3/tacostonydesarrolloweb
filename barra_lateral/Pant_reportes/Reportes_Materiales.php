@@ -87,8 +87,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <span class="reporte-nombre"><?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Materiales Más Usados de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?></span>
-                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
+                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Materiales Más Usados de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-materiales">
@@ -109,6 +108,10 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     ?>
                 </div>
             </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
 
         </div>

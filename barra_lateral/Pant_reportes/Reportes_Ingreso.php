@@ -98,8 +98,7 @@ $fecha_fin = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_dia
             ?>
             <div id="reporte-contenido">
                 <div class="barra-info-reporte">
-                    <span class="reporte-nombre"><?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ingreso por Producto de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?></span>
-                    <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
+                    <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ingreso por Producto de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
                 </div>
                 <div class="total-box">
                     Total del mes: $<?php echo number_format($totalGeneral, 2); ?>
@@ -124,6 +123,10 @@ $fecha_fin = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_dia
                             ?>
                     </div>
                 </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
 
         </div>

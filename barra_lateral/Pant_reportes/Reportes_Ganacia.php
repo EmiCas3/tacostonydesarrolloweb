@@ -76,8 +76,7 @@ $link = Conectarse();
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <span class="reporte-nombre"><?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ganancia por Producto — ' . date('d') . ' de ' . $meses_es[intval(date('m'))] . ' de ' . date('Y'); ?></span>
-                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
+                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ganancia por Producto — ' . date('d') . ' de ' . $meses_es[intval(date('m'))] . ' de ' . date('Y'); ?>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-ganancia">
@@ -114,6 +113,10 @@ $link = Conectarse();
                     ?>
                 </div>
             </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF"><img src="../../Imagenes/Descarga.png" alt="Descargar PDF"></button>
             </div>
 
         </div>
