@@ -1,5 +1,5 @@
 <?php
-include("../../../seguridad.php");
+include("../../../seguridad_admin.php");
 include("../../../conex.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

@@ -9,7 +9,7 @@
  */
 
 include("../../../conex.php");
-include("../../../seguridad.php");
+include("../../../seguridad_admin.php");
 header('Content-Type: application/json; charset=utf-8');
 
 // Solo aceptar POST

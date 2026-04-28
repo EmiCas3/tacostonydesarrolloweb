@@ -1,4 +1,4 @@
-<?php include("../../../seguridad.php"); 
+<?php include("../../../seguridad_admin.php"); 
 
 $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
 $cantidad = isset($_POST['cantidad']) ? trim($_POST['cantidad']) : '';

@@ -1,5 +1,5 @@
 <?php
-include("../../seguridad.php");
+include("../../seguridad_admin.php");
 include("../../conex.php");
 $link = Conectarse();
 ?>

@@ -10,12 +10,12 @@ if (!isset($_SESSION["autentificado"]) || $_SESSION["autentificado"] !== "SI") {
     session_unset();
     session_destroy();
     // Calcular la ruta al index.php desde cualquier profundidad
-    $dirActual = dirname($_SERVER['SCRIPT_FILENAME']);
-    $raiz = realpath(__DIR__);
+    $dirActual = str_replace('\\', '/', realpath(dirname($_SERVER['SCRIPT_FILENAME'])));
+    $raiz = str_replace('\\', '/', realpath(__DIR__));
     $loginPath = 'index.php';
     if ($dirActual !== $raiz) {
         $rel = str_replace($raiz, '', $dirActual);
-        $niveles = substr_count(str_replace('\\', '/', $rel), '/');
+        $niveles = substr_count(trim($rel, '/'), '/') + 1;
         $loginPath = str_repeat('../', $niveles) . 'index.php';
     }
     header("Location: " . $loginPath . "?error=auth_required");
