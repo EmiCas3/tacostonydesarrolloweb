@@ -188,9 +188,7 @@ h2 {
     border-radius: 10px;
     width: 50%;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
+    padding: 15px;
 }
 
 .encabezado-caja {
@@ -198,30 +196,28 @@ h2 {
     color: #000000;
     font-weight: bold;
     text-align: center;
-    padding: 20px;
-    font-size: 22px;
+    padding: 10px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .inventory {
     font-weight: bold;
-    font-size: 22px;
+    font-size: 14px;
     width: 100%;
 }
 
 .inventory td {
-    padding: 15px 12px;
+    padding: 4px 6px;
 }
 
 .inventory-scroll {
-    max-height: 250px;
+    max-height: 90px;
     overflow-y: auto;
-    flex-grow: 1;
 }
 
 .inventory-scroll::-webkit-scrollbar {
@@ -240,37 +236,33 @@ h2 {
 .caja-inferior {
     background-color: #FFFFFF;
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 }
 
 .contenido-inferior {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    flex-grow: 1;
 }
 
 .columna-botones {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
 }
 
 .botones {
     background-color: #F6821F;
     color: #000000;
     border: none;
-    padding: 20px 30px;
+    padding: 15px 30px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
-    width: 300px;
+    width: 250px;
 }
 
 .botones:hover {
