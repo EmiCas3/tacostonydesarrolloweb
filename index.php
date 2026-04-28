@@ -149,7 +149,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <div class="modal-recuperar" id="modalRecuperar">
         <div class="modal-recuperar-box">
             <h3>Recuperar Contraseña</h3>
-            <p>Ingresa tu correo y te enviaremos tu contraseña actual.</p>
+            <p>Ingresa tu correo y te enviaremos una contraseña temporal.</p>
             <div id="msg-recuperar" style="color: green;"></div>
             <input type="email" id="correo-recuperar" placeholder="Tu correo electrónico">
             <button class="btn-enviar" onclick="enviarRecuperacion()">ENVIAR CORREO</button>

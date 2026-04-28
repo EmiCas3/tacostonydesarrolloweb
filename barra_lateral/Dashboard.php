@@ -1,6 +1,13 @@
 <?php include("../seguridad.php");
 include("../conex.php");
 $link = Conectarse();
+
+// Mostrar alerta de bienvenida solo una vez al iniciar sesión
+$mostrar_bienvenida = false;
+if (isset($_SESSION['login_exitoso']) && $_SESSION['login_exitoso'] === true) {
+    $mostrar_bienvenida = true;
+    unset($_SESSION['login_exitoso']); // Solo se muestra una vez
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -190,6 +197,12 @@ $link = Conectarse();
             }
         });
     </script>
+
+    <?php if ($mostrar_bienvenida): ?>
+    <script>
+        alert("Bienvenido(a), <?php echo htmlspecialchars($_SESSION['nombre_empleado']); ?>.");
+    </script>
+    <?php endif; ?>
 </body>
 
 </html>

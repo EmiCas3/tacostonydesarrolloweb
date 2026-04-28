@@ -60,6 +60,7 @@ $_SESSION['salario_empleado'] = $empleado['salario'];
 
 // Marcamos la sesión como autentificada
 $_SESSION["autentificado"] = "SI";
+$_SESSION["login_exitoso"] = true;
 
 // Redirigimos al Dashboard
 header("Location: barra_lateral/Dashboard.php");
