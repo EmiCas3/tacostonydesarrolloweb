@@ -736,11 +736,31 @@ h2 {
     color: #FFFFFF;
     font-weight: bold;
     font-size: 18px;
-    text-align: center;
-    padding: 15px;
+    padding: 15px 20px;
     border-radius: 10px;
     margin-top: 20px;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.total-box .btn-descargar-pdf {
+    position: absolute;
+    right: 15px;
+    opacity: 0.85;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    outline: none;
+}
+
+.total-box .btn-descargar-pdf:hover {
+    opacity: 1;
+    transform: scale(1.15);
 }
 
 /* ===== 10. CATÁLOGO ===== */

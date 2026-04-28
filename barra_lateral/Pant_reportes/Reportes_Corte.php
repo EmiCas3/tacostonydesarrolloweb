@@ -18,7 +18,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Corte de Caja</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -78,6 +78,18 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
                 </div>
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
             </div>
+
+            <?php
+            $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            ?>
+            <div id="contenido-reporte">
+            <div class="total-box">
+                <span>Corte del <?php echo $dia_sel; ?> de <?php echo $meses[$mes_sel]; ?> de <?php echo $anio_sel; ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF">
+                    <img src="../../Imagenes/Descarga.png" width="24" height="24" alt="Descargar PDF">
+                </button>
+            </div>
+
 
             <?php
             // Consulta para el reporte general del día
@@ -247,6 +259,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
                 </div>
             </div>
 
+            </div><!-- fin contenido-reporte -->
         </div>
     </div>
 
@@ -276,6 +289,17 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             }
 
             window.location.href = 'Reportes_Corte.php?dia=' + dia + '&mes=' + mes + '&anio=' + anio;
+        }
+        function descargarPDF() {
+            var elemento = document.getElementById('contenido-reporte');
+            var opt = {
+                margin: 10,
+                filename: 'Reporte_Corte_<?php echo $dia_sel . "_" . $meses[$mes_sel] . "_" . $anio_sel; ?>.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
         }
     </script>
 </body>

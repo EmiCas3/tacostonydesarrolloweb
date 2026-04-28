@@ -22,7 +22,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Ventas por Semana</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -60,9 +60,10 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                            style="background-color:#f0f0f0; cursor:not-allowed; color:#555;">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
             </div>
+            <div id="contenido-reporte">
             <?php
             // Query basado en el procedimiento ventas_semana
             $fi = $fecha_inicio . ' 00:00:00';
@@ -102,8 +103,15 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                 'Sunday'    => 'Domingo'
             ];
             ?>
+            <?php
+            $fi_fmt = date('d/m/Y', strtotime($fecha_inicio));
+            $ff_fmt = date('d/m/Y', strtotime($fecha_fin));
+            ?>
             <div class="total-box">
-                Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>
+                <span>Total del <?php echo $fi_fmt; ?> al <?php echo $ff_fmt; ?>: $<?php echo number_format($totalGeneral, 2); ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF">
+                    <img src="../../Imagenes/Descarga.png" width="24" height="24" alt="Descargar PDF">
+                </button>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-semanal">
@@ -126,6 +134,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                     ?>
                 </div>
             </div>
+            </div><!-- fin contenido-reporte -->
         </div>
     </div>
     <script>
@@ -162,6 +171,18 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
                 }
             }
         });
+
+        function descargarPDF() {
+            var elemento = document.getElementById('contenido-reporte');
+            var opt = {
+                margin: 10,
+                filename: 'Reporte_Semanal_<?php echo $fecha_inicio . "_" . $fecha_fin; ?>.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
+        }
     </script>
 </body>
 </html>

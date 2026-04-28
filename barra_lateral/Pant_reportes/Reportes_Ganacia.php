@@ -12,7 +12,7 @@ $link = Conectarse();
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Ganancia por Producto</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -38,6 +38,21 @@ $link = Conectarse();
     <div class="main-content-top">
         <div class="formulario-card">
             <div class="titulo-caja">GANANCIA POR PRODUCTO</div>
+
+            <?php
+            $meses_g = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            $dia_actual = date('d');
+            $mes_actual = intval(date('m'));
+            $anio_actual = date('Y');
+            ?>
+            <div id="contenido-reporte">
+            <div class="total-box">
+                <span>Consulta generada: <?php echo $dia_actual . " de " . $meses_g[$mes_actual] . " de " . $anio_actual; ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF">
+                    <img src="../../Imagenes/Descarga.png" width="24" height="24" alt="Descargar PDF">
+                </button>
+            </div>
+
 
             <?php
             // Query basado en la vista ganancia_por_producto
@@ -109,7 +124,22 @@ $link = Conectarse();
                     ?>
                 </div>
             </div>
+            </div><!-- fin contenido-reporte -->
         </div>
     </div>
+
+    <script>
+        function descargarPDF() {
+            var elemento = document.getElementById('contenido-reporte');
+            var opt = {
+                margin: 10,
+                filename: 'Reporte_Ganancia_<?php echo $dia_actual . "_" . $meses_g[$mes_actual] . "_" . $anio_actual; ?>.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
+        }
+    </script>
 </body>
 </html>
