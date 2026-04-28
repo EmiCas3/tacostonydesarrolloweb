@@ -3,24 +3,26 @@ include("../../seguridad.php");
 include("../../conex.php");
 $link = Conectarse();
 
-$mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
+$mes_sel = isset($_GET['mes']) ? intval($_GET['mes']) : intval(date('m'));
 $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
 
 // Construir rango de fechas del mes seleccionado
 $fecha_inicio = sprintf('%04d-%02d-01 00:00:00', $anio_sel, $mes_sel);
-$ultimo_dia   = date('t', mktime(0, 0, 0, $mes_sel, 1, $anio_sel));
-$fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_dia);
+$ultimo_dia = date('t', mktime(0, 0, 0, $mes_sel, 1, $anio_sel));
+$fecha_fin = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_dia);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Ingreso por Producto</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
     <div class="sidebar">
         <div align="center">
@@ -28,9 +30,12 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
         </div>
         <a href="../Dashboard.php" class="menu-item"><img src="../../Imagenes/icon-dash.png" width="25"> Dashboard</a>
         <a href="../Inventario.php" class="menu-item"><img src="../../Imagenes/icon-inv.png" width="25"> Inventario</a>
-        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
-        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
-        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
+        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25">
+            Movimientos</a>
+        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25">
+            Reportes</a>
+        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25">
+            Administración</a>
         <a href="../Catalogo.php" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
         <div class="menu-dropdown">
             <a class="menu-item"><img src="../../Imagenes/icon-config.png" width="25"> Configuración</a>
@@ -50,7 +55,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                     <label>Mes</label>
                     <select id="mes">
                         <?php
-                        $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                        $meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                         for ($i = 1; $i <= 12; $i++) {
                             $sel = ($i == $mes_sel) ? 'selected' : '';
                             echo "<option value='$i' $sel>{$meses[$i]}</option>";
@@ -91,38 +96,65 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             $rowTotal = $rTotal ? mysqli_fetch_assoc($rTotal) : null;
             $totalGeneral = ($rowTotal && $rowTotal['total']) ? $rowTotal['total'] : 0;
             ?>
-            <div class="total-box">
-                Total del mes: $<?php echo number_format($totalGeneral, 2); ?>
+            <div id="reporte-contenido">
+                <div class="total-box">
+                    Total del mes: $<?php echo number_format($totalGeneral, 2); ?>
+                </div>
+                <div class="tabla-contenedor">
+                    <div class="tabla-header grid-ingreso">
+                        <span>Producto</span><span>Cantidad</span><span>Ingresos</span>
+                    </div>
+                    <div class="tabla-body">
+                            <?php
+                            if ($rProd && mysqli_num_rows($rProd) > 0) {
+                                while ($row = mysqli_fetch_array($rProd)) {
+                                    echo '<div class="fila grid-ingreso">';
+                                    echo '<span>' . htmlspecialchars($row['Producto']) . '</span>';
+                                    echo '<span>' . $row['Cantidad_Vendida'] . '</span>';
+                                    echo '<span>' . $row['Ingresos_Totales'] . '</span>';
+                                    echo '</div>';
+                                }
+                            } else {
+                                echo '<div class="sin-datos">Sin datos para este mes</div>';
+                            }
+                            ?>
+                    </div>
+                </div>
             </div>
-            <div class="tabla-contenedor">
-                <div class="tabla-header grid-ingreso">
-                    <span>Producto</span><span>Cantidad</span><span>Ingresos</span>
-                </div>
-                <div class="tabla-body">
-                    <?php
-                    if ($rProd && mysqli_num_rows($rProd) > 0) {
-                        while ($row = mysqli_fetch_array($rProd)) {
-                            echo '<div class="fila grid-ingreso">';
-                            echo '<span>' . htmlspecialchars($row['Producto']) . '</span>';
-                            echo '<span>' . $row['Cantidad_Vendida'] . '</span>';
-                            echo '<span>' . $row['Ingresos_Totales'] . '</span>';
-                            echo '</div>';
-                        }
-                    } else {
-                        echo '<div class="sin-datos">Sin datos para este mes</div>';
-                    }
-                    ?>
-                </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm3-6h6v2H9v-2zm0-3h6v2H9v-2z" />
+                    </svg>
+                    Descargar PDF
+                </button>
             </div>
         </div>
     </div>
     <script>
         function filtrar() {
-            var mes  = document.getElementById('mes').value;
+            var mes = document.getElementById('mes').value;
             var anio = document.getElementById('anio').value;
             if (!anio) { alert('Ingrese un año válido'); return; }
             window.location.href = 'Reportes_Ingreso.php?mes=' + mes + '&anio=' + anio;
         }
+
+        function descargarPDF() {
+            var elemento = document.getElementById('reporte-contenido');
+            var meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            var titulo = 'Ingreso_por_Producto_' + meses[<?php echo $mes_sel; ?>] + '_<?php echo $anio_sel; ?>';
+            var opt = {
+                margin: [10, 10, 10, 10],
+                filename: titulo + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
+        }
     </script>
 </body>
+
 </html>

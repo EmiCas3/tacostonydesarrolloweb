@@ -1405,6 +1405,55 @@ h2 {
     cursor: not-allowed;
 }
 
+/* ===== 16b. BOTÓN DESCARGAR PDF ===== */
+.btn-descargar-pdf {
+    background-color: #073A79;
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, .3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.15s;
+    margin-top: 25px;
+}
+
+.btn-descargar-pdf:hover {
+    background-color: #0a4a94;
+    transform: translateY(-2px);
+}
+
+.btn-descargar-pdf:active {
+    transform: translateY(0);
+}
+
+.btn-descargar-pdf svg {
+    width: 18px;
+    height: 18px;
+    fill: #FFFFFF;
+}
+
+.contenedor-btn-pdf {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+/* Ocultar botón PDF en la impresión/generación */
+@media print {
+    .contenedor-btn-pdf,
+    .btn-descargar-pdf,
+    .sidebar,
+    .filtro-container {
+        display: none !important;
+    }
+}
+
 /* ===== 17. MEDIA QUERIES ===== */
 @media (max-width: 900px) {
     .resumen-grid {

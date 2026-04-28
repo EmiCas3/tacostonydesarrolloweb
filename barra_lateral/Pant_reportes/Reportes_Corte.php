@@ -3,8 +3,8 @@ include("../../seguridad.php");
 include("../../conex.php");
 $link = Conectarse();
 
-$dia_sel  = isset($_GET['dia'])  ? intval($_GET['dia'])  : intval(date('d'));
-$mes_sel  = isset($_GET['mes'])  ? intval($_GET['mes'])  : intval(date('m'));
+$dia_sel = isset($_GET['dia']) ? intval($_GET['dia']) : intval(date('d'));
+$mes_sel = isset($_GET['mes']) ? intval($_GET['mes']) : intval(date('m'));
 $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
 $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 ?>
@@ -18,7 +18,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Corte de Caja</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -28,9 +28,12 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
         </div>
         <a href="../Dashboard.php" class="menu-item"><img src="../../Imagenes/icon-dash.png" width="25"> Dashboard</a>
         <a href="../Inventario.php" class="menu-item"><img src="../../Imagenes/icon-inv.png" width="25"> Inventario</a>
-        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25"> Movimientos</a>
-        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25"> Reportes</a>
-        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25"> Administración</a>
+        <a href="../Movimientos.php" class="menu-item"><img src="../../Imagenes/icon-mov.png" width="25">
+            Movimientos</a>
+        <a href="../Reportes.php" class="menu-item activo"><img src="../../Imagenes/icon-repo.png" width="25">
+            Reportes</a>
+        <a href="../Administracion.php" class="menu-item"><img src="../../Imagenes/icon-admin.png" width="25">
+            Administración</a>
         <a href="../Catalogo.php" class="menu-item"><img src="../../Imagenes/icon-catalogo.png" width="25"> Catálogo</a>
         <div class="menu-dropdown">
             <a class="menu-item"><img src="../../Imagenes/icon-config.png" width="25"> Configuración</a>
@@ -63,7 +66,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
                         <label>Mes</label>
                         <select id="mes">
                             <?php
-                            $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                            $meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                             for ($i = 1; $i <= 12; $i++) {
                                 $sel = ($i == $mes_sel) ? 'selected' : '';
                                 echo "<option value='$i' $sel>{$meses[$i]}</option>";
@@ -117,7 +120,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             $r_reporte = mysqli_query($link, $q_reporte);
             $resumen = $r_reporte ? mysqli_fetch_assoc($r_reporte) : false;
 
-            if(!$resumen || $resumen['numero_de_folios'] == 0) {
+            if (!$resumen || $resumen['numero_de_folios'] == 0) {
                 // Valores por defecto cuando no hay ventas
                 $resumen = array(
                     'total_del_dia' => '$0.00',
@@ -145,83 +148,95 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
             }
             ?>
 
-            <div class="subtitulo">Resumen Financiero</div>
-            <div class="resumen-grid">
-                <div class="carta-stat">
-                    <div class="stat-titulo">Venta Total del Día</div>
-                    <div class="stat-valor" style="color:#d35400;"><?php echo $resumen['total_del_dia']; ?></div>
-                </div>
-                <div class="carta-stat azul">
-                    <div class="stat-titulo">Gravado al 16%</div>
-                    <div class="stat-valor"><?php echo $resumen['gravado_al_16']; ?></div>
-                </div>
-                <div class="carta-stat amarillo">
-                    <div class="stat-titulo">Impuesto (IVA)</div>
-                    <div class="stat-valor"><?php echo $resumen['impuesto']; ?></div>
+            <div id="reporte-contenido">
+                <div class="subtitulo">Resumen Financiero</div>
+                <div class="resumen-grid">
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Venta Total del Día</div>
+                        <div class="stat-valor" style="color:#d35400;"><?php echo $resumen['total_del_dia']; ?></div>
+                    </div>
+                    <div class="carta-stat azul">
+                        <div class="stat-titulo">Gravado al 16%</div>
+                        <div class="stat-valor"><?php echo $resumen['gravado_al_16']; ?></div>
+                    </div>
+                    <div class="carta-stat amarillo">
+                        <div class="stat-titulo">Impuesto (IVA)</div>
+                        <div class="stat-valor"><?php echo $resumen['impuesto']; ?></div>
+                    </div>
+
+                    <div class="carta-stat amarillo">
+                        <div class="stat-titulo">Folios Generados</div>
+                        <div class="stat-valor"><?php echo $resumen['numero_de_folios']; ?></div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Servicios a Domicilio</div>
+                        <div class="stat-valor"><?php echo $resumen['numero_servicios_domicilio']; ?> <span
+                                style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_servicios_domicilio']; ?>)</span>
+                        </div>
+                    </div>
+                    <div class="carta-stat azul">
+                        <div class="stat-titulo">Ticket Promedio</div>
+                        <div class="stat-valor"><?php echo $resumen['venta_promedio_por_cliente']; ?></div>
+                    </div>
+
+                    <div class="carta-stat azul">
+                        <div class="stat-titulo">Alimentos Vendidos</div>
+                        <div class="stat-valor"><?php echo $resumen['count_alimentos']; ?> <span
+                                style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_alimentos']; ?>)</span>
+                        </div>
+                    </div>
+                    <div class="carta-stat amarillo">
+                        <div class="stat-titulo">Bebidas Vendidas</div>
+                        <div class="stat-valor"><?php echo $resumen['count_bebidas']; ?> <span
+                                style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_bebidas']; ?>)</span>
+                        </div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Total con Impuesto</div>
+                        <div class="stat-valor"><?php echo $resumen['total_con_impuesto']; ?></div>
+                    </div>
                 </div>
 
-                <div class="carta-stat amarillo">
-                    <div class="stat-titulo">Folios Generados</div>
-                    <div class="stat-valor"><?php echo $resumen['numero_de_folios']; ?></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Servicios a Domicilio</div>
-                    <div class="stat-valor"><?php echo $resumen['numero_servicios_domicilio']; ?> <span style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_servicios_domicilio']; ?>)</span></div>
-                </div>
-                <div class="carta-stat azul">
-                    <div class="stat-titulo">Ticket Promedio</div>
-                    <div class="stat-valor"><?php echo $resumen['venta_promedio_por_cliente']; ?></div>
+                <div class="subtitulo">Ventas por Empleado</div>
+                <div class="grid-empleados">
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Empleado 1</div>
+                        <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_1']; ?>
+                        </div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Empleado 2</div>
+                        <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_2']; ?>
+                        </div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Empleado 3</div>
+                        <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_3']; ?>
+                        </div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Empleado 4</div>
+                        <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_4']; ?>
+                        </div>
+                    </div>
+                    <div class="carta-stat">
+                        <div class="stat-titulo">Empleado 5</div>
+                        <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_5']; ?>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="carta-stat azul">
-                    <div class="stat-titulo">Alimentos Vendidos</div>
-                    <div class="stat-valor"><?php echo $resumen['count_alimentos']; ?> <span style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_alimentos']; ?>)</span></div>
-                </div>
-                <div class="carta-stat amarillo">
-                    <div class="stat-titulo">Bebidas Vendidas</div>
-                    <div class="stat-valor"><?php echo $resumen['count_bebidas']; ?> <span style="font-size:14px; color:#555;">(<?php echo $resumen['ingreso_bebidas']; ?>)</span></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Total con Impuesto</div>
-                    <div class="stat-valor"><?php echo $resumen['total_con_impuesto']; ?></div>
-                </div>
-            </div>
-
-            <div class="subtitulo">Ventas por Empleado</div>
-            <div class="grid-empleados">
-                <div class="carta-stat">
-                    <div class="stat-titulo">Empleado 1</div>
-                    <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_1']; ?></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Empleado 2</div>
-                    <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_2']; ?></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Empleado 3</div>
-                    <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_3']; ?></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Empleado 4</div>
-                    <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_4']; ?></div>
-                </div>
-                <div class="carta-stat">
-                    <div class="stat-titulo">Empleado 5</div>
-                    <div class="stat-valor" style="font-size: 16px;"><?php echo $resumen['ventas_empleado_5']; ?></div>
-                </div>
-            </div>
-
-            <div class="subtitulo">Detalle de Ventas</div>
-            <div class="tabla-contenedor">
-                <div class="tabla-header grid-corte">
-                    <span>Folio</span>
-                    <span>Empleado</span>
-                    <span>Hora</span>
-                    <span>Total</span>
-                </div>
-                <div class="tabla-body">
-                    <?php
-                    $q = "SELECT vg.id, e.nombre, TIME(vg.fecha) AS hora, SUM(vp.subtotal) AS total
+                <div class="subtitulo">Detalle de Ventas</div>
+                <div class="tabla-contenedor">
+                    <div class="tabla-header grid-corte">
+                        <span>Folio</span>
+                        <span>Empleado</span>
+                        <span>Hora</span>
+                        <span>Total</span>
+                    </div>
+                    <div class="tabla-body">
+                        <?php
+                        $q = "SELECT vg.id, e.nombre, TIME(vg.fecha) AS hora, SUM(vp.subtotal) AS total
                           FROM t_vender_general vg
                           JOIN t_empleados e ON vg.id_empleado = e.id
                           JOIN t_vender_particular vp ON vg.id = vp.id_vg
@@ -229,41 +244,52 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
                           GROUP BY vg.id, e.nombre, vg.fecha
                           ORDER BY vg.fecha ASC";
 
-                    $r = mysqli_query($link, $q);
+                        $r = mysqli_query($link, $q);
 
-                    if($r && mysqli_num_rows($r)>0){
-                        while($row=mysqli_fetch_array($r)){
-                            echo '<div class="fila grid-corte">';
-                            echo '<span>#'.$row['id'].'</span>';
-                            echo '<span>'.htmlspecialchars($row['nombre']).'</span>';
-                            echo '<span>'.$row['hora'].'</span>';
-                            echo '<span>$'.number_format($row['total'],2).'</span>';
-                            echo '</div>';
+                        if ($r && mysqli_num_rows($r) > 0) {
+                            while ($row = mysqli_fetch_array($r)) {
+                                echo '<div class="fila grid-corte">';
+                                echo '<span>#' . $row['id'] . '</span>';
+                                echo '<span>' . htmlspecialchars($row['nombre']) . '</span>';
+                                echo '<span>' . $row['hora'] . '</span>';
+                                echo '<span>$' . number_format($row['total'], 2) . '</span>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo '<div class="sin-datos">Sin ventas registradas en esta fecha</div>';
                         }
-                    }else{
-                        echo '<div class="sin-datos">Sin ventas registradas en esta fecha</div>';
-                    }
-                    ?>
+                        ?>
+                    </div>
                 </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm3-6h6v2H9v-2zm0-3h6v2H9v-2z" />
+                    </svg>
+                    Descargar PDF
+                </button>
             </div>
 
         </div>
     </div>
 
     <script>
-        function filtrar(){
-            var dia  = parseInt(document.getElementById('dia').value);
-            var mes  = parseInt(document.getElementById('mes').value);
+        function filtrar() {
+            var dia = parseInt(document.getElementById('dia').value);
+            var mes = parseInt(document.getElementById('mes').value);
             var anio = parseInt(document.getElementById('anio').value);
 
-            if(!anio || anio < 2020){
+            if (!anio || anio < 2020) {
                 alert('Ingrese un año válido');
                 return;
             }
 
             // Días máximos por mes
             var diasPorMes = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            var nombresMes = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            var nombresMes = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
             // Año bisiesto
             if ((anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0)) {
@@ -277,6 +303,20 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 
             window.location.href = 'Reportes_Corte.php?dia=' + dia + '&mes=' + mes + '&anio=' + anio;
         }
+
+        function descargarPDF() {
+            var elemento = document.getElementById('reporte-contenido');
+            var titulo = 'Corte_Diario_<?php echo $fecha; ?>';
+            var opt = {
+                margin: [10, 10, 10, 10],
+                filename: titulo + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
+        }
     </script>
 </body>
+
 </html>

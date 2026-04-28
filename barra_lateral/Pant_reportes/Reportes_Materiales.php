@@ -15,7 +15,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Materiales Más Usados</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -85,6 +85,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
             $rMateriales = mysqli_query($link, $qMateriales);
             ?>
 
+            <div id="reporte-contenido">
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-materiales">
                     <span>Material</span><span>Productos Asociados</span>
@@ -104,6 +105,14 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     ?>
                 </div>
             </div>
+            </div>
+
+            <div class="contenedor-btn-pdf">
+                <button class="btn-descargar-pdf" onclick="descargarPDF()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm3-6h6v2H9v-2zm0-3h6v2H9v-2z"/></svg>
+                    Descargar PDF
+                </button>
+            </div>
         </div>
     </div>
     <script>
@@ -112,6 +121,20 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                 var anio = document.getElementById('anio').value;
                 if (!anio) { alert('Ingrese un año válido'); return; }
                 window.location.href = 'Reportes_Materiales.php?mes=' + mes + '&anio=' + anio;
+            }
+
+            function descargarPDF() {
+                var elemento = document.getElementById('reporte-contenido');
+                var meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                var titulo = 'Materiales_Mas_Usados_' + meses[<?php echo $mes_sel; ?>] + '_<?php echo $anio_sel; ?>';
+                var opt = {
+                    margin:       [10, 10, 10, 10],
+                    filename:     titulo + '.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(elemento).save();
             }
         </script>
 </body>
