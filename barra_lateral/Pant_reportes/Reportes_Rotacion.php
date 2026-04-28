@@ -19,7 +19,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Rotación de Productos</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -63,9 +63,10 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                     <input type="number" id="anio" value="<?php echo $anio_sel; ?>" min="2020" max="2099">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
             </div>
+            <div id="contenido-reporte">
             <?php
             // Query basado en el procedimiento productos_sin_vender
             $qRotacion = "SELECT 
@@ -89,7 +90,10 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             $totalGeneral = ($rowTotal && $rowTotal['total']) ? $rowTotal['total'] : 0;
             ?>
             <div class="total-box">
-                Total productos vendidos: <?php echo number_format($totalGeneral, 0); ?>
+                <span>Total productos vendidos en <?php echo $meses[$mes_sel]; ?> de <?php echo $anio_sel; ?>: <?php echo number_format($totalGeneral, 0); ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF">
+                    <img src="../../Imagenes/Descarga.png" width="24" height="24" alt="Descargar PDF">
+                </button>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-rotacion">
@@ -110,6 +114,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
                     ?>
                 </div>
             </div>
+            </div><!-- fin contenido-reporte -->
         </div>
     </div>
     <script>
@@ -118,6 +123,17 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
             var anio = document.getElementById('anio').value;
             if (!anio) { alert('Ingrese un año válido'); return; }
             window.location.href = 'Reportes_Rotacion.php?mes=' + mes + '&anio=' + anio;
+        }
+        function descargarPDF() {
+            var elemento = document.getElementById('contenido-reporte');
+            var opt = {
+                margin: 10,
+                filename: 'Reporte_Rotacion_<?php echo $meses[$mes_sel] . "_" . $anio_sel; ?>.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(elemento).save();
         }
     </script>
 </body>

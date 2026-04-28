@@ -15,6 +15,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Materiales Más Usados</title>
     <link rel="stylesheet" href="../../estilos/estilogenerico.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </head>
 
@@ -64,9 +65,18 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     <input type="number" id="anio" value="<?php echo $anio_sel; ?>" min="2020" max="2099">
                 </div>
             </div>
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
                 <button class="btn-accion" onclick="filtrar()">FILTRAR</button>
             </div>
+
+            <div id="contenido-reporte">
+            <div class="total-box">
+                <span>Materiales más usados en <?php echo $meses[$mes_sel]; ?> de <?php echo $anio_sel; ?></span>
+                <button class="btn-descargar-pdf" onclick="descargarPDF()" title="Descargar PDF">
+                    <img src="../../Imagenes/Descarga.png" width="24" height="24" alt="Descargar PDF">
+                </button>
+            </div>
+
 
             <?php
             // Materiales más usados en productos vendidos durante el mes seleccionado
@@ -104,6 +114,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                     ?>
                 </div>
             </div>
+            </div><!-- fin contenido-reporte -->
         </div>
     </div>
     <script>
@@ -112,6 +123,17 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
                 var anio = document.getElementById('anio').value;
                 if (!anio) { alert('Ingrese un año válido'); return; }
                 window.location.href = 'Reportes_Materiales.php?mes=' + mes + '&anio=' + anio;
+            }
+            function descargarPDF() {
+                var elemento = document.getElementById('contenido-reporte');
+                var opt = {
+                    margin: 10,
+                    filename: 'Reporte_Materiales_<?php echo $meses[$mes_sel] . "_" . $anio_sel; ?>.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(elemento).save();
             }
         </script>
 </body>
