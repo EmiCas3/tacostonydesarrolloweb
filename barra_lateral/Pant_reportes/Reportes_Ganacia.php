@@ -76,7 +76,7 @@ $link = Conectarse();
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ganancia por Producto — ' . date('d') . ' de ' . $meses_es[intval(date('m'))] . ' de ' . date('Y'); ?>
+                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ganancia por Producto ' . date('d') . ' de ' . $meses_es[intval(date('m'))] . ' ' . date('Y'); ?>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-ganancia">

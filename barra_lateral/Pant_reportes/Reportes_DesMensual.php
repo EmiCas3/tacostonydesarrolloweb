@@ -135,7 +135,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $ultimo_dia);
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ventas de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
+                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Descripción de Ventas Mensual ' . $meses_es[$mes_sel] . ' ' . $anio_sel; ?>
             </div>
             <div class="subtitulo">Resumen Financiero</div>
             <div class="resumen-grid">

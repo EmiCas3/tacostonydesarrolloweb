@@ -150,7 +150,7 @@ $fecha = sprintf('%04d-%02d-%02d', $anio_sel, $mes_sel, $dia_sel);
 
             <div id="reporte-contenido">
                 <div class="barra-info-reporte">
-                    <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Corte del ' . $dia_sel . ' de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
+                    <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Corte Diario ' . $dia_sel . ' de ' . $meses_es[$mes_sel] . ' ' . $anio_sel; ?>
                 </div>
                 <div class="subtitulo">Resumen Financiero</div>
                 <div class="resumen-grid">

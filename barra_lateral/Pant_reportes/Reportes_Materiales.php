@@ -87,7 +87,7 @@ $anio_sel = isset($_GET['anio']) ? intval($_GET['anio']) : intval(date('Y'));
 
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Materiales Más Usados de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
+                <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Materiales Más Usados ' . $meses_es[$mes_sel] . ' ' . $anio_sel; ?>
             </div>
             <div class="tabla-contenedor">
                 <div class="tabla-header grid-materiales">

@@ -102,7 +102,7 @@ if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin'])) {
             ?>
             <div id="reporte-contenido">
             <div class="barra-info-reporte">
-                <?php echo 'Ventas del ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)); ?>
+                <?php echo 'Ventas por Semana del ' . date('d/m/Y', strtotime($fecha_inicio)) . ' al ' . date('d/m/Y', strtotime($fecha_fin)); ?>
             </div>
             <div class="total-box">
                 Total del periodo: $<?php echo number_format($totalGeneral, 2); ?>

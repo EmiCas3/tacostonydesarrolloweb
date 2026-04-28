@@ -98,7 +98,7 @@ $fecha_fin = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_dia
             ?>
             <div id="reporte-contenido">
                 <div class="barra-info-reporte">
-                    <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ingreso por Producto de ' . $meses_es[$mes_sel] . ' de ' . $anio_sel; ?>
+                    <?php $meses_es = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; echo 'Ingreso por Producto ' . $meses_es[$mes_sel] . ' ' . $anio_sel; ?>
                 </div>
                 <div class="total-box">
                     Total del mes: $<?php echo number_format($totalGeneral, 2); ?>
