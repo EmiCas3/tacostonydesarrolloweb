@@ -2,6 +2,7 @@
 include("../seguridad.php"); 
 include("../conex.php");
 
+// 1. Conexión a la base de datos
 $conexion = Conectarse();
 
 
@@ -100,10 +101,11 @@ $resultado = mysqli_query($conexion, $query);
                 } else {
                     echo "<p>No hay productos registrados en el catálogo aún.</p>";
                 }
+                // Cerramos la conexión
                 if(isset($conexion)) { mysqli_close($conexion); }
                 ?>
 
-            </div>
+            </div> <!-- cierra productos-grid -->
 
             <?php if ($total_paginas > 1): ?>
             <div class="paginacion">

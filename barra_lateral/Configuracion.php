@@ -64,8 +64,7 @@
 
                 <div class="form-group">
                     <h2 for="correo">Correo Electrónico</h2>
-                    <!-- Correo ahora es editable -->
-                    <input type="email" id="correo" name="correo" value="<?php echo isset($_SESSION['correo_empleado']) ? htmlspecialchars($_SESSION['correo_empleado']) : ''; ?>">
+                    <input type="email" id="correo" name="correo" value="<?php echo isset($_SESSION['correo_empleado']) ? htmlspecialchars($_SESSION['correo_empleado']) : ''; ?>" readonly>
                 </div>
 
                 <div class="form-group">
@@ -80,26 +79,17 @@
 
     <script>
         function guardar_cambios() {
-            var correo = document.getElementById("correo").value.trim();
             var password = document.getElementById("password").value;
 
-            if (correo === "") {
-                alert("El correo no puede estar vacío.");
+            if (password === "") {
+                alert("Ingrese una nueva contraseña");
                 return;
             }
-
-            // Validación básica de formato de correo
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(correo)) {
-                alert("Ingrese un correo electrónico válido.");
+            if (password.length < 8) {
+                alert("La contraseña debe tener al menos 8 caracteres");
                 return;
             }
-
-            if (password !== "" && password.length < 8) {
-                alert("La contraseña debe tener al menos 8 caracteres.");
-                return;
-            }
-
+            // Enviar el formulario
             document.getElementById("form-config").submit();
         }
     </script>
