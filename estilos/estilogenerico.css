@@ -216,7 +216,7 @@ h2 {
 }
 
 .inventory-scroll {
-    max-height: 90px;
+    max-height: 250px;
     overflow-y: auto;
 }
 

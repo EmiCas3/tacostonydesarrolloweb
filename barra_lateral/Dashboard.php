@@ -98,7 +98,7 @@ $link = Conectarse();
                                         JOIN t_necesitar_general ng ON ng.id_ng = np.id_ng
                                         GROUP BY m.id, m.nombre
                                         ORDER BY dias_guardado DESC
-                                        LIMIT 5";
+                                        LIMIT 15";
                         $resTiempo = mysqli_query($link, $queryTiempo);
                         if ($resTiempo && mysqli_num_rows($resTiempo) > 0) {
                             while ($rowT = mysqli_fetch_array($resTiempo)) {
@@ -130,16 +130,16 @@ $link = Conectarse();
                     </a>
                 </div>
 
-                <!-- Gráfica dinámica: Top 8 materiales por existencias -->
-                <div style="background-color: #F6821F; padding: 15px; border-radius: 10px; width: 350px;">
-                    <canvas id="graficaInventario" width="320" height="220"></canvas>
+                <!-- Gráfica dinámica: Top materiales por existencias -->
+                <div style="background-color: #F6821F; padding: 20px; border-radius: 10px; flex-grow: 1; max-width: 70%; margin-left: 30px;">
+                    <canvas id="graficaInventario" style="width: 100%; max-height: 350px;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
     <?php
-    $queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 8";
+    $queryGrafica = "SELECT nombre, existencias FROM t_materiales ORDER BY existencias DESC LIMIT 15";
     $resGrafica = mysqli_query($link, $queryGrafica);
     $labelsGrafica = [];
     $datosGrafica  = [];
@@ -168,7 +168,8 @@ $link = Conectarse();
                 }]
             },
             options: {
-                responsive: false,
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false }
                 },
