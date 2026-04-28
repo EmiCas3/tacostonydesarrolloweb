@@ -18,7 +18,7 @@ $fecha_fin    = sprintf('%04d-%02d-%02d 23:59:59', $anio_sel, $mes_sel, $ultimo_
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Suministros por Fecha</title>
-    <link rel="stylesheet" href="../../estilos/estilogenerico.css">
+    <link rel="stylesheet" href="../../estilos/estilogenerico.css?v=<?php echo time(); ?>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         .btn-detalle {

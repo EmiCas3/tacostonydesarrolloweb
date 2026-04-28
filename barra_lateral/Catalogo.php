@@ -29,7 +29,7 @@ $resultado = mysqli_query($conexion, $query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="16x16" href="../Imagenes/TTlogomini.png">
     <title>Tacos Tony - Catálogo</title>
-    <link rel="stylesheet" href="../estilos/estilogenerico.css">
+    <link rel="stylesheet" href="../estilos/estilogenerico.css?v=<?php echo time(); ?>">
 </head>
 
 <body>
