@@ -53,7 +53,7 @@ $link = Conectarse();
         </div>
     </div>
 
-    <div style="flex-grow:1">
+    <div style="flex-grow:1; display: flex; flex-direction: column; min-height: calc(100vh - 40px);">
         <h1>Dashboard</h1>
 
         <div class="cajas-superiores">
@@ -131,8 +131,8 @@ $link = Conectarse();
                 </div>
 
                 <!-- Gráfica dinámica: Top 8 materiales por existencias -->
-                <div style="background-color: #F6821F; padding: 15px; border-radius: 10px; width: 350px;">
-                    <canvas id="graficaInventario" width="320" height="220"></canvas>
+                <div style="background-color: #F6821F; padding: 20px; border-radius: 10px; width: 450px;">
+                    <canvas id="graficaInventario" width="410" height="280"></canvas>
                 </div>
             </div>
         </div>
