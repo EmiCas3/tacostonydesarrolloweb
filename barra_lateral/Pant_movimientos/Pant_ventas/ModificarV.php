@@ -1,8 +1,6 @@
 <?php include("../../../seguridad.php");
 include("../../../conex.php");
 $link = Conectarse();
-// Establecer zona horaria de México para que CURDATE() sea correcta
-mysqli_query($link, "SET time_zone = '-06:00'");
 ?>
 <!--Si la venta es a domicilio, disminuir desechables en la tabla de materiales-->
 <!DOCTYPE html>
@@ -66,11 +64,14 @@ mysqli_query($link, "SET time_zone = '-06:00'");
                     <select id="idVenta" style="margin-bottom: 20px;">
                         <option value="">-- Seleccione una Venta --</option>
                         <?php
+                        // Usar la fecha de hoy calculada en PHP con zona horaria de México
+                        date_default_timezone_set('America/Mexico_City');
+                        $hoy = date('Y-m-d');
                         $query_ventas = "SELECT v.id, v.fecha, v.id_cliente, c.nombre as cliente_nombre, v.servicio_a_domicilio, v.id_empleado, e.nombre as empleado_nombre 
                                          FROM t_vender_general v 
                                          INNER JOIN t_clientes c ON v.id_cliente = c.id
                                          INNER JOIN t_empleados e ON v.id_empleado = e.id
-                                         WHERE v.fecha >= CURDATE() AND v.fecha < CURDATE() + INTERVAL 1 DAY
+                                         WHERE DATE(v.fecha) = '$hoy'
                                          ORDER BY v.id ASC";
                         $result_ventas = mysqli_query($link, $query_ventas) or die(mysqli_error($link));
                         while($row_v = mysqli_fetch_array($result_ventas)){
