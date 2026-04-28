@@ -127,7 +127,10 @@ mysqli_begin_transaction($link);
 
 try {
     // 1. Insertar cabecera en t_vender_general
-    $fecha_esc = mysqli_real_escape_string($link, $fecha);
+    // Agregar la hora actual de México a la fecha
+    date_default_timezone_set('America/Mexico_City');
+    $fecha_con_hora = $fecha . ' ' . date('H:i:s');
+    $fecha_esc = mysqli_real_escape_string($link, $fecha_con_hora);
     $servicio_esc = mysqli_real_escape_string($link, $servicio_domicilio);
     
     $query_vg = "INSERT INTO t_vender_general (id_cliente, fecha, servicio_a_domicilio, id_empleado) 
