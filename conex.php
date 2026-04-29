@@ -15,6 +15,9 @@ define('DB_NAME', '2doavance');//BDD del servidor: proydweb_p2026 -- BDD local: 
 
 function Conectarse() {
     $link = @mysqli_connect("localhost", DB_USER, DB_PASS, DB_NAME);
+    if ($link) {
+        mysqli_set_charset($link, 'utf8mb4');
+    }
     return $link ? $link : false;
 }
 ?>

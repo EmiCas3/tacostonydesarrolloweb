@@ -99,10 +99,10 @@ if (isset($_SESSION['login_exitoso']) && $_SESSION['login_exitoso'] === true) {
                     <table class="inventory">
                         <?php
                         $queryTiempo = "SELECT m.nombre, 
-                                            DATEDIFF(NOW(), MAX(ng.fecha)) AS dias_guardado
+                                            DATEDIFF(NOW(), MAX(pg.fecha)) AS dias_guardado
                                         FROM t_materiales m
-                                        JOIN t_necesitar_particular np ON np.id_material = m.id
-                                        JOIN t_necesitar_general ng ON ng.id_ng = np.id_ng
+                                        JOIN t_proporcionar_particular pp ON pp.id_material = m.id
+                                        JOIN t_proporcionar_general pg ON pg.id = pp.id_pg
                                         GROUP BY m.id, m.nombre
                                         ORDER BY dias_guardado DESC
                                         LIMIT 15";
