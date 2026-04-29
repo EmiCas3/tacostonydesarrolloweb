@@ -1,0 +1,165 @@
+================================================================================
+         DIFERENCIAS DE PERMISOS ENTRE COLABORADOR Y ADMINISTRADOR
+                        Sistema Tacos Tony
+================================================================================
+
+NOTA: El rol se determina automáticamente al iniciar sesión con base en el
+salario del empleado registrado en la tabla t_empleados:
+  - Salario > $7,500  →  Rol: ADMINISTRADOR
+  - Salario <= $7,500 →  Rol: COLABORADOR (empleado)
+
+La protección se implementa mediante dos archivos de seguridad:
+  - seguridad.php       → Solo verifica que el usuario esté autenticado (ambos roles)
+  - seguridad_admin.php → Verifica autenticación + que el rol sea "administrador"
+
+================================================================================
+                          TABLA COMPARATIVA
+================================================================================
+
++---------------------------------------------+--------------+-----------------+
+|              FUNCIONALIDAD                  | COLABORADOR  | ADMINISTRADOR   |
++---------------------------------------------+--------------+-----------------+
+|                                             |              |                 |
+|  --- DASHBOARD ---                          |              |                 |
+|  Ver Dashboard (resumen de inventario,      |     ✔        |       ✔         |
+|  gráfica, inventario bajo, tiempo guardado) |              |                 |
+|                                             |              |                 |
+|  --- INVENTARIO ---                         |              |                 |
+|  Ver tabla de inventario (consultar stock)  |     ✔        |       ✔         |
+|  Ordenar y buscar materiales                |     ✔        |       ✔         |
+|  Dar ALTAS de materiales                    |     ✘        |       ✔         |
+|  ASIGNAR materiales                         |     ✘        |       ✔         |
+|                                             |              |                 |
+|  --- MOVIMIENTOS ---                        |              |                 |
+|  Ver pantalla de Movimientos                |     ✔        |       ✔         |
+|  Registrar ENTRADAS de materiales           |     ✘        |       ✔         |
+|  Registrar VENTAS                           |     ✔        |       ✔         |
+|  Modificar VENTAS existentes                |     ✔        |       ✔         |
+|                                             |              |                 |
+|  --- REPORTES ---                           |              |                 |
+|  Ver pantalla de Reportes                   |     ✘        |       ✔         |
+|  Reporte: Ingreso por Producto Mensual      |     ✘        |       ✔         |
+|  Reporte: Corte Diario                      |     ✘        |       ✔         |
+|  Reporte: Descripción de Ventas Mensual     |     ✘        |       ✔         |
+|  Reporte: Ganancia por Producto             |     ✘        |       ✔         |
+|  Reporte: Rotación                          |     ✘        |       ✔         |
+|  Reporte: Ventas Diarias por Semana         |     ✘        |       ✔         |
+|  Reporte: Materiales Más Usados             |     ✘        |       ✔         |
+|  Reporte: Suministros Mensuales             |     ✘        |       ✔         |
+|                                             |              |                 |
+|  --- ADMINISTRACIÓN ---                     |              |                 |
+|  Ver pantalla de Administración             |     ✔        |       ✔         |
+|  Registrar/gestionar CLIENTES               |     ✘        |       ✔         |
+|  Registrar/gestionar COLABORADORES          |     ✘        |       ✔         |
+|  Registrar/gestionar PROVEEDORES            |     ✘        |       ✔         |
+|  Registrar/gestionar PRODUCTOS              |     ✘        |       ✔         |
+|                                             |              |                 |
+|  --- CATÁLOGO ---                           |              |                 |
+|  Ver catálogo de productos (solo lectura)   |     ✔        |       ✔         |
+|                                             |              |                 |
+|  --- CONFIGURACIÓN ---                      |              |                 |
+|  Editar Perfil (correo y contraseña)        |     ✔        |       ✔         |
+|  Ajustes del Sitio (editar productos del    |     ✘        |       ✔         |
+|    catálogo: nombre, precio, imagen)        |              |                 |
+|  Cerrar Sesión                              |     ✔        |       ✔         |
+|                                             |              |                 |
++---------------------------------------------+--------------+-----------------+
+
+================================================================================
+                      RESUMEN POR MÓDULO
+================================================================================
+
+1. DASHBOARD
+   Ambos roles pueden ver el Dashboard completo, incluyendo las cajas de
+   "Inventario Bajo" y "Tiempo Guardado", así como la gráfica de resumen
+   de inventario.
+
+2. INVENTARIO
+   Ambos roles pueden VER la tabla de inventario (materiales y stock).
+   Sin embargo, solo el administrador puede realizar acciones de escritura:
+   dar de alta nuevos materiales y asignar materiales a productos.
+   Archivos protegidos con seguridad_admin.php:
+     - Pant_inventario/Pant_altas/Altas1.php
+     - Pant_inventario/Pant_altas/Altas2.php
+     - Pant_inventario/Pant_altas/guardar_alta.php
+     - Pant_inventario/Pant_asignar/asignar1.php
+     - Pant_inventario/Pant_asignar/asignar2.php
+     - Pant_inventario/Pant_asignar/guardar_asignacion.php
+
+3. MOVIMIENTOS
+   Ambos roles pueden ver la pantalla de Movimientos y gestionar VENTAS
+   (registrar nuevas, modificar existentes). Solo el administrador puede
+   registrar ENTRADAS de materiales (compras de insumos).
+   Protegidos con seguridad_admin.php (solo admin):
+     - Pant_movimientos/Pant_entradas/Entrada1.php
+     - Pant_movimientos/Pant_entradas/Entrada2.php
+     - Pant_movimientos/Pant_entradas/Entrada3.php
+     - Pant_movimientos/Pant_entradas/handler_entrada.php
+   Accesibles para ambos roles (seguridad.php):
+     - Pant_movimientos/Pant_ventas/Ventas1.php
+     - Pant_movimientos/Pant_ventas/Ventas2.php
+     - Pant_movimientos/Pant_ventas/Ventas3.php
+     - Pant_movimientos/Pant_ventas/Ventas_General.php
+     - Pant_movimientos/Pant_ventas/ModificarV.php (y V2, V3)
+     - Pant_movimientos/Pant_ventas/handler_venta.php
+     - Pant_movimientos/Pant_ventas/handler_modificar_venta.php
+
+4. REPORTES
+   El módulo COMPLETO de reportes está restringido al administrador.
+   El colaborador NO puede acceder a ningún reporte. Si intenta entrar,
+   el sistema le muestra una alerta: "No cuentas con los permisos
+   necesarios para acceder a esta sección" y lo redirige al Dashboard.
+   Protegidos con seguridad_admin.php:
+     - Reportes.php (pantalla principal)
+     - Pant_reportes/Reportes_Ingreso.php
+     - Pant_reportes/Reportes_Corte.php
+     - Pant_reportes/Reportes_DesMensual.php
+     - Pant_reportes/Reportes_Ganacia.php
+     - Pant_reportes/Reportes_Rotacion.php
+     - Pant_reportes/Reportes_Semanal.php
+     - Pant_reportes/Reportes_Materiales.php
+     - Pant_reportes/Reportes_Suministro.php
+
+5. ADMINISTRACIÓN
+   La pantalla principal de Administración es visible para ambos roles
+   (usa seguridad.php), pero TODAS las subpantallas de gestión están
+   protegidas con seguridad_admin.php, por lo que el colaborador puede
+   ver los botones pero al hacer clic será rechazado.
+   Protegidos con seguridad_admin.php:
+     - Pant_administracion/Pant_clientes/Clientes.php
+     - Pant_administracion/Pant_clientes/guardar_cliente.php
+     - Pant_administracion/Pant_clientes/actualizar_cliente.php
+     - Pant_administracion/Pant_clientes/editar_cliente.php
+     - Pant_administracion/Pant_colaboradores/Colaboradores1.php
+     - Pant_administracion/Pant_colaboradores/guardar_colaborador.php
+     - Pant_administracion/Pant_proveedores/Proveedor.php
+     - Pant_administracion/Pant_proveedores/guardar_proveedor.php
+     - Pant_administracion/Pant_productos/Productos1.php
+     - Pant_administracion/Pant_productos/guardar_producto.php
+
+6. CATÁLOGO
+   Ambos roles pueden ver el catálogo de productos (solo lectura con
+   paginación). No hay acciones de escritura en esta vista.
+
+7. CONFIGURACIÓN
+   - Editar Perfil: Ambos roles pueden cambiar su correo y contraseña.
+   - Ajustes del Sitio: Solo el administrador puede editar los productos
+     del catálogo (nombre, precio, imagen). Protegido con seguridad_admin.php:
+       - Pant_Ajustes/AjustesSitio.php
+       - Pant_Ajustes/guardar_producto.php
+   - Cerrar Sesión: Ambos roles.
+
+================================================================================
+                    OBSERVACIÓN IMPORTANTE
+================================================================================
+
+La barra lateral (sidebar) muestra los MISMOS enlaces de navegación para ambos
+roles. Es decir, un colaborador puede VER los botones de "Reportes",
+"Administración", etc. Sin embargo, al intentar acceder a las páginas
+protegidas, el archivo seguridad_admin.php le mostrará el mensaje:
+
+    "No cuentas con los permisos necesarios para acceder a esta sección."
+
+Y lo redirigirá automáticamente al Dashboard.
+
+================================================================================
