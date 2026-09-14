@@ -1,0 +1,1 @@
+SELECT * FROM 2doavance.t_proporcionar_particular;
