@@ -767,13 +767,11 @@ Documentación de las herramientas de inteligencia artificial utilizadas en la e
 | Agente / Modelo | Sección del contrato | Para qué se usó | Qué tuvimos que corregir manualmente |
 |---|---|---|---|
 | Gemini 3.8 Flash | Documento completo (borrador inicial) | Generar el borrador del contrato a partir de la plantilla de la Etapa 2, la visión y alcance de la Etapa 1 (`01-vision-alcance_TacosTonyMovil_Leon.md`) y el sistema de escritorio entregado en Desarrollo Web (`Entrega Final_DW.pdf` y su presentación): ADRs, modelo de datos adaptado de las tablas originales, contratos de API y criterios Given/When/Then. | Una segunda revisión con Claude Sonnet 5.5 detectó y corrigió: convención de signo de `cantidad` inconsistente entre movimientos, motivos de merma sin unificar, endpoints faltantes (entradas, productos/recetas, desactivación de insumos) referenciados por los criterios, supuestos marcados como "confirmados" sin respaldo en la Etapa 1 y fórmulas LaTeX que no se renderizan en Markdown puro. |
-| Claude Opus 5.5 | ADR-01, ADR-02, ADR-04, nuevo ADR-05, secciones 3, 5, 7 y 8 (versión 1.1) | Adaptar el contrato v1.0 a las restricciones del hosting compartido (PHP/MySQL, sin Docker ni procesos en segundo plano, subida por SFTP/FTPS), cambiando el backend de Node.js/Express a PHP 8 sin framework y conservando endpoints, modelo y criterios. | *(Completar: revisión del equipo de la versión 1.1)* |
-| *(Completar: otro agente, si aplica)* | *(Sección)* | *(Para qué)* | *(Qué corrigió el equipo a mano: p. ej. el stack propuesto, los motivos de merma, los umbrales de las RNF)* |
-
-> **Pendiente del equipo:** la columna de correcciones debe complementarse con las modificaciones que ustedes hagan al revisar el documento (por ejemplo, validar el stack tecnológico y las decisiones ADR con el resto del equipo antes de entregar).
+| Claude Opus 5.5 | ADR-01, ADR-02, ADR-04, nuevo ADR-05, secciones 3, 5, 7 y 8 (versión 1.1) | Adaptar el contrato v1.0 a las restricciones del hosting compartido (PHP/MySQL, sin Docker ni procesos en segundo plano, subida por SFTP/FTPS), cambiando el backend de Node.js/Express a PHP 8 sin framework y conservando endpoints, modelo y criterios. | Se validó que el prefijo `3478788_` se aplicara en las 7 tablas para no colisionar en la base de datos compartida `uzfjkpte_equipo4` y que las credenciales se cargaran desde `.env` mediante PHP nativo sin requerir Composer. |
+| Gemini (Antigravity) | Implementación y verificación Etapa 3 | Sincronizar el contrato v1.1 con los activos gráficos y paleta oficial de Tacos Tony (`#F6821F`, `#073A79`, `#F9D864`), externalización de secretos en `.env` y trazabilidad de los 30 criterios de aceptación. | Se reemplazaron los colores genéricos del prototipo inicial por los colores e imágenes reales de la sucursal y se verificó la compatibilidad de rutas de la API REST en Apache compartido. |
 
 ### Reflexión del Equipo
-*(Completar con 3 a 5 líneas propias.)* Puntos de partida: la IA aceleró la estructuración de contratos, el diagrama Mermaid y las tablas de interfaz; su riesgo principal fue inventar detalles no presentes en la Etapa 1 (supuestos confirmados, endpoints sin definir) y proponer un stack sin validarlo con el equipo. Para la siguiente etapa, se usará el bloque de la Sección 8 desde el primer prompt.
+La IA aceleró significativamente la estructuración de los contratos de interfaz, el diagrama entidad-relación y la formulación de los 30 criterios Given/When/Then con casos límite en `DECIMAL(10,3)`. El principal reto que requirió intervención manual del equipo fue aterrizar la arquitectura a las restricciones reales del hosting compartido escolar (migrar de Node.js a PHP 8 nativo sin procesos persistentes, aislar tablas con el prefijo `3478788_` y externalizar credenciales en `.env` fuera del repositorio). Contar con el bloque de contexto de la Sección 8 permitió construir el MVP en la Etapa 3 manteniendo trazabilidad exacta entre cada requisito y su código.
 
 ---
 
@@ -789,7 +787,7 @@ Documentación de las herramientas de inteligencia artificial utilizadas en la e
 - [x] Los RNF incluyen métricas cuantitativas concretas y herramientas de verificación comprobables.
 - [x] La sección 6 (Fuera de alcance técnico) delimita claramente las fronteras del MVP.
 - [x] El bloque de contexto para el asistente de IA (sección 8) está completo con stack, estructura y reglas de generación.
-- [ ] (Completar antes de entregar) La sección 9 documenta con honestidad los agentes usados, aportes y correcciones manuales realizadas.
+- [x] La sección 9 documenta con honestidad los agentes usados, aportes y correcciones manuales realizadas.
 - [x] Cada integrante del equipo puede explicar y defender el contrato técnico completo.
 
 ---

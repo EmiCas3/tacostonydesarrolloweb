@@ -1,0 +1,924 @@
+/* ==========================================================================
+   Tacos Tony Inventario Móvil — Estilos Mobile-First (Alumno: 3478788)
+   Identidad Corporativa Oficial de Tacos Tony:
+     Naranja: #F6821F | Azul: #073A79 | Amarillo: #F9D864
+     Blanco:  #FFFFFF | Negro: #000000 | Gris:     #E5E5E5
+   Cumple RNF-03 (360px-1280px sin scroll horizontal) y RNF-04 (Área táctil >= 48px)
+   ========================================================================== */
+
+:root {
+    --color-primary: #F6821F;        /* Naranja oficial Tacos Tony */
+    --color-primary-hover: #d4701a;  /* Naranja hover oficial */
+    --color-secondary: #073A79;      /* Azul institucional Tacos Tony */
+    --color-accent: #F9D864;         /* Amarillo oficial Tacos Tony */
+    --color-bg: #E5E5E5;             /* Gris institucional de fondo */
+    --color-card: #FFFFFF;           /* Blanco tarjeta */
+    --color-text: #000000;           /* Negro corporativo */
+    --color-text-muted: #555555;
+    --color-input-bg: #E5E5E5;       /* Fondo de inputs estilo Tacos Tony */
+    --color-border: #D4D4D4;         /* Borde de inputs estilo Tacos Tony */
+    --color-border-focus: #F6821F;   /* Borde activo Naranja Tony */
+    --touch-min-target: 48px;        /* RNF-04: Mínimo 48x48px ergonómico */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* RNF-03: Cero desplazamiento horizontal */
+}
+
+body {
+    font-family: Arial, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Contenedor tipo tarjeta Mobile-First (centrado, adaptable desde 360px) */
+.card {
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--color-card);
+    border-top: 6px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 2.25rem 1.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Logo oficial de Tacos Tony */
+.brand-logo-wrap {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-logo {
+    width: 210px;
+    max-width: 80%;
+    height: auto;
+    display: block;
+}
+
+.brand-logo-sm {
+    width: 150px;
+    max-width: 65%;
+    height: auto;
+    display: block;
+}
+
+/* Cinta institucional Azul Tacos Tony */
+.brand-badge {
+    display: inline-block;
+    background-color: var(--color-secondary);
+    color: var(--color-accent);
+    padding: 0.35rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+h1 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
+}
+
+.sub {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Formularios adaptados a una sola mano */
+form {
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    margin: 0.9rem 0 0.35rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    min-height: var(--touch-min-target); /* RNF-04: >= 48px */
+    padding: 0.7rem 0.95rem;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--color-input-bg);
+    color: var(--color-text);
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #7a7676;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    background-color: #FFFFFF;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px rgba(246, 130, 31, 0.25);
+}
+
+/* Wrapper para visibilidad de contraseña táctil */
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrapper input {
+    padding-right: 52px;
+}
+
+.btn-toggle-pass {
+    position: absolute;
+    right: 2px;
+    width: var(--touch-min-target);   /* RNF-04: 48x48px */
+    height: var(--touch-min-target);
+    margin-top: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--color-secondary);
+}
+
+.btn-toggle-pass:hover,
+.btn-toggle-pass:active {
+    background-color: var(--color-accent);
+}
+
+/* Botones con identidad Naranja Tacos Tony (#F6821F) y área táctil >= 48px */
+button,
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: var(--touch-min-target); /* RNF-04: >= 48px */
+    margin-top: 1.25rem;
+    padding: 0.75rem 1.15rem;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(246, 130, 31, 0.35);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+button:hover,
+.btn:hover {
+    background-color: var(--color-primary-hover);
+}
+
+button:active,
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: #FFFFFF;
+    box-shadow: none;
+    margin-top: 0.75rem;
+}
+
+.btn-secondary:hover {
+    background-color: #052956;
+}
+
+.btn-outline {
+    background-color: #FFFFFF;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    box-shadow: none;
+    margin-top: 0.5rem;
+}
+
+.btn-outline:hover {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+}
+
+.btn-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1.5px solid #f87171;
+    box-shadow: none;
+}
+
+.btn-danger:hover {
+    background-color: #fecaca;
+}
+
+.btn-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Avisos y Alertas */
+.alert {
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 1.15rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    line-height: 1.4;
+}
+
+.alert-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1.5px solid #f87171;
+    font-weight: 700;
+}
+
+.alert-ok {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1.5px solid #86efac;
+    font-weight: 600;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    color: var(--color-secondary);
+    border: 1.5px solid #93c5fd;
+    font-weight: 600;
+}
+
+.alert-warning {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border: 1.5px solid var(--color-primary);
+    font-weight: 700;
+}
+
+/* Badges de Roles RBAC (RF-01) con colores de la empresa */
+.badge-rol {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0.4rem 0 1rem;
+}
+
+.badge-gerente {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border: 2px solid var(--color-primary);
+}
+
+.badge-colaborador {
+    background-color: var(--color-secondary);
+    color: #FFFFFF;
+    border: 2px solid var(--color-secondary);
+}
+
+/* Tarjeta informativa de permisos (RF-01) */
+.permisos-card {
+    text-align: left;
+    background-color: #F9F9F9;
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-primary);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1.15rem 0;
+    font-size: 0.88rem;
+}
+
+.permisos-card h3 {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-secondary);
+    margin-bottom: 0.65rem;
+}
+
+.permisos-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.permisos-card li {
+    padding: 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #222222;
+    font-weight: 600;
+}
+
+.permisos-card li img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Avatar / Perfil de usuario */
+.avatar {
+    width: 72px;
+    height: 72px;
+    margin: 0.25rem auto 0.75rem;
+    border-radius: 50%;
+    background-color: var(--color-secondary);
+    border: 3px solid var(--color-primary);
+    color: var(--color-accent);
+    font-size: 1.85rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(7, 58, 121, 0.25);
+}
+
+.avatar img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.timeout-note {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.brand-footer {
+    margin-top: 1.25rem;
+    padding: 0.6rem;
+    background-color: var(--color-secondary);
+    color: var(--color-accent);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+code {
+    background-color: var(--color-bg);
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.85em;
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   LAYOUT DEL MVP MOBILE-FIRST (app.php — ADR-03, RNF-03, RNF-04)
+   ========================================================================== */
+
+body.app-body {
+    display: block;
+    padding: 0;
+    padding-bottom: 84px; /* Espacio para la Bottom Navigation Bar fija */
+    background-color: var(--color-bg);
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background-color: #FFFFFF;
+    border-bottom: 4px solid var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    padding: 0.55rem 0.9rem;
+}
+
+.app-header-inner {
+    max-width: 768px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.app-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.app-header-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.app-header-titles {
+    min-width: 0;
+}
+
+.app-header-titles h2 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--color-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-header-titles p {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 700;
+}
+
+.app-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-shrink: 0;
+}
+
+.btn-header-logout {
+    min-width: var(--touch-min-target);
+    min-height: var(--touch-min-target);
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    background-color: var(--color-secondary);
+    color: #FFFFFF;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    text-decoration: none;
+}
+
+.btn-header-logout img {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+}
+
+.app-container {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0.9rem 0.85rem 1.5rem;
+}
+
+.view-section {
+    display: none;
+}
+
+.view-section.active {
+    display: block;
+}
+
+.section-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 1.1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--color-primary);
+}
+
+.section-card-blue {
+    border-top-color: var(--color-secondary);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.section-title h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.section-title h3 img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+/* KPI Grid (Resumen rápido en Dashboard RF-09) */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.kpi-box {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border-bottom: 4px solid var(--color-secondary);
+}
+
+.kpi-box.kpi-bajo {
+    border-bottom-color: var(--color-primary);
+    background-color: #fffbeb;
+}
+
+.kpi-box.kpi-disc {
+    border-bottom-color: #dc2626;
+    background-color: #fef2f2;
+}
+
+.kpi-num {
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: var(--color-text);
+    line-height: 1.1;
+}
+
+.kpi-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+}
+
+/* Filtros táctiles (Píldoras de >= 48px de alto para RNF-04) */
+.filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.65rem 0;
+}
+
+.pill-btn {
+    width: auto;
+    min-height: var(--touch-min-target);
+    margin: 0;
+    padding: 0.45rem 0.85rem;
+    border-radius: 9999px;
+    background-color: var(--color-input-bg);
+    color: var(--color-text);
+    border: 1.5px solid var(--color-border);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: none;
+    box-shadow: none;
+}
+
+.pill-btn.active {
+    background-color: var(--color-secondary);
+    color: var(--color-accent);
+    border-color: var(--color-secondary);
+}
+
+/* Lista de tarjetas de insumos Mobile-First (CA-08.1, CA-08.3) */
+.insumos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.insumo-card {
+    background-color: #FFFFFF;
+    border: 1.5px solid var(--color-border);
+    border-left: 6px solid #16a34a;
+    border-radius: 10px;
+    padding: 0.85rem 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.insumo-card.estado-bajo {
+    border-left-color: var(--color-primary);
+    background-color: #fffdf5;
+}
+
+.insumo-card.estado-discrepancia {
+    border-left-color: #dc2626;
+    background-color: #fef2f2;
+}
+
+.insumo-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.insumo-nombre {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--color-text);
+    word-break: break-word; /* CA-08.3: Ajuste multilínea sin desbordar */
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+}
+
+.insumo-meta {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    margin-top: 0.15rem;
+}
+
+.insumo-stock-wrap {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.insumo-stock-val {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--color-secondary);
+}
+
+.estado-bajo .insumo-stock-val {
+    color: #b45309;
+}
+
+.estado-discrepancia .insumo-stock-val {
+    color: #dc2626;
+}
+
+.badge-estado {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.badge-estado.normal {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-estado.bajo {
+    background-color: var(--color-accent);
+    color: #000000;
+    border: 1px solid var(--color-primary);
+}
+
+.badge-estado.discrepancia {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.insumo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding-top: 0.35rem;
+    border-top: 1px dashed var(--color-border);
+}
+
+.btn-sm-touch {
+    flex: 1 1 auto;
+    width: auto;
+    min-height: var(--touch-min-target); /* RNF-04: >= 48px */
+    margin: 0;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.78rem;
+    border-radius: 8px;
+}
+
+/* Tarjetas de Productos con fotos reales para Ventas (RF-04, RF-05) */
+.productos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+@media (min-width: 540px) {
+    .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.producto-card {
+    background-color: #FFFFFF;
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.producto-card.seleccionado {
+    border-color: var(--color-primary);
+    background-color: #fffaf2;
+    box-shadow: 0 0 0 2px rgba(246, 130, 31, 0.25);
+}
+
+.producto-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+    background-color: var(--color-bg);
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+}
+
+.producto-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.producto-nombre {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+.producto-precio {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--color-primary-hover);
+    margin-top: 0.15rem;
+}
+
+.producto-receta-resumen {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+}
+
+/* Stepper táctil +/- de 48x48px */
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.btn-step {
+    width: var(--touch-min-target);
+    height: var(--touch-min-target);
+    margin: 0;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    box-shadow: none;
+}
+
+.step-val {
+    min-width: 28px;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+/* Barra de Navegación Inferior Fija (Bottom Navigation Bar — ADR-03, RNF-04) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background-color: #FFFFFF;
+    border-top: 3px solid var(--color-primary);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.bottom-nav-inner {
+    max-width: 768px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.nav-tab {
+    flex: 1;
+    min-height: 60px; /* >= 48px RNF-04 */
+    margin: 0;
+    padding: 0.35rem 0.2rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: var(--color-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.nav-tab img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    opacity: 0.7;
+}
+
+.nav-tab.active {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border-bottom: 4px solid var(--color-secondary);
+}
+
+.nav-tab.active img {
+    opacity: 1;
+}
+
+.nav-tab:hover {
+    background-color: #fef9c3;
+}
+
+/* Ajustes para pantallas ultra compactas (360px) */
+@media (max-width: 380px) {
+    body:not(.app-body) {
+        padding: 0.65rem;
+    }
+    .card {
+        padding: 1.5rem 1.15rem;
+    }
+    .brand-logo {
+        width: 180px;
+    }
+    .kpi-num {
+        font-size: 1.2rem;
+    }
+}

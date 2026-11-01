@@ -1,0 +1,20 @@
+# Variables de entorno y credenciales sensibles (Regla obligatoria Etapa 3)
+.env
+**/.env
+*.env.local
+
+# Conservar plantillas de ejemplo en el repositorio
+!.env.example
+!**/.env.example
+!**/config.example.php
+
+# Archivos de sistema operativo y editores
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencias (si se usan localmente)
+node_modules/
+vendor/
