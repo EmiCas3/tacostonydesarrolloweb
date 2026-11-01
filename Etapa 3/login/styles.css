@@ -1,0 +1,313 @@
+/* ==========================================================================
+   Tacos Tony Inventario Móvil — Estilos Mobile-First (Práctica Login 3478788)
+   Cumple RNF-03 (360px-1280px sin scroll horizontal) y RNF-04 (Área táctil >= 48px)
+   ========================================================================== */
+
+:root {
+    --color-primary: #b91c1c;       /* Rojo taquería */
+    --color-primary-hover: #991b1b;
+    --color-secondary: #ea580c;     /* Naranja asador */
+    --color-bg: #f8fafc;
+    --color-card: #ffffff;
+    --color-text: #0f172a;
+    --color-text-muted: #64748b;
+    --color-border: #cbd5e1;
+    --color-border-focus: #ea580c;
+    --touch-min-target: 48px;        /* RNF-04: Mínimo 48x48px ergonómico */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--color-bg);
+    background-image: radial-gradient(#ea580c18 1px, transparent 1px), radial-gradient(#b91c1c15 1px, var(--color-bg) 1px);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+    color: var(--color-text);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Contenedor tipo tarjeta Mobile-First (centrado, máx 420px) */
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-card);
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    text-align: center;
+}
+
+/* Branding de Taquería */
+.brand-badge {
+    display: inline-block;
+    background: #fef2f2;
+    color: var(--color-primary);
+    border: 1px solid #fecaca;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
+}
+
+.sub {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Formularios adaptados a una sola mano */
+form {
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #334155;
+    margin: 1rem 0 0.4rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    width: 100%;
+    min-height: var(--touch-min-target); /* RNF-04: >= 48px */
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #0f172a;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.2);
+}
+
+/* Wrapper para visibilidad de contraseña táctil */
+.input-password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrapper input {
+    padding-right: 52px;
+}
+
+.btn-toggle-pass {
+    position: absolute;
+    right: 2px;
+    width: var(--touch-min-target);   /* RNF-04: 48x48px */
+    height: var(--touch-min-target);
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #64748b;
+}
+
+.btn-toggle-pass:hover,
+.btn-toggle-pass:active {
+    background-color: #f1f5f9;
+}
+
+/* Botones con área táctil accesible */
+button,
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: var(--touch-min-target); /* RNF-04: >= 48px */
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+    transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+button:hover,
+.btn:hover {
+    filter: brightness(1.08);
+}
+
+button:active,
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+    box-shadow: none;
+    margin-top: 0.75rem;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e1;
+    filter: none;
+}
+
+/* Avisos y Alertas */
+.alert {
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.4;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    font-weight: 600;
+}
+
+.alert-ok {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+.alert-warning {
+    background-color: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+/* Badges de Roles RBAC (RF-01) */
+.badge-rol {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0.5rem 0 1rem;
+}
+
+.badge-gerente {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.badge-colaborador {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+/* Tarjeta informativa de permisos (RF-01) */
+.permisos-card {
+    text-align: left;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+}
+
+.permisos-card h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.permisos-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.permisos-card li {
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Avatar de usuario */
+.avatar {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 0.75rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);
+}
+
+.timeout-note {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+}
+
+code {
+    background: #f1f5f9;
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.85em;
+    color: #475569;
+}
