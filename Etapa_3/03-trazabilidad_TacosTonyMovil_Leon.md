@@ -3,7 +3,7 @@
 | Campo | Valor |
 |---|---|
 | **Proyecto** | Tacos Tony Inventario Móvil (Sucursal Camino Real) |
-| **Alumno / Autor** | Fernando León Del Río (ID: `3478788`) — Equipo 3 |
+| **Alumno / Autor** | Fernando León Del Río (ID: `3478788`) — Equipo 4 |
 | **Versión del MVP** | v1.0 (Etapa 3) |
 | **Versión del Contrato Técnico** | [02-contrato-tecnico_TacosTonyMovil_Leon_v1.1.md](./02-contrato-tecnico_TacosTonyMovil_Leon_v1.1.md) (v1.1) |
 | **Fecha de entrega** | Noviembre de 2026 |
@@ -93,4 +93,4 @@
 
 | Agente / herramienta usada | Para qué se usó | Qué tuvo que corregirse o ajustarse manualmente |
 |---|---|---|
-| **Gemini (Antigravity)** | Diagnóstico de documentos de la Etapa 3, auditoría de seguridad para externalizar credenciales hacia `.env` con un lector nativo en PHP (`cargarEnv()`), adaptación de la identidad corporativa real de Tacos Tony (`#F6821F`, `#073A79`, `#F9D864`, logotipo e imágenes reales de productos) y generación del backend API-First (`api/index.php`) e interfaz móvil (`app.php`). | 1. **Externalización de secretos:** En la práctica previa la contraseña de BD estaba fija en `config.php`; se corrigió creando `.gitignore`, `.env.example`, bloqueo en `.htaccess` y carga desde `.env` ingresado manualmente por el alumno.<br>2. **Identidad visual real:** El primer prototipo de login usaba colores genéricos (`#b91c1c`) y emojis; se reemplazaron por la paleta oficial de `estilogenerico.css` y las imágenes reales de `Imagenes/`.<br>3. **Rutas autocontenidas para FTP:** Se copiaron los logos, iconos y fotos de productos dentro de `login/assets/img/` para evitar enlaces rotos al desplegar la carpeta en `/3478788/login/` vía FileZilla. |
+| **Gemini 4 Argon (Antigravity)** | Diagnóstico de documentos de la Etapa 3, auditoría de seguridad para externalizar credenciales hacia `.env` con un lector nativo en PHP (`cargarEnv()`), adaptación de la identidad corporativa real de Tacos Tony (`#F6821F`, `#073A79`, `#F9D864`, logotipo e imágenes reales de productos) y generación del backend API-First (`api/index.php`) e interfaz móvil (`app.php`). | 1. **Externalización de secretos:** En la práctica previa la contraseña de BD estaba fija en `config.php`; se corrigió creando `.gitignore`, `.env.example`, bloqueo en `.htaccess` y carga desde `.env` ingresado manualmente por el alumno.<br>2. **Identidad visual real:** El primer prototipo de login usaba colores genéricos (`#b91c1c`) y emojis; se reemplazaron por la paleta oficial de `estilogenerico.css` y las imágenes reales de `Imagenes/`.<br>3. **Rutas autocontenidas para FTP:** Se copiaron los logos, iconos y fotos de productos dentro de `login/assets/img/` para evitar enlaces rotos al desplegar la carpeta en `/3478788/login/` vía FileZilla. |
