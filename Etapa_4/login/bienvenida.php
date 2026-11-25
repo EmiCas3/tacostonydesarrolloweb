@@ -44,10 +44,10 @@ $rol     = strtoupper($_SESSION['rol'] ?? 'GERENTE');
         <span>Login correcto. Credenciales validadas exitosamente.</span>
     </div>
 
-    <!-- Acceso directo principal al MVP Mobile-First integrado -->
+    <!-- Acceso directo principal a la versión final Mobile-First -->
     <a class="btn" href="app.php" style="margin-top: 0.5rem;">
-        <img src="assets/img/icon-dash.png" alt="Abrir MVP" class="btn-icon">
-        <span>ABRIR INVENTARIO MÓVIL (MVP)</span>
+        <img src="assets/img/icon-dash.png" alt="Abrir Inventario" class="btn-icon">
+        <span>ABRIR INVENTARIO MÓVIL (v2.0)</span>
     </a>
 
     <!-- Módulo de Permisos según Rol (RF-01) con iconos oficiales de Tacos Tony -->
@@ -57,19 +57,19 @@ $rol     = strtoupper($_SESSION['rol'] ?? 'GERENTE');
             <?php if ($rol === 'GERENTE'): ?>
                 <li>
                     <img src="assets/img/icon-inv.png" alt="Inventario">
-                    <span>Catálogo de insumos y recetas (RF-02, RF-03)</span>
+                    <span>Catálogo de insumos, recetas y conteo físico (RF-02, RF-03, RF-17)</span>
                 </li>
                 <li>
                     <img src="assets/img/icon-mov.png" alt="Movimientos">
-                    <span>Descuento automático por ventas (RF-04, RF-05)</span>
+                    <span>Ventas manuales / CSV y descuento automático (RF-04, RF-05, RF-14)</span>
                 </li>
                 <li>
-                    <img src="assets/img/icon-admin.png" alt="Compras y mermas">
-                    <span>Registro de compras y mermas (RF-06, RF-07)</span>
+                    <img src="assets/img/icon-admin.png" alt="Compras y pedidos">
+                    <span>Entradas, mermas, reabastecimiento y pedidos (RF-06, RF-07, RF-11..13)</span>
                 </li>
                 <li>
                     <img src="assets/img/icon-dash.png" alt="Alertas y auditoría">
-                    <span>Auditoría de movimientos y alertas (RF-09, RF-10)</span>
+                    <span>Alertas, auditoría inmutable, reportes y CSV (RF-09, RF-10, RF-15, RF-16)</span>
                 </li>
             <?php else: ?>
                 <li>
@@ -77,12 +77,16 @@ $rol     = strtoupper($_SESSION['rol'] ?? 'GERENTE');
                     <span>Consulta de existencias móvil (RF-08)</span>
                 </li>
                 <li>
-                    <img src="assets/img/icon-catalogo.png" alt="Catálogo">
-                    <span>Consulta de alertas operativas</span>
+                    <img src="assets/img/icon-catalogo.png" alt="Conteo físico">
+                    <span>Captura de conteo físico en borrador (RF-17)</span>
+                </li>
+                <li>
+                    <img src="assets/img/icon-admin.png" alt="Recepción de pedidos">
+                    <span>Confirmación de recepción de pedidos (RF-13)</span>
                 </li>
                 <li>
                     <img src="assets/img/icon-warning.png" alt="Restringido">
-                    <span>Altas, mermas y ajustes restringidos a Gerente</span>
+                    <span>Aprobación de ajustes, altas, ventas, mermas y reportes restringidos a Gerente</span>
                 </li>
             <?php endif; ?>
         </ul>

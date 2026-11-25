@@ -53,7 +53,7 @@ define('DB_USER', $env['DB_USER'] ?? getenv('DB_USER') ?: 'uzfjkpte_equipo4_user
 define('DB_PASS', $env['DB_PASS'] ?? getenv('DB_PASS') ?: '');
 define('DB_PREFIX', $env['DB_PREFIX'] ?? getenv('DB_PREFIX') ?: '3478788_');
 
-// Tablas físicas con prefijo del alumno (Sección 3.1 del Contrato Técnico v1.1)
+// Tablas físicas con prefijo del alumno (Sección 3.1 del Contrato Técnico v2.0)
 define('TABLA_USUARIOS', '`' . DB_PREFIX . 'usuarios`');
 define('TABLA_INSUMOS', '`' . DB_PREFIX . 'insumos`');
 define('TABLA_PRODUCTOS', '`' . DB_PREFIX . 'productos`');
@@ -61,6 +61,11 @@ define('TABLA_RECETAS', '`' . DB_PREFIX . 'recetas`');
 define('TABLA_VENTAS', '`' . DB_PREFIX . 'ventas`');
 define('TABLA_VENTA_DETALLES', '`' . DB_PREFIX . 'venta_detalles`');
 define('TABLA_MOVIMIENTOS', '`' . DB_PREFIX . 'movimientos_inventario`');
+define('TABLA_CONTEOS', '`' . DB_PREFIX . 'conteos_fisicos`');
+define('TABLA_CONTEO_DETALLES', '`' . DB_PREFIX . 'conteo_detalles`');
+define('TABLA_PEDIDOS', '`' . DB_PREFIX . 'pedidos`');
+define('TABLA_PEDIDO_DETALLES', '`' . DB_PREFIX . 'pedido_detalles`');
+define('TABLA_PROVEEDORES', '`' . DB_PREFIX . 'proveedores`');
 
 // Tiempo límite de inactividad de sesión (RNF-05): 30 minutos (1800 segundos)
 define('SESSION_TIMEOUT', (int)($env['SESSION_TIMEOUT'] ?? getenv('SESSION_TIMEOUT') ?: 1800));

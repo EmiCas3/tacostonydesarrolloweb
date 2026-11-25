@@ -907,6 +907,156 @@ body.app-body {
     background-color: #fef9c3;
 }
 
+button:disabled,
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Sub-pestañas táctiles dentro de vistas compuestas (Etapa 4 · 360px safe) */
+.subtabs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.85rem;
+    background-color: #FFFFFF;
+    padding: 0.55rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.subtabs-bar .pill-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+    padding: 0.45rem 0.65rem;
+}
+
+.subview-panel {
+    display: none;
+}
+
+.subview-panel.active {
+    display: block;
+}
+
+/* Conteo físico y conciliación (RF-17) */
+.conteo-item-row {
+    background-color: #FFFFFF;
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.75rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.conteo-item-inputs {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.dif-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 96px;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.dif-negativa {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.dif-positiva {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #4ade80;
+}
+
+.dif-cero {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+/* Badges de estado para conteos y pedidos */
+.badge-estado.PENDIENTE {
+    background-color: var(--color-accent);
+    color: #000000;
+    border: 1px solid var(--color-primary);
+}
+
+.badge-estado.CONFIRMADO,
+.badge-estado.RECIBIDO {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-estado.RECHAZADO,
+.badge-estado.CANCELADO {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-estado.AJUSTE {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.badge-estado.RECEPCION {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+/* Tablas analíticas responsivas sin causar scroll en el documento */
+.tabla-scroll {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    text-align: left;
+}
+
+.tabla-datos th {
+    background-color: var(--color-secondary);
+    color: #FFFFFF;
+    padding: 0.55rem 0.6rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.tabla-datos td {
+    padding: 0.55rem 0.6rem;
+    border-top: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+.tabla-datos tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+
+.fila-alta-merma td {
+    background-color: #fff7ed !important;
+}
+
 /* Ajustes para pantallas ultra compactas (360px) */
 @media (max-width: 380px) {
     body:not(.app-body) {
@@ -920,5 +1070,8 @@ body.app-body {
     }
     .kpi-num {
         font-size: 1.2rem;
+    }
+    .nav-tab {
+        font-size: 0.62rem;
     }
 }

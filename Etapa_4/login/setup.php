@@ -52,15 +52,15 @@ try {
                 ':r' => $rol,
             ]);
 
-            $mensaje = "¡Usuario '$usuario' ($rol) y las 7 tablas del MVP configurados exitosamente con bcrypt!";
+            $mensaje = "¡Usuario '$usuario' ($rol) y las 12 tablas del sistema (v2.0) configurados exitosamente con bcrypt!";
             $tipo = 'ok';
         }
     } elseif ($total > 0) {
-        $mensaje = "Esquema MVP listo (7 tablas 3478788_* y catálogo Tacos Tony). Usuarios activos: $total (incluye fer.leon_05 [GERENTE] y colab.tony [COLABORADOR]).";
+        $mensaje = "Esquema v2.0 listo (12 tablas 3478788_* y catálogo Tacos Tony completo). Usuarios activos: $total (incluye fer.leon_05 [GERENTE] y colab.tony [COLABORADOR]).";
         $tipo = 'info';
     }
 } catch (PDOException $e) {
-    $mensaje = 'Error de conexión con la base de datos: ' . $e->getMessage();
+    $mensaje = 'Error de conexión con la base de datos.';
     $tipo = 'error';
 }
 ?>
@@ -71,7 +71,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/TTlogomini.png">
-    <title>Setup MVP · Tacos Tony Inventario Móvil</title>
+    <title>Setup v2.0 · Tacos Tony Inventario Móvil</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -80,7 +80,7 @@ try {
         <img src="assets/img/Tacos_tony_logo.png" alt="Logo Tacos Tony" class="brand-logo-sm">
     </div>
     <span class="brand-badge">Sucursal Camino Real</span>
-    <h1>Inicializar MVP (Etapa 3)</h1>
+    <h1>Inicializar Sistema (v2.0 · Etapa 4)</h1>
     <p class="sub">Prefijo: <code><?= htmlspecialchars(DB_PREFIX) ?>*</code> (BD: <code><?= htmlspecialchars(DB_NAME) ?></code>)</p>
 
     <?php if ($mensaje): ?>
