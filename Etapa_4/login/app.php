@@ -432,9 +432,6 @@ $vistaInicial = $_GET['vista'] ?? ($esGerente ? 'alertas' : 'existencias');
                         <img src="assets/img/icon-catalogo.png" alt="Conteo físico">
                         <span>Conteo Físico de Bodega (RF-17)</span>
                     </h3>
-                    <button type="button" class="pill-btn" onclick="precargarStockSistemaEnConteo()">
-                        Copiar Stock Actual
-                    </button>
                 </div>
                 <p class="sub" style="margin-bottom: 0.75rem;">
                     Captura lo que realmente hay en bodega (<code>DECIMAL(10,3)</code>).
@@ -1568,7 +1565,7 @@ function renderizarCapturaConteo() {
                                step="0.001"
                                min="0"
                                value="${escaparHtml(valPrevio)}"
-                               placeholder="Ej. ${formatearDecimal(ins.stock_actual)}"
+                               placeholder="0.000"
                                oninput="actualizarDifConteoLive(this)">
                     </div>
                     <div id="conteo-dif-${ins.id}" class="${diffHtml.clase}">
@@ -1606,13 +1603,6 @@ function actualizarDifConteoLive(inputEl) {
     }
 }
 
-function precargarStockSistemaEnConteo() {
-    document.querySelectorAll('.conteo-input').forEach(inp => {
-        inp.value = formatearDecimal(inp.getAttribute('data-sistema'));
-        actualizarDifConteoLive(inp);
-    });
-}
-
 async function enviarConteoFisico(confirmarDirecto, btn = null) {
     const items = [];
     let valorInvalido = false;
@@ -1627,7 +1617,8 @@ async function enviarConteoFisico(confirmarDirecto, btn = null) {
             }
             items.push({
                 insumo_id: Number(inp.getAttribute('data-id')),
-                stock_contado: Math.round(num * 1000) / 1000
+                stock_contado: Math.round(num * 1000) / 1000,
+                stock_sistema: Number(inp.getAttribute('data-sistema'))
             });
         }
     });
@@ -1810,14 +1801,20 @@ function renderizarReporteConteo(reporte) {
         const claseCard = dif <= -0.001 ? 'estado-discrepancia' : (dif >= 0.001 ? 'estado-bajo' : '');
         const colorDif = dif <= -0.001 ? '#dc2626' : (dif >= 0.001 ? '#166534' : '#475569');
 
+        const movsPost = Number(d.movimientos_posteriores || 0);
+        const notaPost = Math.abs(movsPost) >= 0.001
+            ? `<div class="insumo-meta">Movs. posteriores preservados: ${movsPost > 0 ? '+' : ''}${formatearDecimal(movsPost)} &rarr; Stock final: <strong>${formatearDecimal(d.stock_actual_aplicado)} ${escaparHtml(d.unidad_medida)}</strong></div>`
+            : '';
+
         return `
             <article class="insumo-card ${claseCard}">
                 <div class="insumo-top">
                     <div>
                         <div class="insumo-nombre">${escaparHtml(d.insumo_nombre)}</div>
                         <div class="insumo-meta">
-                            Sistema: ${formatearDecimal(d.stock_sistema)} &rarr; Contado: <strong>${formatearDecimal(d.stock_contado)} ${escaparHtml(d.unidad_medida)}</strong>
+                            Sistema al contar: ${formatearDecimal(d.stock_sistema)} &rarr; Contado: <strong>${formatearDecimal(d.stock_contado)} ${escaparHtml(d.unidad_medida)}</strong>
                         </div>
+                        ${notaPost}
                     </div>
                     <div class="insumo-stock-wrap">
                         <div class="insumo-stock-val" style="color: ${colorDif};">

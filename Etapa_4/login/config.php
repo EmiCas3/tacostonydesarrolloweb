@@ -70,11 +70,18 @@ define('TABLA_PROVEEDORES', '`' . DB_PREFIX . 'proveedores`');
 // Tiempo límite de inactividad de sesión (RNF-05): 30 minutos (1800 segundos)
 define('SESSION_TIMEOUT', (int)($env['SESSION_TIMEOUT'] ?? getenv('SESSION_TIMEOUT') ?: 1800));
 
-// Secreto de firma HMAC-SHA256 para JWT (ADR-04)
-define(
-    'JWT_SECRET',
-    $env['JWT_SECRET'] ?? getenv('JWT_SECRET') ?: hash('sha256', DB_NAME . '_' . DB_PREFIX . '_tacos_tony_jwt')
-);
+// Secreto de firma HMAC-SHA256 para JWT (ADR-04 / RNF-05: obligatorio en .env, sin fallback predecible)
+$jwtSecretEnv = trim((string)($env['JWT_SECRET'] ?? getenv('JWT_SECRET') ?: ''));
+if (
+    $jwtSecretEnv === '' ||
+    $jwtSecretEnv === 'REEMPLAZA_CON_UNA_CADENA_ALEATORIA_SEGURA_DE_32_CARACTERES' ||
+    strlen($jwtSecretEnv) < 16
+) {
+    throw new RuntimeException(
+        'Falta configurar un JWT_SECRET seguro en el archivo .env (mínimo 16 caracteres).'
+    );
+}
+define('JWT_SECRET', $jwtSecretEnv);
 
 /**
  * Obtiene la instancia PDO singleton con configuración segura

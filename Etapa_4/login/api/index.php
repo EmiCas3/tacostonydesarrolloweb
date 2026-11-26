@@ -1101,15 +1101,21 @@ function conciliarConteoEnBd(
             throw new RuntimeException("Insumo $insumoId no encontrado o inactivo");
         }
 
-        // Cálculo atómico dentro de la transacción de confirmación (protege frente a ventas concurrentes)
+        // Cálculo atómico dentro de la transacción de confirmación (preserva ventas/movimientos ocurridos entre captura y aprobación)
         $stockSistemaVivo = round((float)$insumo['stock_actual'], 3);
         $stockMinimo      = round((float)$insumo['stock_minimo'], 3);
-        $diferencia       = round($stockContado - $stockSistemaVivo, 3);
-        $estadoResultante = calcularEstadoInsumo($stockContado, $stockMinimo);
+        $stockBaseCaptura = (isset($item['stock_sistema']) && is_numeric($item['stock_sistema']))
+            ? round((float)$item['stock_sistema'], 3)
+            : $stockSistemaVivo;
+
+        $diferencia          = round($stockContado - $stockBaseCaptura, 3);
+        $movsPosteriores     = round($stockSistemaVivo - $stockBaseCaptura, 3);
+        $stockFinalAplicado  = round($stockSistemaVivo + $diferencia, 3);
+        $estadoResultante    = calcularEstadoInsumo($stockFinalAplicado, $stockMinimo);
 
         if ($actualizarDetallesExistentes) {
             $stmtUpdDet->execute([
-                ':sys' => number_format($stockSistemaVivo, 3, '.', ''),
+                ':sys' => number_format($stockBaseCaptura, 3, '.', ''),
                 ':dif' => number_format($diferencia, 3, '.', ''),
                 ':est' => $estadoResultante,
                 ':cid' => $conteoId,
@@ -1119,7 +1125,7 @@ function conciliarConteoEnBd(
             $stmtInsDet->execute([
                 ':cid'  => $conteoId,
                 ':iid'  => $insumoId,
-                ':sys'  => number_format($stockSistemaVivo, 3, '.', ''),
+                ':sys'  => number_format($stockBaseCaptura, 3, '.', ''),
                 ':cont' => number_format($stockContado, 3, '.', ''),
                 ':dif'  => number_format($diferencia, 3, '.', ''),
                 ':est'  => $estadoResultante,
@@ -1127,33 +1133,38 @@ function conciliarConteoEnBd(
         }
 
         $stmtUpdIns->execute([
-            ':nuevo'  => number_format($stockContado, 3, '.', ''),
+            ':nuevo'  => number_format($stockFinalAplicado, 3, '.', ''),
             ':estado' => $estadoResultante,
             ':id'     => $insumoId,
         ]);
 
         if (abs($diferencia) >= 0.001) {
             $etiqueta = $diferencia < 0 ? 'Faltante' : 'Sobrante';
+            $notaMovs = abs($movsPosteriores) >= 0.001
+                ? ' · Movs. entre captura y aprobación: ' . ($movsPosteriores > 0 ? '+' : '') . number_format($movsPosteriores, 3, '.', '')
+                : '';
             $stmtMov->execute([
                 ':iid'  => $insumoId,
                 ':uid'  => $usuarioAprobador['id'],
                 ':cant' => number_format($diferencia, 3, '.', ''),
                 ':prev' => number_format($stockSistemaVivo, 3, '.', ''),
-                ':post' => number_format($stockContado, 3, '.', ''),
-                ':obs'  => "Conciliación Conteo Físico #$conteoId ($etiqueta)",
+                ':post' => number_format($stockFinalAplicado, 3, '.', ''),
+                ':obs'  => "Conciliación Conteo Físico #$conteoId ($etiqueta)$notaMovs",
                 ':ref'  => $conteoId,
             ]);
             $ajustesGenerados++;
         }
 
         $detallesReporte[] = [
-            'insumo_id'         => $insumoId,
-            'insumo_nombre'     => $insumo['nombre'],
-            'unidad_medida'     => $insumo['unidad_medida'],
-            'stock_sistema'     => $stockSistemaVivo,
-            'stock_contado'     => $stockContado,
-            'diferencia'        => $diferencia,
-            'estado_resultante' => $estadoResultante,
+            'insumo_id'               => $insumoId,
+            'insumo_nombre'           => $insumo['nombre'],
+            'unidad_medida'           => $insumo['unidad_medida'],
+            'stock_sistema'           => $stockBaseCaptura,
+            'stock_contado'           => $stockContado,
+            'diferencia'              => $diferencia,
+            'movimientos_posteriores' => $movsPosteriores,
+            'stock_actual_aplicado'   => $stockFinalAplicado,
+            'estado_resultante'       => $estadoResultante,
         ];
     }
 
@@ -1271,7 +1282,7 @@ if (preg_match('#^/conteos/(\d+)/confirmar$#', $ruta, $m) && $metodo === 'POST')
         }
 
         $stmtDets = $pdo->prepare(
-            "SELECT insumo_id, stock_contado FROM " . TABLA_CONTEO_DETALLES . " WHERE conteo_id = :cid ORDER BY id ASC"
+            "SELECT insumo_id, stock_sistema, stock_contado FROM " . TABLA_CONTEO_DETALLES . " WHERE conteo_id = :cid ORDER BY id ASC"
         );
         $stmtDets->execute([':cid' => $conteoId]);
         $itemsConteo = $stmtDets->fetchAll();
@@ -1443,6 +1454,9 @@ if ($ruta === '/conteos' && $metodo === 'POST') {
         $itemsUnicos[$iid] = [
             'insumo_id'     => $iid,
             'stock_contado' => round((float)$cant, 3),
+            'stock_sistema' => (isset($item['stock_sistema']) && is_numeric($item['stock_sistema']))
+                ? round((float)$item['stock_sistema'], 3)
+                : null,
         ];
     }
 

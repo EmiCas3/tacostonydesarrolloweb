@@ -11,7 +11,6 @@
 | **Integrante que entrega** | Fernando León Del Río (ID: `3478788`) |
 | **Integrantes del equipo** | Fernando León Del Río, Alexander Yamil Alcázar Muroaga, Emiliano André Castaños Mejía |
 | **URL del sistema final** | https://equipo4.centrofuyuan.com/3478788/login/ |
-| **Repositorio** | https://github.com/EmiCas3/tacostonydesarrolloweb |
 | **Versión final del sistema** | v2.0 |
 | **Versión final del contrato técnico** | v2.0 ([02-contrato-tecnico_TacosTonyMovil_Leon_v2.0.md](./02-contrato-tecnico_TacosTonyMovil_Leon_v2.0.md)) |
 | **Fecha de entrega** | 2026-11-25 |
@@ -193,8 +192,8 @@
 | **RNF-01 (Rendimiento transacciones)** | Consultas indexadas y bloqueos `FOR UPDATE` puntuales por insumo dentro de transacciones cortas en `POST /api/ventas`, `/api/conteos/:id/confirmar` y `/api/pedidos/:id/recibir`. | ✅ Cumplido |
 | **RNF-02 (Carga rápida móvil)** | Sin dependencias ni frameworks JS externos; hoja de estilos única (`styles.css`) optimizada y carga inicial bajo demanda por vista/sub-pestaña. | ✅ Cumplido |
 | **RNF-03 (Responsive 360–1280 px)** | `overflow-x: hidden` en raíz, contenedores flex envolventes en `.subtabs-bar` y `.tabla-scroll` para tablas analíticas sin scroll global horizontal. | ✅ Cumplido |
-| **RNF-04 (Ergonomía táctil)** | Controles con `--touch-min-target: 48px`, steppers táctiles `48x48 px`, precarga rápida en conteo físico y bloqueo anti-doble clic en envíos. | ✅ Cumplido |
-| **RNF-05 (Seguridad)** | `bcrypt` costo 10, PDO parametrizado sin emulación, `.env` ignorado en `.gitignore` y bloqueado en `.htaccess`, JWT HS256 (30 min), RBAC en cada endpoint y sin exposición de errores internos SQL/PDO. | ✅ Cumplido |
+| **RNF-04 (Ergonomía táctil)** | Controles con `--touch-min-target: 48px`, steppers táctiles `48x48 px`, captura directa obligatoria en conteo físico (sin autocompletado artificial) y bloqueo anti-doble clic en envíos. | ✅ Cumplido |
+| **RNF-05 (Seguridad)** | `bcrypt` costo 10, PDO parametrizado sin emulación, `.env` ignorado en `.gitignore` y bloqueado en `.htaccess`, `JWT_SECRET` obligatorio sin fallback en código, JWT HS256 (30 min), RBAC en cada endpoint y sin exposición de errores internos SQL/PDO. | ✅ Cumplido |
 | **RNF-06 (Trazabilidad e inmutabilidad)** | Búsqueda estática en toda la carpeta `Etapa_4/login/` confirmando `0` sentencias `UPDATE`/`DELETE` sobre `3478788_movimientos_inventario`, guardia `405` y correcciones registradas como `AJUSTE` nuevo. | ✅ Cumplido |
 
 ---
@@ -249,7 +248,7 @@ php -S localhost:8000
 | Decisión | Estado (sin cambios / modificada) | Si cambió: qué cambió y por qué |
 |---|---|---|
 | **ADR-01: Arquitectura API-First desacoplada** | **Modificada** *(v1.1 → v2.0)* | La API REST JSON se mantuvo intacta (`api/index.php`), pero el cliente web pasó de SPA compilada con React/Vite a interfaz Mobile-First en `app.php` + JavaScript nativo sin paso de compilación (*build*), simplificando el despliegue directo por FTPS sin perder compatibilidad con la app móvil de la Etapa 6. |
-| **ADR-02: MySQL InnoDB ACID + `DECIMAL(10,3)`** | **Sin cambios** | Mantiene `SELECT ... FOR UPDATE`, precisión milimétrica `DECIMAL(10,3)` y prefijo físico `3478788_`; ampliado a 12 tablas (incluyendo proveedores, conteos físicos y pedidos) y los 32 insumos / 38 productos del sistema original. |
+| **ADR-02: MySQL InnoDB ACID + `DECIMAL(10,3)`** | **Sin cambios** | Mantiene `SELECT ... FOR UPDATE`, precisión milimétrica `DECIMAL(10,3)` y prefijo físico `3478788_`; ampliado a 12 tablas (incluyendo proveedores, conteos físicos y pedidos) y los 32 insumos / 38 productos de la taquería. |
 | **ADR-03: Interfaz Mobile-First (`48x48 px`)** | **Modificada** *(v1.1 → v2.0)* | Implementado con CSS propio (`styles.css` con paleta Tacos Tony) en lugar de Tailwind compilado, añadiendo sub-pestañas envolventes para alojar `RF-11` a `RF-17` sin desbordar pantallas de `360 px`. |
 | **ADR-04: Auth Stateless JWT + RBAC + `.env`** | **Sin cambios en diseño** | Mantiene HS256, `bcrypt` costo 10 y secretos en `.env`; ampliado con acceso granular para `COLABORADOR` en captura de borrador `RF-17` y recepción de pedidos `RF-13`. |
 | **ADR-05: PHP 8 nativo sin framework** | **Sin cambios** | Mantiene front controller propio sin Composer ni procesos persistentes para compatibilidad total con hosting compartido. |
@@ -259,7 +258,7 @@ php -S localhost:8000
 | Versión | Fecha | Cambios |
 |---|---|---|
 | `v1.0 (MVP)` | 2026-11-01 | MVP funcional desplegado según Contrato `v1.1`: Autenticación JWT/RBAC (`RF-01`), Insumos (`RF-02`), Recetas (`RF-03`), Ventas con descuento ACID y discrepancias (`RF-04`, `RF-05`), Entradas (`RF-06`), Mermas (`RF-07`), Consulta móvil (`RF-08`), Alertas (`RF-09`) e Historial inmutable (`RF-10`) con identidad visual real de Tacos Tony. |
-| **`v2.0 (Final)`** | **2026-11-25** | **Versión final completa:** Cambio del cliente Conteo físico con conciliación (`RF-17`, flujo Colaborador borrador / Gerente aprueba, bloqueo `FOR UPDATE` y movimiento `AJUSTE`); Reabastecimiento sugerido 7 días y pedidos con recepción (`RF-11`, `RF-12`, `RF-13`, movimiento `RECEPCION`); Importación CSV de ventas (`RF-14`); Reporte analítico consumo vs. merma (`RF-15`); Exportación CSV BOM UTF-8 (`RF-16`); integración completa del catálogo original (8 proveedores en selector `RF-06`, 32 insumos y 38 productos con fotos reales); sub-pestañas móviles y bloqueo anti-doble clic. |
+| **`v2.0 (Final)`** | **2026-11-25** | **Versión final completa:** Cambio del cliente Conteo físico con conciliación (`RF-17`, flujo Colaborador borrador / Gerente aprueba, bloqueo `FOR UPDATE` y movimiento `AJUSTE`); Reabastecimiento sugerido 7 días y pedidos con recepción (`RF-11`, `RF-12`, `RF-13`, movimiento `RECEPCION`); Importación CSV de ventas (`RF-14`); Reporte analítico consumo vs. merma (`RF-15`); Exportación CSV BOM UTF-8 (`RF-16`); integración completa del catálogo de la taquería (8 proveedores en selector `RF-06`, 32 insumos y 38 productos con fotos reales); sub-pestañas móviles y bloqueo anti-doble clic. |
 
 **Historial de versiones del contrato técnico:**
 
@@ -267,7 +266,7 @@ php -S localhost:8000
 |---|---|---|---|
 | `v1.0` | 2026-10-05 | Contrato técnico inicial (Node.js + React) | Definición inicial en Etapa 2. |
 | `v1.1` | 2026-10-22 | Cambio a PHP 8 nativo, prefijo `3478788_` y `.env` | Adaptación obligatoria a hosting compartido sin Node/Docker. |
-| `v2.0` | 2026-11-25 | Se añade `RF-17`, se activan `RF-11`..`RF-16`, catálogo completo (8 proveedores, 32 insumos, 38 productos), se retira la exclusión de ajustes por conteo de Fuera de Alcance, modelo a 12 tablas y ajuste ADR-01/ADR-03 | Incorporar solicitud del cliente (Equipo 4), completar requisitos finales y homologar catálogo completo con el sistema original. |
+| `v2.0` | 2026-11-25 | Se añade `RF-17`, se activan `RF-11`..`RF-16`, catálogo completo (8 proveedores, 32 insumos, 38 productos), se retira la exclusión de ajustes por conteo de Fuera de Alcance, modelo a 12 tablas y ajuste ADR-01/ADR-03 | Incorporar solicitud del cliente (Equipo 4), completar requisitos finales y homologar catálogo completo al de la taquería. |
 
 ### 6.7 Pendientes conocidos y trabajo futuro
 - [ ] **Complemento móvil nativo/multiplataforma (Etapa 6):** Desarrollar la app móvil en React Native + Expo (`Offline-First` con `expo-sqlite` y escaneo de códigos QR/barras) consumiendo los endpoints de `api/index.php` ya publicados en `v2.0`.
@@ -283,20 +282,20 @@ php -S localhost:8000
 
 | Agente / herramienta | Para qué se usó | Qué tuvo que corregirse manualmente |
 |---|---|---|
-| **Antigravity (Gemini 4 Neon)** | Planificación de Etapa 4, generación del esquema SQL ampliado y migración idempotente (`schema.sql`, `init_mvp.php`), implementación de endpoints en `api/index.php` (`RF-11` a `RF-17`), diseño de sub-pestañas en `app.php`/`styles.css` y redacción del Contrato `v2.0` y documento SSOT. | 1. Se verificó que la diferencia del conteo físico (`stock_contado - stock_actual`) se calculara dentro de la transacción de aprobación (`FOR UPDATE`) en lugar de confiar en la diferencia capturada al inicio del borrador, evitando errores si ocurren ventas concurrentes.<br>2. Se ajustó la exportación CSV para usar `fetch` con cabecera `Bearer JWT` y sanitización de celdas (`=`, `+`, `-`, `@`) en lugar de enlaces `href` simples.<br>3. Se revisó la coherencia entre el equipo real (**Equipo 4**), la URL de despliegue (`/3478788/login/`) y las exclusiones de Fuera de Alcance frente al contrato `v1.1`. |
+| **Antigravity (Gemini 4 Neon)** | Planificación de Etapa 4, generación del esquema SQL ampliado y migración idempotente (`schema.sql`, `init_mvp.php`), implementación de endpoints en `api/index.php` (`RF-11` a `RF-17`), diseño de sub-pestañas en `app.php`/`styles.css` y redacción del Contrato `v2.0` y documento SSOT. | 1. Se verificó que la diferencia del conteo físico (`stock_contado - stock_actual`) se calculara dentro de la transacción de aprobación (`FOR UPDATE`) en lugar de confiar en la diferencia capturada al inicio del borrador, evitando errores si ocurren ventas concurrentes.<br>2. Se ajustó la exportación CSV para usar `fetch` con cabecera `Bearer JWT` y sanitización de celdas (`=`, `+`, `-`, `@`) en lugar de enlaces `href` simples.<br>3. Se revisó la coherencia entre el equipo real (**Equipo 4**), la URL de despliegue (`/3478788/login/`) y las exclusiones de Fuera de Alcance frente al contrato `v1.1`. <br>4. Se ajusto el contenido de algunos de los archivos|
 
 ### 7.2 Reflexión
-La IA agilizó notablemente la escritura de endpoints transaccionales, migraciones SQL y sub-vistas responsive alineadas con el código existente de la Etapa 3. Sin embargo, el agente no valida por sí solo inconsistencias entre documentos anteriores (como la referencia heredada a React/Vite en el contrato `v1.1` o el riesgo de calcular diferencias fuera del bloqueo `FOR UPDATE`), ni puede sustituir la definición de reglas de negocio críticas como la autorización diferenciada entre Colaborador y Gerente en el conteo físico. Por criterio propio decidimos unificar helpers transaccionales en PHP, priorizar la inmutabilidad del historial y reorganizar la UI en sub-pestañas antes de escribir código. En un proyecto siguiente mantendríamos sincronizados contrato y arquitectura real desde el primer hito y automatizaríamos pruebas de endpoints desde el día uno.
+La IA agilizó notablemente la escritura de endpoints transaccionales, migraciones SQL y sub-vistas responsive alineadas con el código existente de la Etapa 3. Sin embargo, el agente no valida por sí solo inconsistencias entre documentos anteriores (como la referencia heredada a React/Vite en el contrato `v1.1` o el riesgo de calcular diferencias fuera del bloqueo `FOR UPDATE`), ni puede sustituir la definición de reglas de negocio críticas como la autorización diferenciada entre Colaborador y Gerente en el conteo físico. Por criterio propio decidimos unificar helpers transaccionales en PHP, priorizar la inmutabilidad del historial y reorganizar la UI en sub-pestañas antes de escribir código. Además había veces que si trabajabamos con una IA y revisabamos con otra, se encontraban cosas que hacían falta y cosas que se podrían mejorar, lo que demuestra que todavía es necesario que exista una etapa de revisión humana a hora de trabajar en un proyecto con IA, para poder asegurarnos que todo siga con la visión inicial.
 
 ---
 
 ## Lista de verificación antes de entregar
 
-- [ ] El sistema actualizado (`v2.0`) está subido por FTPS y accesible en `https://equipo4.centrofuyuan.com/3478788/login/`.
-- [ ] Las cuentas ficticias de la sección 1 (`fer.leon_05` y `colab.tony`) funcionan con los nuevos módulos.
+- [x] El sistema actualizado (`v2.0`) está subido por FTPS y accesible en `https://equipo4.centrofuyuan.com/3478788/login/`.
+- [x] Las cuentas ficticias de la sección 1 (`fer.leon_05` y `colab.tony`) funcionan con los nuevos módulos.
 - [x] No hay contraseñas, claves ni credenciales reales en este archivo ni en el repositorio (`.env` excluido en `.gitignore`).
 - [x] Los 5 cambios implementados están completos, documentados y alineados al código fuente y contrato `v2.0`.
 - [x] El contrato técnico `v2.0` del repositorio ([02-contrato-tecnico_TacosTonyMovil_Leon_v2.0.md](./02-contrato-tecnico_TacosTonyMovil_Leon_v2.0.md)) está actualizado con historial de versiones.
 - [x] La trazabilidad (`RF-01` a `RF-17` y `RNF-01` a `RNF-06`) coincide con el código y los criterios de aceptación.
-- [ ] Puedo explicar cualquier parte del sistema y de este documento (incluida la validación en vivo con usuarios antes de subir a Canvas).
+- [x] Puedo explicar cualquier parte del sistema y de este documento (incluida la validación en vivo con usuarios antes de subir a Canvas).
 - [ ] Después de la evaluación cambiaré o eliminaré las cuentas de demostración.
