@@ -279,8 +279,8 @@ function inicializarEsquemaMvp(PDO $pdo): void
         ['cilantro',        'Cilantro Fresco',               'kg',    'Verduras',     0.450,  0.800, ['cilantro']],
         ['limones',         'Limones Verdes',                'kg',    'Verduras',     5.200,  2.000, ['limones']],
         ['salsa_chipotle',  'Salsa de Chipotle Tony',        'L',     'Salsas',       4.500,  2.000, []],
-        ['jocoque_cremoso', 'Jocoque Cremoso',               'kg',    'Salsas',       1.200,  1.500, []],
-        ['falafel',         'Masa de Falafel (Garbanzo)',    'kg',    'Verduras',     3.500,  1.500, ['falafel']],
+        ['jocoque_cremoso', 'Jocoque Cremoso',               'pieza', 'Salsas',       1.200,  1.500, []],
+        ['falafel',         'Falafel',                       'pieza', 'Verduras',    21.000,  5.000, ['Masa de Falafel (Garbanzo)', 'falafel']],
         ['agua',            'Agua Embotellada 600ml',        'pieza', 'Bebidas',     36.000, 12.000, ['agua embotellada']],
         ['refresco',        'Refresco en Lata 355ml',        'pieza', 'Bebidas',     42.000, 15.000, ['refrescos en lata']],
         ['servilletas',     'Servilletas y Desechables',     'pieza', 'Desechables',150.000, 50.000, ['servilletas']],
@@ -290,7 +290,7 @@ function inicializarEsquemaMvp(PDO $pdo): void
         ['camaron',         'Camarón',                       'kg',    'Carnes',       2.450,  1.000, []],
         ['perejil',         'Perejil Fresco',                'kg',    'Verduras',     2.950,  0.800, ['perejil']],
         ['gine',            'Gine (Salsa Árabe)',            'L',     'Salsas',       9.650,  2.000, ['gine']],
-        ['jocoque_seco',    'Jocoque Seco',                  'kg',    'Salsas',      39.000,  5.000, []],
+        ['jocoque_seco',    'Jocoque Seco',                  'pieza', 'Salsas',      39.000,  5.000, []],
         ['papas',           'Papas a la Francesa',           'kg',    'Verduras',     0.800,  2.000, []],
         ['catsup',          'Catsup',                        'L',     'Salsas',       4.000,  1.000, []],
         ['salsa_jitomate',  'Salsa de Jitomate',             'L',     'Salsas',       4.500,  1.500, []],
@@ -338,6 +338,20 @@ function inicializarEsquemaMvp(PDO $pdo): void
             ]);
             $idEncontrado = (int)$pdo->lastInsertId();
             $porNombreIns[normalizarClaveCatalogo($nombre)] = $idEncontrado;
+        } elseif (in_array($clave, ['jocoque_cremoso', 'jocoque_seco', 'falafel'], true)) {
+            // Homologación solicitada: asegurar unidad 'pieza' y nombre exacto 'Falafel'
+            $stmtHomologIns = $pdo->prepare(
+                "UPDATE " . TABLA_INSUMOS . "
+                 SET nombre = :nom, unidad_medida = :uni
+                 WHERE id = :id AND (unidad_medida <> :uni2 OR nombre <> :nom2)"
+            );
+            $stmtHomologIns->execute([
+                ':nom'  => $nombre,
+                ':uni'  => $unidad,
+                ':id'   => $idEncontrado,
+                ':uni2' => $unidad,
+                ':nom2' => $nombre,
+            ]);
         }
         $mapaInsumos[$clave] = $idEncontrado;
     }
@@ -369,7 +383,7 @@ function inicializarEsquemaMvp(PDO $pdo): void
             ['carne', 0.150], ['tortilla_maiz', 2.000], ['queso_gouda', 0.100], ['gine', 0.050],
         ]],
         ['Falafel',                   'Complementos Libaneses', 39.00, 'assets/img/productos/Falafel.png',       ['Orden de Falafel (5 pzas)'], [
-            ['falafel', 0.180], ['pan_arabe', 1.000], ['jocoque_cremoso', 0.050],
+            ['falafel', 1.000], ['pan_arabe', 1.000],
         ]],
         ['Kilo de Carne Arabe',       'Por Kilo',              400.00, 'assets/img/productos/Carne.png',         [], [
             ['carne', 1.000], ['pan_arabe', 10.000], ['tortilla_maiz', 10.000], ['cebolla', 0.150], ['cilantro', 0.050], ['limones', 0.100], ['envases', 1.000],
@@ -423,13 +437,13 @@ function inicializarEsquemaMvp(PDO $pdo): void
             ['camaron', 0.050], ['perejil', 0.020], ['salsa_jitomate', 0.050],
         ]],
         ['Jocoque Seco',              'Complementos Libaneses', 55.00, 'assets/img/productos/JocoSeco.png',      [], [
-            ['jocoque_seco', 0.200], ['pan_arabe', 1.000],
+            ['jocoque_seco', 1.000], ['pan_arabe', 1.000],
         ]],
         ['Papas a la Francesa',       'Complementos Libaneses', 45.00, 'assets/img/productos/PapasFran.png',     [], [
             ['papas', 0.200], ['catsup', 0.030],
         ]],
         ['Jocoque Cremoso',           'Complementos Libaneses', 48.00, 'assets/img/productos/JocoCrem.png',      ['Porción Jocoque Cremoso'], [
-            ['jocoque_cremoso', 0.150], ['pan_arabe', 1.000],
+            ['jocoque_cremoso', 1.000], ['pan_arabe', 1.000],
         ]],
         ['Flan Horneado',             'Postres',                34.00, 'assets/img/productos/FlanHorn.png',      [], [
             ['flan', 1.000],
@@ -524,6 +538,27 @@ function inicializarEsquemaMvp(PDO $pdo): void
                 }
             }
         }
+    }
+
+    // Ajustar recetas heredadas en kg (0.180, 0.200, 0.150) de Falafel, Jocoque Seco y Jocoque Cremoso a 1.000 pieza
+    $pFalafel  = $porNombreProd[normalizarClaveCatalogo('Falafel')] ?? null;
+    $pJocoSeco = $porNombreProd[normalizarClaveCatalogo('Jocoque Seco')] ?? null;
+    $pJocoCrem = $porNombreProd[normalizarClaveCatalogo('Jocoque Cremoso')] ?? null;
+    $stmtFixRec = $pdo->prepare(
+        "UPDATE " . TABLA_RECETAS . " SET cantidad = 1.000 WHERE producto_id = :pid AND insumo_id = :iid AND cantidad = :oldCant"
+    );
+    if ($pFalafel && isset($mapaInsumos['falafel'])) {
+        $stmtFixRec->execute([':pid' => $pFalafel, ':iid' => $mapaInsumos['falafel'], ':oldCant' => '0.180']);
+        if (isset($mapaInsumos['jocoque_cremoso'])) {
+            $pdo->prepare("DELETE FROM " . TABLA_RECETAS . " WHERE producto_id = :pid AND insumo_id = :iid AND cantidad = 0.050")
+                ->execute([':pid' => $pFalafel, ':iid' => $mapaInsumos['jocoque_cremoso']]);
+        }
+    }
+    if ($pJocoSeco && isset($mapaInsumos['jocoque_seco'])) {
+        $stmtFixRec->execute([':pid' => $pJocoSeco, ':iid' => $mapaInsumos['jocoque_seco'], ':oldCant' => '0.200']);
+    }
+    if ($pJocoCrem && isset($mapaInsumos['jocoque_cremoso'])) {
+        $stmtFixRec->execute([':pid' => $pJocoCrem, ':iid' => $mapaInsumos['jocoque_cremoso'], ':oldCant' => '0.150']);
     }
 
     // Sembrar movimientos iniciales de auditoría si la bitácora está vacía (RF-10)
